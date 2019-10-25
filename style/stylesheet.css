@@ -2,3 +2,15 @@
     margin-top: 30px;
     margin-bottom: 30px;
 }
+
+.theme-answer {
+    width: 100%;
+    border-style: solid;
+    border-color: green;
+    border-radius: 5px;
+    border-width: thin;
+}
+
+.theme-answer button {
+    
+}
