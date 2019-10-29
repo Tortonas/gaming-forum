@@ -9,6 +9,7 @@
     border-color: green;
     border-radius: 5px;
     border-width: thin;
+    margin: 2px;
 }
 
 .theme-answer button {
