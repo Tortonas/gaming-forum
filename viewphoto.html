@@ -25,10 +25,10 @@
                 <li class="nav-item">
                     <a class="nav-link" href="index.html">Namai <span class="sr-only">(current)</span></a>
                 </li>
-                <li class="nav-item active">
+                <li class="nav-item">
                     <a class="nav-link" href="forum.html">Forumas</a>
                 </li>
-                <li class="nav-item">
+                <li class="nav-item active">
                     <a class="nav-link" href="gallery.html">Galerija</a>
                 </li>
                 <li class="nav-item">
@@ -51,13 +51,26 @@
     </nav>
 
     <div class='container'>
-        <h1>(kategorijos pavadinimas) temos:</h1>
-        <h2> <a href="viewtheme.html">Random tema</a> <button class="btn btn-danger btn-sm">Naikinti</button></h2>
-        <h2> <a href="viewtheme.html">Random tema</a> <button class="btn btn-danger btn-sm">Naikinti</button></h2>
-        <h2> <a href="viewtheme.html">Random tema</a> <button class="btn btn-danger btn-sm">Naikinti</button></h2>
-        <h2> <a href="viewtheme.html">Random tema</a> <button class="btn btn-danger btn-sm">Naikinti</button></h2>
-        <h2> <a href="viewtheme.html">Random tema</a> <button class="btn btn-danger btn-sm">Naikinti</button></h2>
+        
+        <figure class="figure">
+            <img src="./img/1.png" id="imageInput" alt="fortnite dance" class="img-thumbnail rounded">
+            <figcaption class="figure-caption">Nuotraukos aprasymas</figcaption>
+            <button type="button" class="btn btn-primary">
+                Pamėgti <span class="badge badge-light">4</span>
+            </button>
+            <button type="button" class="btn btn-primary">Redaguoti</button>
+            <button type="button" class="btn btn-danger">Ištrinti</button>
+        </figure>
+
+        <form method='POST'>
+                <div class="form-group">
+                    <label for="comment">Komentuoti:</label>
+                    <textarea class="form-control" rows="5" id="comment"></textarea>
+                    <button type="button" class="btn btn-danger">Komentuoti</button>
+                </div>
+        </form>
     </div>
+      
     <!-- Optional JavaScript -->
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
