@@ -45,7 +45,7 @@
                 </li>
                 <li class="nav-item">
                         <a class="nav-link" href="adminpanel.html">Admin</a>
-                    </li>
+                </li>
             </ul>
             <form class="form-inline my-2 my-lg-0" method="POST" action="search.html">
                     <input class="form-control mr-sm-2" type="search" placeholder="Raktažodis paieškai" aria-label="Search">
@@ -57,7 +57,28 @@
     </nav>
 
     <div class='container'>
-        
+        <h1>Nuotraukos įkėlimas</h1>
+        <div class="file-upload-form--small">
+            <div class="input-group">
+                <div class="input-group-prepend">
+                    <span class="input-group-text" id="inputGroupFileAddon01">Įkelti</span>
+                </div>
+                <div class="custom-file">
+                    <input type="file" class="custom-file-input" id="inputGroupFile01"
+                    aria-describedby="inputGroupFileAddon01">
+                    <label class="custom-file-label" for="inputGroupFile01">Pasirinkti nuotrauką</label>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="inputFor">Etiketės</label>
+                <input type="text" class="form-control" id="inputFor" placeholder="fortnite;dance;gaming">
+            </div>
+            <div class="form-group">
+                <label for="comment">Aprašymas:</label>
+                <textarea class="form-control" rows="5" id="comment"></textarea>
+                <button type="button" class="btn btn-danger">Įkelti</button>
+            </div>
+        </div>
         <figure class="figure">
                 <a href="viewphoto.html"><img src="./img/1.png" id="imageInput" alt="fortnite dance" class="img-thumbnail rounded"></a>
             <figcaption class="figure-caption">Nuotraukos aprasymas</figcaption>
