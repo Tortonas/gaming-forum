@@ -12,6 +12,11 @@
     margin: 2px;
 }
 
-.theme-answer button {
-    
+.file-upload-form--small {
+    width: 300px;
+    margin-bottom: 50px;
+}
+
+.profile-picture--200px {
+    width: 200px;
 }
