@@ -6,7 +6,7 @@
 .theme-answer {
     width: 100%;
     border-style: solid;
-    border-color: green;
+    border-color: rgb(0, 110, 255);
     border-radius: 5px;
     border-width: thin;
     margin: 2px;
