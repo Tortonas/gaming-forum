@@ -15,7 +15,7 @@
       
     <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
         <div class='container'>
-            <a class="navbar-brand" href="index.html">Gaming Forumas  </a>
+            <a class="navbar-brand" href="index.php">Gaming Forumas  </a>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
             </button>
@@ -23,52 +23,60 @@
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav mr-auto">
                 <li class="nav-item">
-                    <a class="nav-link" href="index.html">Namai <span class="sr-only">(current)</span></a>
+                    <a class="nav-link" href="index.php">Namai <span class="sr-only">(current)</span></a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="forum.html">Forumas</a>
+                    <a class="nav-link" href="forum.php">Forumas</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="gallery.html">Galerija</a>
+                    <a class="nav-link" href="gallery.php">Galerija</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="login.html">Prisijungti</a>
+                    <a class="nav-link" href="login.php">Prisijungti</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="register.html">Registracija</a>
+                    <a class="nav-link" href="register.php">Registracija</a>
                 </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="settings.html">Nustatymai</a>
+                <li class="nav-item active">
+                    <a class="nav-link" href="settings.php">Nustatymai</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="#">Atsijungti</a>
                 </li>
-                <li class="nav-item active">
-                    <a class="nav-link" href="adminpanel.html">Admin</a>
-                </li>
+                <li class="nav-item">
+                        <a class="nav-link" href="adminpanel.php">Admin</a>
+                    </li>
             </ul>
-            <form class="form-inline my-2 my-lg-0" method="POST" action="search.html">
+            <form class="form-inline my-2 my-lg-0" method="POST" action="search.php">
                     <input class="form-control mr-sm-2" type="search" placeholder="Raktažodis paieškai" aria-label="Search">
                     <button class="btn btn-outline-light my-2 my-sm-0" type="submit">Ieškoti</button>
                 </form>
             </div>
+        
         </div>
     </nav>
     <div class='container'>
         <form method='POST' class='mainForm'>
-            <h1>Koreguojamas (naudotojo vardas) profilis</h1>
+            <h1>Profilio nuotrauka</h1>
+            <div class='profile-picture--200px'>
+                <img src="img/profile pictures/default.png" alt="default profile picture" class="img-thumbnail">
+                <div class="file-upload-form--small">
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text" id="inputGroupFileAddon01">Įkelti</span>
+                        </div>
+                        <div class="custom-file">
+                            <input type="file" class="custom-file-input" id="inputGroupFile01"
+                            aria-describedby="inputGroupFileAddon01">
+                            <label class="custom-file-label" for="inputGroupFile01">Pasirinkti nuotrauką</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
             <h1>Profilio nustatymai</h1>
             <div class="form-group">
                 <label for="inputFor">Slapyvardis*</label>
                 <input type="text" class="form-control" id="inputFor" value='Tortonas' disabled>
-            </div>
-            <div class="form-group">
-                <label for="inputFor">Rolė</label>
-                <select class="custom-select">
-                    <option selected value="1">Naudotojas</option>
-                    <option value="2">Moderatorius</option>
-                    <option value="3">Administratorius</option>
-                </select>
             </div>
             <div class="form-group">
                 <label for="inputFor">El. pašto adresas*</label>
@@ -144,6 +152,10 @@
         <form method='POST' class='mainForm'>
             <h1>Slaptažodžio keitimo forma</h1>
             <div class="form-group">
+                <label for="inputFor">Dabartinis slaptažodis</label>
+                <input type="password" class="form-control" id="inputFor" placeholder="Senas slaptažodis">
+            </div>
+            <div class="form-group">
                 <label for="inputFor">Naujas slaptažodis</label>
                 <input type="password" class="form-control" id="inputFor" placeholder="Naujas slaptažodis">
             </div>
@@ -153,6 +165,8 @@
             </div>
             <button type="button" class="btn btn-danger">Keisti slaptažodį</button>
         </form>
+
+
     </div>
       
     <!-- Optional JavaScript -->

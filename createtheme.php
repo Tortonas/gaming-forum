@@ -15,7 +15,7 @@
       
     <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
         <div class='container'>
-            <a class="navbar-brand" href="index.html">Gaming Forumas  </a>
+            <a class="navbar-brand" href="index.php">Gaming Forumas  </a>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
             </button>
@@ -23,31 +23,31 @@
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav mr-auto">
                 <li class="nav-item">
-                    <a class="nav-link" href="index.html">Namai <span class="sr-only">(current)</span></a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="forum.html">Forumas</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="gallery.html">Galerija</a>
+                    <a class="nav-link" href="index.php">Namai <span class="sr-only">(current)</span></a>
                 </li>
                 <li class="nav-item active">
-                    <a class="nav-link" href="login.html">Prisijungti</a>
+                    <a class="nav-link" href="forum.php">Forumas</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="register.html">Registracija</a>
+                    <a class="nav-link" href="gallery.php">Galerija</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="settings.html">Nustatymai</a>
+                    <a class="nav-link" href="login.php">Prisijungti</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="register.php">Registracija</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="settings.php">Nustatymai</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="#">Atsijungti</a>
                 </li>
                 <li class="nav-item">
-                        <a class="nav-link" href="adminpanel.html">Admin</a>
+                        <a class="nav-link" href="adminpanel.php">Admin</a>
                     </li>
             </ul>
-            <form class="form-inline my-2 my-lg-0" method="POST" action="search.html">
+            <form class="form-inline my-2 my-lg-0" method="POST" action="search.php">
                     <input class="form-control mr-sm-2" type="search" placeholder="Raktažodis paieškai" aria-label="Search">
                     <button class="btn btn-outline-light my-2 my-sm-0" type="submit">Ieškoti</button>
                 </form>
@@ -57,20 +57,17 @@
     </nav>
 
     <div class='container'>
-            <form method='POST' class='mainForm'>
-                <div class="form-group">
-                    <label for="inputFor">Slapyvardis</label>
-                    <input type="text" class="form-control" id="inputFor" placeholder="Slapyvardis">
-                </div>
-                <div class="form-group">
-                    <label for="inputFor">Slaptažodis</label>
-                    <input type="password" class="form-control" id="inputFor" placeholder="Slaptažodis">
-                </div>
-                    <button type="button" class="btn btn-primary">Prisijungti</button>
-                    <a href="remindpass.html">Pamiršai slaptažodį?</a>
-            </form>
+        <h1>Sukurti naują temą - (kategorijos pavadinimas):</h1>
+
+        <div class="form-group">
+            <label for="inputFor">Temos pavadinimas</label>
+            <input type="text" class="form-control" id="inputFor" placeholder="Temos pavadinimas">
+            <label for="exampleFormControlTextarea3">Turinys</label>
+            <textarea class="form-control" id="exampleFormControlTextarea3" rows="7"></textarea>
         </div>
-      
+
+        <a href="createtheme.php"> <button type="button" class="btn btn-danger">Sukurti naują temą</button> </a>
+    </div>
     <!-- Optional JavaScript -->
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>

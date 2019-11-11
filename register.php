@@ -6,7 +6,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
     <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="/style/stylesheet.css">
+    
+    <link rel="stylesheet" href="./style/stylesheet.css">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 
     <title>Hello, world!</title>
@@ -15,7 +16,7 @@
       
     <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
         <div class='container'>
-            <a class="navbar-brand" href="index.html">Gaming Forumas  </a>
+            <a class="navbar-brand" href="index.php">Gaming Forumas  </a>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
             </button>
@@ -23,31 +24,31 @@
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav mr-auto">
                 <li class="nav-item">
-                    <a class="nav-link" href="index.html">Namai <span class="sr-only">(current)</span></a>
+                    <a class="nav-link" href="index.php">Namai <span class="sr-only">(current)</span></a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="forum.html">Forumas</a>
+                    <a class="nav-link" href="forum.php">Forumas</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="gallery.html">Galerija</a>
+                    <a class="nav-link" href="gallery.php">Galerija</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="login.html">Prisijungti</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="register.html">Registracija</a>
+                    <a class="nav-link" href="login.php">Prisijungti</a>
                 </li>
                 <li class="nav-item active">
-                    <a class="nav-link" href="settings.html">Nustatymai</a>
+                    <a class="nav-link" href="register.php">Registracija</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="settings.php">Nustatymai</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="#">Atsijungti</a>
                 </li>
                 <li class="nav-item">
-                        <a class="nav-link" href="adminpanel.html">Admin</a>
+                        <a class="nav-link" href="adminpanel.php">Admin</a>
                     </li>
             </ul>
-            <form class="form-inline my-2 my-lg-0" method="POST" action="search.html">
+            <form class="form-inline my-2 my-lg-0" method="POST" action="search.php">
                     <input class="form-control mr-sm-2" type="search" placeholder="Raktažodis paieškai" aria-label="Search">
                     <button class="btn btn-outline-light my-2 my-sm-0" type="submit">Ieškoti</button>
                 </form>
@@ -55,40 +56,28 @@
         
         </div>
     </nav>
+
     <div class='container'>
         <form method='POST' class='mainForm'>
-            <h1>Profilio nuotrauka</h1>
-            <div class='profile-picture--200px'>
-                <img src="img/profile pictures/default.png" alt="default profile picture" class="img-thumbnail">
-                <div class="file-upload-form--small">
-                    <div class="input-group">
-                        <div class="input-group-prepend">
-                            <span class="input-group-text" id="inputGroupFileAddon01">Įkelti</span>
-                        </div>
-                        <div class="custom-file">
-                            <input type="file" class="custom-file-input" id="inputGroupFile01"
-                            aria-describedby="inputGroupFileAddon01">
-                            <label class="custom-file-label" for="inputGroupFile01">Pasirinkti nuotrauką</label>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <h1>Profilio nustatymai</h1>
             <div class="form-group">
                 <label for="inputFor">Slapyvardis*</label>
-                <input type="text" class="form-control" id="inputFor" value='Tortonas' disabled>
+                <input type="text" class="form-control" id="inputFor" placeholder="Slapyvardis">
             </div>
             <div class="form-group">
                 <label for="inputFor">El. pašto adresas*</label>
-                <input type="email" class="form-control" id="inputFor" aria-describedby="emailHelp" placeholder="El. Paštas" value='Tortonas@yeet.com'>
+                <input type="email" class="form-control" id="inputFor" aria-describedby="emailHelp" placeholder="El. Paštas">
+            </div>
+            <div class="form-group">
+                <label for="inputFor">Slaptažodis*</label>
+                <input type="password" class="form-control" id="inputFor" placeholder="Slaptažodis">
             </div>
             <div class="form-group">
                 <label for="inputFor">Šalis</label>
-                <input type="text" class="form-control" id="inputFor" placeholder="Šalis" value='Lietuva'>
+                <input type="text" class="form-control" id="inputFor" placeholder="Šalis">
             </div>
             <div class="form-group">
                 <label for="inputFor">Adresas</label>
-                <input type="text" class="form-control" id="inputFor" placeholder="Adresas" value='Studentu g. 50'>
+                <input type="text" class="form-control" id="inputFor" placeholder="Adresas">
             </div>
             <div class="form-group">
                 <label for="inputFor">Telefono numeris</label>
@@ -146,29 +135,9 @@
                 <label for="inputFor">Aukštasis išsilavinimas</label>
                 <input type="text" class="form-control" id="inputFor" placeholder="Aukštasis išsilavinimas">
             </div>
-                <button type="button" class="btn btn-primary">Išsaugoti nustatymus</button>
+                <button type="button" class="btn btn-primary">Registruotis</button>
         </form>
-
-        <form method='POST' class='mainForm'>
-            <h1>Slaptažodžio keitimo forma</h1>
-            <div class="form-group">
-                <label for="inputFor">Dabartinis slaptažodis</label>
-                <input type="password" class="form-control" id="inputFor" placeholder="Senas slaptažodis">
-            </div>
-            <div class="form-group">
-                <label for="inputFor">Naujas slaptažodis</label>
-                <input type="password" class="form-control" id="inputFor" placeholder="Naujas slaptažodis">
-            </div>
-            <div class="form-group">
-                <label for="inputFor">Pakartokite naują slaptažodį</label>
-                <input type="password" class="form-control" id="inputFor" placeholder="Naujas slaptažodis">
-            </div>
-            <button type="button" class="btn btn-danger">Keisti slaptažodį</button>
-        </form>
-
-
     </div>
-      
     <!-- Optional JavaScript -->
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
