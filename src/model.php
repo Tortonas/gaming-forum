@@ -11,7 +11,7 @@ class Model {
     {
         $this->setDefaultSessions();
         date_default_timezone_set("Europe/Vilnius");
-        $dbConfigFile = fopen("./src/databaseconfig", "r") or die("Unable to open file!");
+        $dbConfigFile = fopen("./src/database.config", "r") or die("Unable to open file!");
         $dbConfigFileString =  fgets($dbConfigFile);
         $dbConfigLines = explode(":", $dbConfigFileString);
         fclose($dbConfigFile);
