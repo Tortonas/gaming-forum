@@ -80,4 +80,25 @@ class View {
         echo '<h1>Sveiki atvykę į forumą!</h1>';
     }
     // -- INDEX PAGE VIEW END --
+
+    // -- LOGIN PAGE VIEW START --
+
+    public function printLoginPage()
+    {
+        echo '
+        <form method="POST" class="mainForm">
+            <div class="form-group">
+                <label for="inputFor">Slapyvardis</label>
+                <input name="username" type="text" class="form-control" id="inputFor" placeholder="Slapyvardis">
+            </div>
+            <div class="form-group">
+                <label for="inputFor">Slaptažodis</label>
+                <input name="password" type="password" class="form-control" id="inputFor" placeholder="Slaptažodis">
+            </div>
+                <button type="submit" name="loginBtn" class="btn btn-primary">Prisijungti</button>
+                <a href="remindpass.php">Pamiršai slaptažodį?</a>
+        </form>';
+    }
+
+    // -- LOGIN PAGE VIEW END --
 }
