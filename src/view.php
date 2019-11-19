@@ -101,4 +101,44 @@ class View {
     }
 
     // -- LOGIN PAGE VIEW END --
+
+    // -- ADMIN PAGE VIEW START
+
+    public function printAdminPanel()
+    {
+        echo '<ul class="list-group">
+            <li class="list-group-item">
+                HENRIUX420 
+                <button type="button" class="btn btn-warning btn-sm">Užtildyti</button>
+                <button type="button" class="btn btn-danger btn-sm">Užblokuoti</button>
+                <a href="edituser.php"> <button type="button" class="btn btn-primary btn-sm">Redaguoti naudotoją</button> </a>
+            </li>
+            <li class="list-group-item">
+                VALEEE                
+                <button type="button" class="btn btn-warning btn-sm">Užtildyti</button>
+                <button type="button" class="btn btn-danger btn-sm">Užblokuoti</button>
+                <a href="edituser.php"> <button type="button" class="btn btn-primary btn-sm">Redaguoti naudotoją</button> </a>
+            </li>
+            <li class="list-group-item">
+                ELYGAAA
+                <button type="button" class="btn btn-warning btn-sm">Užtildyti</button>
+                <button type="button" class="btn btn-danger btn-sm">Užblokuoti</button>
+                <a href="edituser.php"> <button type="button" class="btn btn-primary btn-sm">Redaguoti naudotoją</button> </a>
+            </li>
+            <li class="list-group-item">
+                RIMV3
+                <button type="button" class="btn btn-warning btn-sm">Užtildyti</button>
+                <button type="button" class="btn btn-danger btn-sm">Užblokuoti</button>
+                <a href="edituser.php"> <button type="button" class="btn btn-primary btn-sm">Redaguoti naudotoją</button> </a>
+            </li>
+            <li class="list-group-item">
+                Random
+                <button type="button" class="btn btn-warning btn-sm">Užtildyti</button>
+                <button type="button" class="btn btn-danger btn-sm">Užblokuoti</button>
+                <a href="edituser.php"> <button type="button" class="btn btn-primary btn-sm">Redaguoti naudotoją</button> </a>
+            </li>
+        </ul>';
+    }
+
+    // -- ADMIN PAGE VIEW END
 }
