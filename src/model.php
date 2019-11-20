@@ -101,6 +101,8 @@ class Model {
         {
             $_SESSION['verified'] = "0";
         }
+
+        return true;
     }
 
     public function secureInput($input)
@@ -152,5 +154,7 @@ class Model {
         $_SESSION['last_name'] = "0";
         $_SESSION['role'] = "0";
         $_SESSION['verified'] = "0";
+
+        return true;
     }
 }
