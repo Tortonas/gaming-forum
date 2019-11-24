@@ -72,4 +72,14 @@ class MainController {
     {
         $this->view->printDanger($text);
     }
+
+    protected function getDateTime()
+    {
+        return date('Y-m-d H:i:s');
+    }
+
+    protected function getDate()
+    {
+        return date('Y-m-d');
+    }
 }

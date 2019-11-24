@@ -20,8 +20,6 @@ class LoginController extends MainController implements iController
                 $this->getView()->printDanger('Jūs neprijungtas prie sistemos!');
             }
         }
-
-        echo $_SESSION['slapyvardis'];
     }
 
     public function getTitle()

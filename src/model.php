@@ -127,4 +127,72 @@ class Model {
 
         return true;
     }
+
+    public function getData($table)
+    {
+        $table = $this->secureInput($table);
+        $sql = "SELECT * FROM ".$table;
+        $result = mysqli_query($this->conn, $sql);
+
+        if (mysqli_num_rows($result) > 0)
+        {
+            return $result;
+        }
+        else
+        {
+            echo mysqli_error($this->conn);
+            return false;
+        }
+    }
+
+    public function getDataByColumn($table, $column, $value)
+    {
+        $table = $this->secureInput($table);
+        $column = $this->secureInput($column);
+        $value = $this->secureInput($value);
+        $sql = "SELECT * FROM ".$table." WHERE ".$column."=".$value;
+        $result = mysqli_query($this->conn, $sql);
+
+        if (mysqli_num_rows($result) > 0)
+        {
+            return $result;
+        }
+        else
+        {
+            echo mysqli_error($this->conn);
+            return false;
+        }
+    }
+
+    public function removeData($table, $id)
+    {
+        $table = $this->secureInput($table);
+        $id = $this->secureInput($id);
+        $sql = "DELETE FROM ".$table." WHERE id=".$id;
+        if(mysqli_query($this->conn, $sql))
+        {
+            return true;
+        }
+        else
+        {
+            echo mysqli_error($this->conn);
+            return false;
+        }
+    }
+
+    public function createNewCatalog($name, $date)
+    {
+        $name = $this->secureInput($name);
+        $date = $this->secureInput($date);
+        $sql = "INSERT INTO katalogai (pavadinimas, sukurimo_data) VALUES ('$name', '$date')";
+        if(mysqli_query($this->conn, $sql))
+        {
+            return true;
+        }
+        else
+        {
+            echo mysqli_error($this->conn);
+            return false;
+        }
+    }
 }

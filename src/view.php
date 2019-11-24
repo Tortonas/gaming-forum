@@ -141,4 +141,41 @@ class View {
     }
 
     // -- ADMIN PAGE VIEW END
+
+    // -- FORUM PAGE START
+
+    public function printForumFrontPage($catalogs)
+    {
+        $role = $_SESSION['role'];
+
+        echo '<h1>Forumo kategorijos:</h1>';
+
+        while($row = mysqli_fetch_assoc($catalogs))
+        {
+            if($role == 3)
+            {
+                echo '<h2><a href="themes.php">'.$row['pavadinimas'].'</a> <button class="btn btn-danger btn-sm" type="submit">Naikinti</button></h2>';
+            }
+            else
+            {
+                echo '<h2><a href="themes.php">'.$row['pavadinimas'].'</a></h2>';
+            }
+        }
+
+        if($role == 3)
+        {
+            echo '
+        <form method="POST">
+            <div class="input-group mb-3">
+                <div class="input-group-prepend">
+                    <span class="input-group-text" id="inputGroup-sizing-default">Nauja kategorija</span>
+                </div>
+                <input type="text" name="catalogName" class="form-control" aria-label="Default" aria-describedby="inputGroup-sizing-default">
+                <button type="submit" name="createNewCatalog" class="btn btn-primary">Sukurti</button>
+            </div>
+        </form>';
+        }
+    }
+
+    // -- FORUM PAGE END
 }
