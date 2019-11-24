@@ -10,8 +10,18 @@ class LoginController extends MainController implements iController
         $this->getView()->printLoginPage();
         if(isset($_POST['loginBtn']))
         {
-            //login logic
+            if($this->getModel()->loginMe($_POST['username'], $_POST['password']))
+            {
+                $this->getView()->printSuccess('Jūs prijungtas prie sistemos!');
+                $this->redirect_to_another_page('forum.php', 0);
+            }
+            else
+            {
+                $this->getView()->printDanger('Jūs neprijungtas prie sistemos!');
+            }
         }
+
+        echo $_SESSION['slapyvardis'];
     }
 
     public function getTitle()

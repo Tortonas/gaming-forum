@@ -31,26 +31,25 @@ class Model {
     {
         if($_SESSION['id'] != "0")
         {
-            $username = $this->secureInput($_SESSION['username']);
-            $password = $this->secureInput($_SESSION['password']);
+            $username = $this->secureInput($_SESSION['slapyvardis']);
+            $password = $this->secureInput($_SESSION['slaptazodis']);
 
-            $sql = "SELECT * FROM users WHERE username='$username'";
+            $sql = "SELECT * FROM naudotojai WHERE slapyvardis='$username'";
             $result = $this->conn->query($sql);
 
             if ($result->num_rows > 0)
             {
                 while($row = $result->fetch_assoc())
                 {
-                    if($password == $row['password'])
+                    if($password == $row['slaptazodis'])
                     {
                         $_SESSION['id'] = $row['id'];
-                        $_SESSION['username'] = $row['username'];
+                        $_SESSION['slapyvardis'] = $row['slapyvardis'];
+                        $_SESSION['slaptazodis'] = $row['slaptazodis'];
                         $_SESSION['email'] = $row['email'];
-                        $_SESSION['password'] = $row['password'];
-                        $_SESSION['first_name'] = $row['first_name'];
-                        $_SESSION['last_name'] = $row['last_name'];
                         $_SESSION['role'] = $row['role'];
-                        $_SESSION['verified'] = $row['verified'];
+                        $_SESSION['uzblokuotas'] = $row['uzblokuotas'];
+                        $_SESSION['uztildytas'] = $row['uztildytas'];
                         return true;
                     }
                     else
@@ -69,37 +68,10 @@ class Model {
 
     public function setDefaultSessions()
     {
+        // If ID is not set, it means we have to set default sessions, instead of rewriting whole function, I call logout() function. It does the same thing.
         if(!isset($_SESSION['id']) && empty($_SESSION['id']))
         {
-            $_SESSION['id'] = "0";
-        }
-        if(!isset($_SESSION['username']) && empty($_SESSION['username']))
-        {
-            $_SESSION['username'] = "0";
-        }
-        if(!isset($_SESSION['email']) && empty($_SESSION['email']))
-        {
-            $_SESSION['email'] = "0";
-        }
-        if(!isset($_SESSION['password']) && empty($_SESSION['password']))
-        {
-            $_SESSION['password'] = "0";
-        }
-        if(!isset($_SESSION['first_name']) && empty($_SESSION['first_name']))
-        {
-            $_SESSION['first_name'] = "0";
-        }
-        if(!isset($_SESSION['last_name']) && empty($_SESSION['last_name']))
-        {
-            $_SESSION['last_name'] = "0";
-        }
-        if(!isset($_SESSION['role']) && empty($_SESSION['role']))
-        {
-            $_SESSION['role'] = "0";
-        }
-        if(!isset($_SESSION['verified']) && empty($_SESSION['verified']))
-        {
-            $_SESSION['verified'] = "0";
+            $this->logoutMe();
         }
 
         return true;
@@ -117,23 +89,22 @@ class Model {
         $username = $this->secureInput($username);
         $password = $this->secureInput($password);
 
-        $sql = "SELECT * FROM users WHERE username='$username'";
+        $sql = "SELECT * FROM naudotojai WHERE slapyvardis='$username'";
         $result = $this->conn->query($sql);
 
         if ($result->num_rows > 0)
         {
             while($row = $result->fetch_assoc())
             {
-                if(password_verify($password, $row['password']))
+                if(password_verify($password, $row['slaptazodis']))
                 {
                     $_SESSION['id'] = $row['id'];
-                    $_SESSION['username'] = $row['username'];
+                    $_SESSION['slapyvardis'] = $row['slapyvardis'];
+                    $_SESSION['slaptazodis'] = $row['slaptazodis'];
                     $_SESSION['email'] = $row['email'];
-                    $_SESSION['password'] = $row['password'];
-                    $_SESSION['first_name'] = $row['first_name'];
-                    $_SESSION['last_name'] = $row['last_name'];
                     $_SESSION['role'] = $row['role'];
-                    $_SESSION['verified'] = $row['verified'];
+                    $_SESSION['uzblokuotas'] = $row['uzblokuotas'];
+                    $_SESSION['uztildytas'] = $row['uztildytas'];
                     return true;
                 }
                 else
@@ -147,13 +118,12 @@ class Model {
     public function logoutMe()
     {
         $_SESSION['id'] = "0";
-        $_SESSION['username'] = "0";
+        $_SESSION['slapyvardis'] = "0";
+        $_SESSION['slaptazodis'] = "0";
         $_SESSION['email'] = "0";
-        $_SESSION['password'] = "0";
-        $_SESSION['first_name'] = "0";
-        $_SESSION['last_name'] = "0";
         $_SESSION['role'] = "0";
-        $_SESSION['verified'] = "0";
+        $_SESSION['uzblokuotas'] = "0";
+        $_SESSION['uztildytas'] = "0";
 
         return true;
     }
