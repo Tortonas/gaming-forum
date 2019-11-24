@@ -157,7 +157,7 @@ class View {
             {
                 if($role == 3)
                 {
-                    echo '<h2><a href="themes.php">'.$row['pavadinimas'].'</a> <button class="btn btn-danger btn-sm" type="submit" name="deleteButton" value="'.$row['id'].'">Naikinti</button></h2>';
+                    echo '<h2><a href="themes.php?id='.$row['id'].'">'.$row['pavadinimas'].'</a> <button class="btn btn-danger btn-sm" type="submit" name="deleteButton" value="'.$row['id'].'">Naikinti</button></h2>';
                 }
                 else
                 {
@@ -185,6 +185,21 @@ class View {
             </div>
         </form>';
         }
+    }
+
+    public function printForumThemes($themeList, $categoryName)
+    {
+        echo '        <h1>'.$categoryName['pavadinimas'].' temos:</h1>';
+
+        if($themeList)
+        {
+            while($row = $themeList->fetch_assoc()) {
+                echo '<h2> <a href="viewtheme.php?id=">'.$row['pavadinimas'].'</a><button class="btn btn-danger btn-sm">Naikinti</button></h2>';
+            }
+        }
+
+
+        echo '<a href="createtheme.php"> <button type="button" class="btn btn-primary">Sukurti naują temą</button> </a>';
     }
 
     // -- FORUM PAGE END

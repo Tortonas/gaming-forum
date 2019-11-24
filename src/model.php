@@ -164,6 +164,28 @@ class Model {
         }
     }
 
+    public function getDataByColumnFirst($table, $column, $value)
+    {
+        $table = $this->secureInput($table);
+        $column = $this->secureInput($column);
+        $value = $this->secureInput($value);
+        $sql = "SELECT * FROM ".$table." WHERE ".$column."=".$value;
+        $result = mysqli_query($this->conn, $sql);
+
+        if (mysqli_num_rows($result) > 0)
+        {
+            while($row = $result->fetch_assoc())
+            {
+                return $row;
+            }
+        }
+        else
+        {
+            echo mysqli_error($this->conn);
+            return false;
+        }
+    }
+
     public function removeData($table, $id)
     {
         $table = $this->secureInput($table);

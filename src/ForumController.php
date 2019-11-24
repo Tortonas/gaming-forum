@@ -42,6 +42,20 @@ class ForumController extends MainController implements iController
         }
     }
 
+    public function printPageViewThemes()
+    {
+        if(!isset($_GET['id']))
+        {
+            $this->printDanger('Ivyko klaida!');
+            $this->redirect_to_another_page('forum.php', 0);
+            return;
+        }
+
+        $themeList = $this->getModel()->getDataByColumn('temos', 'fk_katalogas', $_GET['id']);
+
+        $this->getView()->printForumThemes($themeList, $this->getModel()->getDataByColumnFirst('katalogai', 'id', $_GET['id']));
+    }
+
     public function getTitle()
     {
         echo 'Gaming forum - forumas';
