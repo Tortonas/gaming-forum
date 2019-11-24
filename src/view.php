@@ -148,19 +148,29 @@ class View {
     {
         $role = $_SESSION['role'];
 
-        echo '<h1>Forumo kategorijos:</h1>';
+        echo '<h1>Forumo kategorijos:</h1>
+               <form method="POST">';
 
-        while($row = mysqli_fetch_assoc($catalogs))
+        if($catalogs)
         {
-            if($role == 3)
+            while($row = mysqli_fetch_assoc($catalogs))
             {
-                echo '<h2><a href="themes.php">'.$row['pavadinimas'].'</a> <button class="btn btn-danger btn-sm" type="submit">Naikinti</button></h2>';
-            }
-            else
-            {
-                echo '<h2><a href="themes.php">'.$row['pavadinimas'].'</a></h2>';
+                if($role == 3)
+                {
+                    echo '<h2><a href="themes.php">'.$row['pavadinimas'].'</a> <button class="btn btn-danger btn-sm" type="submit" name="deleteButton" value="'.$row['id'].'">Naikinti</button></h2>';
+                }
+                else
+                {
+                    echo '<h2><a href="themes.php">'.$row['pavadinimas'].'</a></h2>';
+                }
             }
         }
+        else
+        {
+            echo '<h2>Nėra nei vienos forumo kategorijos!</h2>';
+        }
+
+        echo '</form>';
 
         if($role == 3)
         {

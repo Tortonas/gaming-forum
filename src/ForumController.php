@@ -28,6 +28,18 @@ class ForumController extends MainController implements iController
                 }
             }
         }
+        if(isset($_POST['deleteButton']))
+        {
+            if($this->getModel()->removeData('katalogai', $_POST['deleteButton']))
+            {
+                $this->printSuccess('Istrinta!');
+                $this->redirect_to_another_page('forum.php', 0);
+            }
+            else
+            {
+                $this->printDanger('Ivyko klaida!');
+            }
+        }
     }
 
     public function getTitle()
