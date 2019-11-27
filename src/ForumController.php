@@ -103,6 +103,38 @@ class ForumController extends MainController implements iController
 
         $themeAnswerList = $this->getModel()->getThemeListJoinedWithUsers($_GET['id']);
         $this->getView()->printViewTheme($themeAnswerList);
+        if(isset($_POST['commentBtn']))
+        {
+            if(empty($_POST['text']))
+            {
+                $this->printDanger('Irašykite kažką!');
+            }
+            else
+            {
+                if($this->getModel()->createNewThemeAnswer($_POST['text'], $this->getDateTime(), $_SESSION['id'], $_GET['id']))
+                {
+                    $this->printSuccess('Temos atsakymas sukurtas!');
+                    $this->redirect_to_another_page('viewtheme.php?id='.$_GET['id'], 1);
+                }
+                else
+                {
+                    $this->printDanger('Ivyko klaida!');
+                }
+            }
+        }
+
+        if(isset($_POST['deleteBtn']))
+        {
+            if($this->getModel()->removeData('temu_atsakymai', $_POST['deleteBtn']))
+            {
+                $this->printSuccess('Istrinta!');
+                $this->redirect_to_another_page('viewtheme.php?id='.$_GET['id'], 1);
+            }
+            else
+            {
+                $this->printDanger('Ivyko klaida!');
+            }
+        }
     }
 
     public function getTitle()

@@ -253,7 +253,7 @@ class View {
                 if($_SESSION['role'] >= 3 || $_SESSION['slapyvardis'] == $row['slapyvardis'])
                 {
                     echo '                        <a href="edittheme.php"> <button type="button" class="btn btn-primary btn-sm">Redaguoti</button> </a>
-                        <button type="button" class="btn btn-danger btn-sm">Naikinti</button>';
+                        <button type="submit" name="deleteBtn" value='.$row['id'].' class="btn btn-danger btn-sm">Naikinti</button>';
                 }
 
                 echo '
@@ -268,15 +268,18 @@ class View {
 
 
 
-
-        echo '
+        if($_SESSION['role'] > 0)
+        {
+            echo '
         <form method="POST">
             <div class="form-group">
                 <label for="comment">Komentuoti:</label>
-                <textarea class="form-control" rows="5" id="comment"></textarea>
-                <button type="button" class="btn btn-danger">Komentuoti</button>
+                <textarea class="form-control" name="text" rows="5" id="comment"></textarea>
+                <button name="commentBtn" type="submit" class="btn btn-danger">Komentuoti</button>
             </div>
         </form>';
+        }
+
     }
 
     // -- FORUM PAGE END

@@ -250,7 +250,7 @@ class Model {
     public function getThemeListJoinedWithUsers($themeId)
     {
         $themeId = $this->secureInput($themeId);
-        $sql = "SELECT * FROM temu_atsakymai 
+        $sql = "SELECT pavadinimas, slapyvardis, temu_atsakymai.sukurimo_data, tekstas, temu_atsakymai.id FROM temu_atsakymai 
                 JOIN naudotojai ON temu_atsakymai.fk_naudotojas = naudotojai.id 
                 JOIN temos ON temos.id = temu_atsakymai.fk_tema
                 WHERE fk_tema=".$themeId;
@@ -259,6 +259,24 @@ class Model {
         if (mysqli_num_rows($result) > 0)
         {
             return $result;
+        }
+        else
+        {
+            echo mysqli_error($this->conn);
+            return false;
+        }
+    }
+
+    public function createNewThemeAnswer($text, $date, $userId, $themeId)
+    {
+        $text = $this->secureInput($text);
+        $date = $this->secureInput($date);
+        $userId = $this->secureInput($userId);
+        $themeId = $this->secureInput($themeId);
+        $sql = "INSERT INTO temu_atsakymai (tekstas, sukurimo_data, fk_naudotojas, fk_tema) VALUES ('$text', '$date', '$userId', '$themeId')";
+        if($this->conn->query($sql))
+        {
+            return true;
         }
         else
         {
