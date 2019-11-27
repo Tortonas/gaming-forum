@@ -252,7 +252,7 @@ class View {
 
                 if($_SESSION['role'] >= 3 || $_SESSION['slapyvardis'] == $row['slapyvardis'])
                 {
-                    echo '                        <a href="edittheme.php"> <button type="button" class="btn btn-primary btn-sm">Redaguoti</button> </a>
+                    echo '                        <a href="edittheme.php?id='.$row['id'].'"> <button type="button" class="btn btn-primary btn-sm">Redaguoti</button> </a>
                         <button type="submit" name="deleteBtn" value='.$row['id'].' class="btn btn-danger btn-sm">Naikinti</button>';
                 }
 
@@ -280,6 +280,18 @@ class View {
         </form>';
         }
 
+    }
+
+    public function printEditTheme()
+    {
+        echo '        <h1>Redaguoti temos atsakymą - (temos pavadinimas)</h1>
+
+        <div class="form-group">
+            <label for="exampleFormControlTextarea3">Turinys</label>
+            <textarea class="form-control" id="exampleFormControlTextarea3" rows="7"></textarea>
+        </div>
+
+        <a href="viewtheme.php"> <button type="button" class="btn btn-danger">Pateikti atnaujintą temą</button> </a>';
     }
 
     // -- FORUM PAGE END

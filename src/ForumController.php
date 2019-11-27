@@ -137,6 +137,17 @@ class ForumController extends MainController implements iController
         }
     }
 
+    public function printEditThemeView()
+    {
+        if(!isset($_GET['id']))
+        {
+            $this->printDanger('Ivyko klaida!');
+            $this->redirect_to_another_page('forum.php', 0);
+            return;
+        }
+        $this->getView()->printEditTheme();
+    }
+
     public function getTitle()
     {
         echo 'Gaming forum - forumas';
