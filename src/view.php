@@ -161,7 +161,7 @@ class View {
                 }
                 else
                 {
-                    echo '<h2><a href="themes.php">'.$row['pavadinimas'].'</a></h2>';
+                    echo '<h2><a href="themes.php?id='.$row['id'].'">'.$row['pavadinimas'].'</a></h2>';
                 }
             }
         }
@@ -194,12 +194,37 @@ class View {
         if($themeList)
         {
             while($row = $themeList->fetch_assoc()) {
-                echo '<h2> <a href="viewtheme.php?id=">'.$row['pavadinimas'].'</a><button class="btn btn-danger btn-sm">Naikinti</button></h2>';
+                if($_SESSION['role'] >= 3)
+                {
+                    echo '<h2> <a href="viewtheme.php?id=">'.$row['pavadinimas'].'</a> <button class="btn btn-danger btn-sm">Naikinti</button></h2>';
+                }
+                else
+                {
+                    echo '<h2> <a href="viewtheme.php?id=">'.$row['pavadinimas'].'</a></h2>';
+                }
             }
         }
 
+        if($_SESSION['role'] > 0)
+        {
+            echo '<a href="createtheme.php?id='.$_GET['id'].'"> <button type="button" class="btn btn-primary">Sukurti naują temą</button> </a>';
+        }
+    }
 
-        echo '<a href="createtheme.php"> <button type="button" class="btn btn-primary">Sukurti naują temą</button> </a>';
+    public function printCreateTheme()
+    {
+        echo '        <h1>Sukurti naują temą - (kategorijos pavadinimas):</h1>
+        <form method="POST">
+        <div class="form-group">
+            <label for="inputFor">Temos pavadinimas</label>
+            <input name="themeName" type="text" class="form-control" id="inputFor" placeholder="Temos pavadinimas">
+            <label for="exampleFormControlTextarea3">Turinys</label>
+            <textarea name="themeText" class="form-control" id="exampleFormControlTextarea3" rows="7"></textarea>
+        </div>
+
+        
+            <button type="submit" name="createThemeBtn" class="btn btn-danger">Sukurti naują temą</button>
+        </form>';
     }
 
     // -- FORUM PAGE END

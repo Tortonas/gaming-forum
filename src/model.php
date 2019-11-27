@@ -217,4 +217,33 @@ class Model {
             return false;
         }
     }
+
+    public function createNewTheme($name, $date, $userId, $catalogId, $text)
+    {
+        $name = $this->secureInput($name);
+        $date = $this->secureInput($date);
+        $userId = $this->secureInput($userId);
+        $catalogId = $this->secureInput($catalogId);
+        $text = $this->secureInput($text);
+        $sqlCreateTheme = "INSERT INTO temos (pavadinimas, sukurimo_data, fk_naudotojas, fk_katalogas) VALUES ('$name', '$date', '$userId', '$catalogId')";
+        if($this->conn->query($sqlCreateTheme))
+        {
+            $newThemeId =  $this->conn->insert_id;
+            $sqlCreateThemeAnswer = "INSERT INTO temu_atsakymai (tekstas, sukurimo_data, fk_naudotojas, fk_tema) VALUES ('$text', '$date', '$userId', '$newThemeId')";
+            if($this->conn->query($sqlCreateThemeAnswer))
+            {
+                return true;
+            }
+            else
+            {
+                echo mysqli_error($this->conn);
+                return false;
+            }
+        }
+        else
+        {
+            echo mysqli_error($this->conn);
+            return false;
+        }
+    }
 }

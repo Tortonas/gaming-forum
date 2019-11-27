@@ -7,6 +7,7 @@ class ForumController extends MainController implements iController
         parent::__construct();
     }
 
+    // forum.php
     public function printPageView()
     {
         $catalogs = $this->getModel()->getData('katalogai');
@@ -42,6 +43,7 @@ class ForumController extends MainController implements iController
         }
     }
 
+    // themes.php
     public function printPageViewThemes()
     {
         if(!isset($_GET['id']))
@@ -54,6 +56,39 @@ class ForumController extends MainController implements iController
         $themeList = $this->getModel()->getDataByColumn('temos', 'fk_katalogas', $_GET['id']);
 
         $this->getView()->printForumThemes($themeList, $this->getModel()->getDataByColumnFirst('katalogai', 'id', $_GET['id']));
+    }
+
+
+    // createtheme.php
+    public function printCreateThemeView()
+    {
+        if(!isset($_GET['id']))
+        {
+            $this->printDanger('Ivyko klaida!');
+            $this->redirect_to_another_page('forum.php', 0);
+            return;
+        }
+
+        $this->getView()->printCreateTheme();
+
+        if(isset($_POST['createThemeBtn']))
+        {
+            if(empty($_POST['themeName']) || empty($_POST['themeText']))
+            {
+                $this->printDanger('Iveskite kazka!');
+                return;
+            }
+
+            if($this->getModel()->createNewTheme($_POST['themeName'], $this->getDateTime(), $_SESSION['id'], $_GET['id'], $_POST['themeText']))
+            {
+                $this->printSuccess('Tema sukurta!');
+            }
+            else
+            {
+                $this->printDanger('Nenumatyta klaida!');
+            }
+
+        }
     }
 
     public function getTitle()
