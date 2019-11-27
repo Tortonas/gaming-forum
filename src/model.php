@@ -246,4 +246,24 @@ class Model {
             return false;
         }
     }
+
+    public function getThemeListJoinedWithUsers($themeId)
+    {
+        $themeId = $this->secureInput($themeId);
+        $sql = "SELECT * FROM temu_atsakymai 
+                JOIN naudotojai ON temu_atsakymai.fk_naudotojas = naudotojai.id 
+                JOIN temos ON temos.id = temu_atsakymai.fk_tema
+                WHERE fk_tema=".$themeId;
+        $result = mysqli_query($this->conn, $sql);
+
+        if (mysqli_num_rows($result) > 0)
+        {
+            return $result;
+        }
+        else
+        {
+            echo mysqli_error($this->conn);
+            return false;
+        }
+    }
 }

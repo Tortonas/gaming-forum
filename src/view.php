@@ -196,11 +196,11 @@ class View {
             while($row = $themeList->fetch_assoc()) {
                 if($_SESSION['role'] >= 3)
                 {
-                    echo '<h2> <a href="viewtheme.php?id=">'.$row['pavadinimas'].'</a> <button class="btn btn-danger btn-sm">Naikinti</button></h2>';
+                    echo '<h2> <a href="viewtheme.php?id='.$row['id'].'">'.$row['pavadinimas'].'</a> <button class="btn btn-danger btn-sm">Naikinti</button></h2>';
                 }
                 else
                 {
-                    echo '<h2> <a href="viewtheme.php?id=">'.$row['pavadinimas'].'</a></h2>';
+                    echo '<h2> <a href="viewtheme.php?id='.$row['id'].'">'.$row['pavadinimas'].'</a></h2>';
                 }
             }
         }
@@ -224,6 +224,58 @@ class View {
 
         
             <button type="submit" name="createThemeBtn" class="btn btn-danger">Sukurti naują temą</button>
+        </form>';
+    }
+
+    public function printViewTheme($themeAnswerList)
+    {
+        $showTitle = true;
+        if($themeAnswerList)
+        {
+            while($row = $themeAnswerList->fetch_assoc())
+            {
+                if($showTitle)
+                {
+                    echo '<h1>'.$row['pavadinimas'].'</h1>';
+                    $showTitle = false;
+                }
+
+                echo '
+                <div class="theme-answer">
+                    <form method="POST" class="form-group">
+                        <h4>'.$row['slapyvardis'].'</h4>
+                        <h6>'.$row['sukurimo_data'].'</h6>
+                        <p>'.$row['tekstas'].'</p>
+                        <button type="button" class="btn btn-primary btn-sm">
+                            Pamėgti <span class="badge badge-light">4</span>
+                        </button>';
+
+                if($_SESSION['role'] >= 3 || $_SESSION['slapyvardis'] == $row['slapyvardis'])
+                {
+                    echo '                        <a href="edittheme.php"> <button type="button" class="btn btn-primary btn-sm">Redaguoti</button> </a>
+                        <button type="button" class="btn btn-danger btn-sm">Naikinti</button>';
+                }
+
+                echo '
+                    </form>
+                </div>';
+            }
+        }
+        else
+        {
+            echo '<h3>Tema neturi atsakymų! Temos autorius ištrynė savo pranešimą</h3>';
+        }
+
+
+
+
+        echo '
+        <form method="POST">
+            <div class="form-group">
+                <label for="comment">Komentuoti:</label>
+                <textarea class="form-control" rows="5" id="comment"></textarea>
+                <button type="button" class="btn btn-danger">Komentuoti</button>
+            </div>
         </form>';
     }
 
