@@ -35,7 +35,7 @@ class View {
                 }
                 echo '</ul>
             <form class="form-inline my-2 my-lg-0" method="POST" action="search.php">
-                <input class="form-control mr-sm-2" type="search" placeholder="Raktažodis paieškai" aria-label="Search">
+                <input class="form-control mr-sm-2" type="search" name="searchText" placeholder="Raktažodis paieškai" aria-label="Search">
                 <button class="btn btn-outline-light my-2 my-sm-0" type="submit">Ieškoti</button>
             </form>
             </div>
@@ -283,10 +283,21 @@ class View {
 
     }
 
+    public function printSearchPage($searchText)
+    {
+        echo '<form method="POST">
+            <div class="form-group">
+                <label for="exampleInputEmail1">Raktažodis paieškai</label>
+                <input type="text" class="form-control" id="exampleInputEmail1" value="'.$searchText.'" name="searchText" placeholder="Raktažodis paieškai">
+            </div>
+            <button type="submit" name="searchBtn" class="btn btn-primary">Ieškoti</button>
+        </form>';
+    }
+
     public function printEditTheme($content)
     {
 
-        echo '        <h1>Redaguoti temos atsakymą - (temos pavadinimas)</h1>
+        echo '        <h1>Redaguoti temos atsakymą</h1>
         <form method="POST">
         <div class="form-group">
             <label for="exampleFormControlTextarea3">Turinys</label>
