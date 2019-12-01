@@ -186,6 +186,24 @@ class Model {
         }
     }
 
+    public function updateDataOneColumn($table, $rowId,  $column, $newValue)
+    {
+        $table = $this->secureInput($table);
+        $column = $this->secureInput($column);
+        $newValue = $this->secureInput($newValue);
+        $sql = "UPDATE ".$table." SET ".$column."='".$newValue."' WHERE id=".$rowId;
+
+        if($this->conn->query($sql))
+        {
+            return true;
+        }
+        else
+        {
+            echo mysqli_error($this->conn);
+            return false;
+        }
+    }
+
     public function removeData($table, $id)
     {
         $table = $this->secureInput($table);
@@ -247,6 +265,23 @@ class Model {
         }
     }
 
+    public function likeTheme($date, $userId, $themeAnsId)
+    {
+        $date = $this->secureInput($date);
+        $userId = $this->secureInput($userId);
+        $themeAnsId = $this->secureInput($themeAnsId);
+        $sql = "INSERT INTO temu_pamegimai (sukurimo_data, fk_naudotojas, fk_temos_atsakymas) VALUES ('$date', '$userId', '$themeAnsId')";
+        if($this->conn->query($sql))
+        {
+            return true;
+        }
+        else
+        {
+            echo mysqli_error($this->conn);
+            return false;
+        }
+    }
+
     public function getThemeListJoinedWithUsers($themeId)
     {
         $themeId = $this->secureInput($themeId);
@@ -265,6 +300,14 @@ class Model {
             echo mysqli_error($this->conn);
             return false;
         }
+    }
+
+    public function getLikeCountByThemeAnswerId($id)
+    {
+        $id = $this->secureInput($id);
+        $sql = "SELECT * FROM temu_pamegimai WHERE fk_temos_atsakymas=".$id;
+        $result = $this->conn->query($sql);
+        return $result->num_rows;
     }
 
     public function createNewThemeAnswer($text, $date, $userId, $themeId)

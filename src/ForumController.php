@@ -102,7 +102,18 @@ class ForumController extends MainController implements iController
         }
 
         $themeAnswerList = $this->getModel()->getThemeListJoinedWithUsers($_GET['id']);
-        $this->getView()->printViewTheme($themeAnswerList);
+
+        $likeCount = array();
+        $likeCountIter = 0;
+
+        while($row = $themeAnswerList->fetch_assoc())
+        {
+            $likeCount[$likeCountIter++] = $this->getModel()->getLikeCountByThemeAnswerId($row['id']);
+        }
+
+        $themeAnswerList = $this->getModel()->getThemeListJoinedWithUsers($_GET['id']);
+        $this->getView()->printViewTheme($themeAnswerList, $likeCount);
+
         if(isset($_POST['commentBtn']))
         {
             if(empty($_POST['text']))
@@ -135,8 +146,16 @@ class ForumController extends MainController implements iController
                 $this->printDanger('Ivyko klaida!');
             }
         }
+
+        if(isset($_POST['likeBtn']))
+        {
+            $this->getModel()->likeTheme($this->getDateTime(), $_SESSION['id'], $_POST['likeBtn']);
+            $this->redirect_to_another_page('viewtheme.php?id='.$_GET['id'], 0);
+        }
     }
 
+
+    // editheme.php
     public function printEditThemeView()
     {
         if(!isset($_GET['id']))
@@ -145,7 +164,33 @@ class ForumController extends MainController implements iController
             $this->redirect_to_another_page('forum.php', 0);
             return;
         }
-        $this->getView()->printEditTheme();
+
+        // TODO: Patikrinti ar as turiu teises redaguoti sita tema.
+
+        $content = $this->getModel()->getDataByColumnFirst('temu_atsakymai', 'id', $_GET['id']);
+
+
+        $this->getView()->printEditTheme($content['tekstas']);
+
+        if(isset($_POST['editThemeBtn']))
+        {
+            if(!empty($_POST['text']))
+            {
+                if($this->getModel()->updateDataOneColumn('temu_atsakymai', $_GET['id'], 'tekstas', $_POST['text']))
+                {
+                    $this->printSuccess('Komentaras atnaujintas!');
+                    $this->redirect_to_another_page('viewtheme.php?id='.$content['fk_tema'], 0);
+                }
+                else
+                {
+                    $this->printDanger('Ivyko klaida!');
+                }
+            }
+            else
+            {
+                $this->printDanger('Ivyko klaida! Negalima pateikti tuščio komentaro!');
+            }
+        }
     }
 
     public function getTitle()

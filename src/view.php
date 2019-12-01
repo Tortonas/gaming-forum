@@ -227,9 +227,10 @@ class View {
         </form>';
     }
 
-    public function printViewTheme($themeAnswerList)
+    public function printViewTheme($themeAnswerList, $likeCount)
     {
         $showTitle = true;
+        $likeCountIter = 0;
         if($themeAnswerList)
         {
             while($row = $themeAnswerList->fetch_assoc())
@@ -246,8 +247,8 @@ class View {
                         <h4>'.$row['slapyvardis'].'</h4>
                         <h6>'.$row['sukurimo_data'].'</h6>
                         <p>'.$row['tekstas'].'</p>
-                        <button type="button" class="btn btn-primary btn-sm">
-                            Pamėgti <span class="badge badge-light">4</span>
+                        <button type="submit" name="likeBtn" value="'.$row['id'].'" class="btn btn-primary btn-sm">
+                            Pamėgti <span class="badge badge-light">'.$likeCount[$likeCountIter++].'</span>
                         </button>';
 
                 if($_SESSION['role'] >= 3 || $_SESSION['slapyvardis'] == $row['slapyvardis'])
@@ -282,16 +283,18 @@ class View {
 
     }
 
-    public function printEditTheme()
+    public function printEditTheme($content)
     {
-        echo '        <h1>Redaguoti temos atsakymą - (temos pavadinimas)</h1>
 
+        echo '        <h1>Redaguoti temos atsakymą - (temos pavadinimas)</h1>
+        <form method="POST">
         <div class="form-group">
             <label for="exampleFormControlTextarea3">Turinys</label>
-            <textarea class="form-control" id="exampleFormControlTextarea3" rows="7"></textarea>
+            <textarea class="form-control" name="text" id="exampleFormControlTextarea3" rows="7">'.$content.'</textarea>
         </div>
+        <button type="submit" name="editThemeBtn" class="btn btn-danger">Pateikti atnaujintą temą</button>
+        </form>';
 
-        <a href="viewtheme.php"> <button type="button" class="btn btn-danger">Pateikti atnaujintą temą</button> </a>';
     }
 
     // -- FORUM PAGE END
