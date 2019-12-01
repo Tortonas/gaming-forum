@@ -193,6 +193,21 @@ class ForumController extends MainController implements iController
         }
     }
 
+    // search.php
+    public function printSearchContent()
+    {
+        if(isset($_POST['searchText']))
+            $this->getView()->printSearchPage($_POST['searchText']);
+        else
+            $this->getView()->printSearchPage(null);
+
+        if(isset($_POST['searchBtn']))
+        {
+            // TODO: Realizuoti paieska.
+            echo $_POST['searchText'];
+        }
+    }
+
     public function getTitle()
     {
         echo 'Gaming forum - forumas';
