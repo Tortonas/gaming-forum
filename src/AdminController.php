@@ -18,4 +18,18 @@ class AdminController extends  MainController implements iController
         echo 'pasikeist';
         // TODO: Implement getTitle() method.
     }
+
+    public function printEditUserView()
+    {
+        if(!isset($_GET['id']))
+        {
+            $this->printDanger('Ivyko klaida!');
+            $this->redirect_to_another_page('adminpanel.php', 0);
+            return;
+        }
+
+        $content = $this->getModel()->getDataByColumnFirst("naudotojai", 'id', $_GET['id']);
+        $this->getView()->printEditUserAsAdmin($content);
+
+    }
 }

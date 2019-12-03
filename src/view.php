@@ -1,5 +1,6 @@
 <?php
-class View {
+class View
+{
 
     function __construct()
     {
@@ -16,24 +17,20 @@ class View {
 
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav mr-auto">';
-                self::printNavbarItem("Namai", "index.php", $location);
-                self::printNavbarItem("Forumas", "forum.php", $location);
-                self::printNavbarItem("Galerija", "gallery.php", $location);
-                if($_SESSION['role'] == "0")
-                {
-                    self::printNavbarItem("Registruotis", "register.php", $location);
-                    self::printNavbarItem("Prisijungti", "login.php", $location);
-                }
-                else
-                {
-                    if($_SESSION['role'] == 3)
-                    {
-                        self::printNavbarItem("Admin", "admin.php", $location);
-                    }
-                    self::printNavbarItem("Nustatymai", "settings.php", $location);
-                    self::printNavbarItem("Atsijungti", "logout.php", $location);
-                }
-                echo '</ul>
+        self::printNavbarItem("Namai", "index.php", $location);
+        self::printNavbarItem("Forumas", "forum.php", $location);
+        self::printNavbarItem("Galerija", "gallery.php", $location);
+        if ($_SESSION['role'] == "0") {
+            self::printNavbarItem("Registruotis", "register.php", $location);
+            self::printNavbarItem("Prisijungti", "login.php", $location);
+        } else {
+            if ($_SESSION['role'] == 3) {
+                self::printNavbarItem("Admin", "admin.php", $location);
+            }
+            self::printNavbarItem("Nustatymai", "settings.php", $location);
+            self::printNavbarItem("Atsijungti", "logout.php", $location);
+        }
+        echo '</ul>
             <form class="form-inline my-2 my-lg-0" method="POST" action="search.php">
                 <input class="form-control mr-sm-2" type="search" name="searchText" placeholder="Raktažodis paieškai" aria-label="Search">
                 <button class="btn btn-outline-light my-2 my-sm-0" type="submit">Ieškoti</button>
@@ -45,18 +42,15 @@ class View {
 
     private static function printNavbarItem($name, $location, $globalLocation)
     {
-        if($globalLocation == $location)
-        {
+        if ($globalLocation == $location) {
             echo '
                   <li class="nav-item active">
-                    <a class="nav-link" href="'.$location.'">'.$name.'</a>
+                    <a class="nav-link" href="' . $location . '">' . $name . '</a>
                   </li>';
-        }
-        else
-        {
+        } else {
             echo '
                   <li class="nav-item">
-                    <a class="nav-link" href="'.$location.'">'.$name.'</a>
+                    <a class="nav-link" href="' . $location . '">' . $name . '</a>
                   </li>';
         }
     }
@@ -64,12 +58,12 @@ class View {
 
     function printSuccess($text)
     {
-        echo '<div class="alert alert-success" role="alert">'.$text.'</div>';
+        echo '<div class="alert alert-success" role="alert">' . $text . '</div>';
     }
 
     function printDanger($text)
     {
-        echo '<div class="alert alert-danger" role="alert">'.$text.'</div>';
+        echo '<div class="alert alert-danger" role="alert">' . $text . '</div>';
     }
 
     // -- GLOBAL VIEW END --
@@ -151,29 +145,21 @@ class View {
         echo '<h1>Forumo kategorijos:</h1>
                <form method="POST">';
 
-        if($catalogs)
-        {
-            while($row = mysqli_fetch_assoc($catalogs))
-            {
-                if($role == 3)
-                {
-                    echo '<h2><a href="themes.php?id='.$row['id'].'">'.$row['pavadinimas'].'</a> <button class="btn btn-danger btn-sm" type="submit" name="deleteButton" value="'.$row['id'].'">Naikinti</button></h2>';
-                }
-                else
-                {
-                    echo '<h2><a href="themes.php?id='.$row['id'].'">'.$row['pavadinimas'].'</a></h2>';
+        if ($catalogs) {
+            while ($row = mysqli_fetch_assoc($catalogs)) {
+                if ($role == 3) {
+                    echo '<h2><a href="themes.php?id=' . $row['id'] . '">' . $row['pavadinimas'] . '</a> <button class="btn btn-danger btn-sm" type="submit" name="deleteButton" value="' . $row['id'] . '">Naikinti</button></h2>';
+                } else {
+                    echo '<h2><a href="themes.php?id=' . $row['id'] . '">' . $row['pavadinimas'] . '</a></h2>';
                 }
             }
-        }
-        else
-        {
+        } else {
             echo '<h2>Nėra nei vienos forumo kategorijos!</h2>';
         }
 
         echo '</form>';
 
-        if($role == 3)
-        {
+        if ($role == 3) {
             echo '
         <form method="POST">
             <div class="input-group mb-3">
@@ -189,25 +175,20 @@ class View {
 
     public function printForumThemes($themeList, $categoryName)
     {
-        echo '        <h1>'.$categoryName['pavadinimas'].' temos:</h1>';
+        echo '        <h1>' . $categoryName['pavadinimas'] . ' temos:</h1>';
 
-        if($themeList)
-        {
-            while($row = $themeList->fetch_assoc()) {
-                if($_SESSION['role'] >= 3)
-                {
-                    echo '<h2> <a href="viewtheme.php?id='.$row['id'].'">'.$row['pavadinimas'].'</a> <button class="btn btn-danger btn-sm">Naikinti</button></h2>';
-                }
-                else
-                {
-                    echo '<h2> <a href="viewtheme.php?id='.$row['id'].'">'.$row['pavadinimas'].'</a></h2>';
+        if ($themeList) {
+            while ($row = $themeList->fetch_assoc()) {
+                if ($_SESSION['role'] >= 3) {
+                    echo '<h2> <a href="viewtheme.php?id=' . $row['id'] . '">' . $row['pavadinimas'] . '</a> <button class="btn btn-danger btn-sm">Naikinti</button></h2>';
+                } else {
+                    echo '<h2> <a href="viewtheme.php?id=' . $row['id'] . '">' . $row['pavadinimas'] . '</a></h2>';
                 }
             }
         }
 
-        if($_SESSION['role'] > 0)
-        {
-            echo '<a href="createtheme.php?id='.$_GET['id'].'"> <button type="button" class="btn btn-primary">Sukurti naują temą</button> </a>';
+        if ($_SESSION['role'] > 0) {
+            echo '<a href="createtheme.php?id=' . $_GET['id'] . '"> <button type="button" class="btn btn-primary">Sukurti naują temą</button> </a>';
         }
     }
 
@@ -231,46 +212,38 @@ class View {
     {
         $showTitle = true;
         $likeCountIter = 0;
-        if($themeAnswerList)
-        {
-            while($row = $themeAnswerList->fetch_assoc())
-            {
-                if($showTitle)
-                {
-                    echo '<h1>'.$row['pavadinimas'].'</h1>';
+        if ($themeAnswerList) {
+            while ($row = $themeAnswerList->fetch_assoc()) {
+                if ($showTitle) {
+                    echo '<h1>' . $row['pavadinimas'] . '</h1>';
                     $showTitle = false;
                 }
 
                 echo '
                 <div class="theme-answer">
                     <form method="POST" class="form-group">
-                        <h4>'.$row['slapyvardis'].'</h4>
-                        <h6>'.$row['sukurimo_data'].'</h6>
-                        <p>'.$row['tekstas'].'</p>
-                        <button type="submit" name="likeBtn" value="'.$row['id'].'" class="btn btn-primary btn-sm">
-                            Pamėgti <span class="badge badge-light">'.$likeCount[$likeCountIter++].'</span>
+                        <h4>' . $row['slapyvardis'] . '</h4>
+                        <h6>' . $row['sukurimo_data'] . '</h6>
+                        <p>' . $row['tekstas'] . '</p>
+                        <button type="submit" name="likeBtn" value="' . $row['id'] . '" class="btn btn-primary btn-sm">
+                            Pamėgti <span class="badge badge-light">' . $likeCount[$likeCountIter++] . '</span>
                         </button>';
 
-                if($_SESSION['role'] >= 3 || $_SESSION['slapyvardis'] == $row['slapyvardis'])
-                {
-                    echo '                        <a href="edittheme.php?id='.$row['id'].'"> <button type="button" class="btn btn-primary btn-sm">Redaguoti</button> </a>
-                        <button type="submit" name="deleteBtn" value='.$row['id'].' class="btn btn-danger btn-sm">Naikinti</button>';
+                if ($_SESSION['role'] >= 3 || $_SESSION['slapyvardis'] == $row['slapyvardis']) {
+                    echo '                        <a href="edittheme.php?id=' . $row['id'] . '"> <button type="button" class="btn btn-primary btn-sm">Redaguoti</button> </a>
+                        <button type="submit" name="deleteBtn" value=' . $row['id'] . ' class="btn btn-danger btn-sm">Naikinti</button>';
                 }
 
                 echo '
                     </form>
                 </div>';
             }
-        }
-        else
-        {
+        } else {
             echo '<h3>Tema neturi atsakymų! Temos autorius ištrynė savo pranešimą</h3>';
         }
 
 
-
-        if($_SESSION['role'] > 0)
-        {
+        if ($_SESSION['role'] > 0) {
             echo '
         <form method="POST">
             <div class="form-group">
@@ -288,7 +261,7 @@ class View {
         echo '<form method="POST">
             <div class="form-group">
                 <label for="exampleInputEmail1">Raktažodis paieškai</label>
-                <input type="text" class="form-control" id="exampleInputEmail1" value="'.$searchText.'" name="searchText" placeholder="Raktažodis paieškai">
+                <input type="text" class="form-control" id="exampleInputEmail1" value="' . $searchText . '" name="searchText" placeholder="Raktažodis paieškai">
             </div>
             <button type="submit" name="searchBtn" class="btn btn-primary">Ieškoti</button>
         </form>';
@@ -301,9 +274,131 @@ class View {
         <form method="POST">
         <div class="form-group">
             <label for="exampleFormControlTextarea3">Turinys</label>
-            <textarea class="form-control" name="text" id="exampleFormControlTextarea3" rows="7">'.$content.'</textarea>
+            <textarea class="form-control" name="text" id="exampleFormControlTextarea3" rows="7">' . $content . '</textarea>
         </div>
         <button type="submit" name="editThemeBtn" class="btn btn-danger">Pateikti atnaujintą temą</button>
+        </form>';
+
+    }
+
+    public function printEditUserAsAdmin($content)
+    {
+        echo ' <form method="POST" class="mainForm">
+            <h1>Koreguojamas (naudotojo vardas) profilis</h1>
+            <h1>Profilio nustatymai</h1>
+            <div class="form-group">
+                <label for="inputFor">Slapyvardis*</label>
+                <input type="text" class="form-control" id="inputFor" value="'.$content['slapyvardis'].'" disabled>
+            </div>
+            <div class="form-group">
+                <label for="inputFor">Rolė</label>
+                <select class="custom-select">';
+                if($content['role'] == 1)
+                {
+                    echo '<option selected value = "1" > Naudotojas</option >
+                          <option value = "2" > Moderatorius</option >
+                          <option value = "3" > Administratorius</option >
+                          ';
+                }
+                else if($content['role'] == 2)
+                {
+                    echo '<option value = "1" > Naudotojas</option >
+                          <option selected value = "2" > Moderatorius</option >
+                          <option value = "3" > Administratorius</option >
+                          ';
+                }
+                else if($content['role'] == 3)
+                {
+                    echo '<option value = "1" > Naudotojas</option >
+                          <option value = "2" > Moderatorius</option >
+                          <option selected value = "3" > Administratorius</option >
+                          ';
+                }
+                    echo '
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="inputFor">El. pašto adresas*</label>
+                <input type="email" class="form-control" id="inputFor" aria-describedby="emailHelp" placeholder="El. Paštas" value="'.$content['email'].'">
+            </div>
+            <div class="form-group">
+                <label for="inputFor">Šalis</label>
+                <input type="text" class="form-control" id="inputFor" placeholder="Šalis" value="'.$content['salis'].'">
+            </div>
+            <div class="form-group">
+                <label for="inputFor">Adresas</label>
+                <input type="text" class="form-control" id="inputFor" placeholder="Adresas" value="'.$content['adresas'].'">
+            </div>
+            <div class="form-group">
+                <label for="inputFor">Telefono numeris</label>
+                <input type="text" class="form-control" id="inputFor" placeholder="Telefono numeris">
+            </div>
+            <div class="form-group">
+                <label for="inputFor">Pavardė</label>
+                <input type="text" class="form-control" id="inputFor" placeholder="Pavardė">
+            </div>
+            <div class="form-group">
+                <label for="inputFor">Gimimo data</label>
+                <input type="text" class="form-control" id="inputFor" placeholder="Gimimo data">
+            </div>
+            <div class="form-group">
+                <label for="inputFor">Miestas</label>
+                <input type="text" class="form-control" id="inputFor" placeholder="Miestas">
+            </div>
+            <div class="form-group">
+                <label for="inputFor">Mėgstamiausias žaidimas</label>
+                <input type="text" class="form-control" id="inputFor" placeholder="Mėgstamiausias žaidimas">
+            </div>
+            <div class="form-group">
+                <label for="inputFor">Biografinė žinutė</label>
+                <input type="text" class="form-control" id="inputFor" placeholder="Biografinė žinutė">
+            </div>
+            <div class="form-group">
+                <label for="inputFor">Discord ID</label>
+                <input type="text" class="form-control" id="inputFor" placeholder="Discord ID">
+            </div>
+            <div class="form-group">
+                <label for="inputFor">Facebook</label>
+                <input type="text" class="form-control" id="inputFor" placeholder="Facebook">
+            </div>
+            <div class="form-group">
+                <label for="inputFor">Instagram</label>
+                <input type="text" class="form-control" id="inputFor" placeholder="Instagram">
+            </div>
+            <div class="form-group">
+                <label for="inputFor">Skype</label>
+                <input type="text" class="form-control" id="inputFor" placeholder="Skype">
+            </div>
+            <div class="form-group">
+                <label for="inputFor">Parašas</label>
+                <input type="text" class="form-control" id="inputFor" placeholder="Parašas">
+            </div>
+            <div class="form-group">
+                <label for="inputFor">Tinklalapis</label>
+                <input type="text" class="form-control" id="inputFor" placeholder="Tinklalapis">
+            </div>
+            <div class="form-group">
+                <label for="inputFor">Mokykla</label>
+                <input type="text" class="form-control" id="inputFor" placeholder="Mokykla">
+            </div>
+            <div class="form-group">
+                <label for="inputFor">Aukštasis išsilavinimas</label>
+                <input type="text" class="form-control" id="inputFor" placeholder="Aukštasis išsilavinimas">
+            </div>
+                <button type="button" class="btn btn-primary">Išsaugoti nustatymus</button>
+        </form>
+
+        <form method="POST" class="mainForm">
+            <h1>Slaptažodžio keitimo forma</h1>
+            <div class="form-group">
+                <label for="inputFor">Naujas slaptažodis</label>
+                <input type="password" class="form-control" id="inputFor" placeholder="Naujas slaptažodis">
+            </div>
+            <div class="form-group">
+                <label for="inputFor">Pakartokite naują slaptažodį</label>
+                <input type="password" class="form-control" id="inputFor" placeholder="Naujas slaptažodis">
+            </div>
+            <button type="button" class="btn btn-danger">Keisti slaptažodį</button>
         </form>';
 
     }

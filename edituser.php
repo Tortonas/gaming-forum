@@ -1,3 +1,6 @@
+<?php
+$controller = new AdminController();
+?>
 <!doctype html>
 <html lang="en">
   <head>
@@ -12,147 +15,18 @@
     <title>Hello, world!</title>
   </head>
   <body>
-      
-    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
-        <div class='container'>
-            <a class="navbar-brand" href="index.php">Gaming Forumas  </a>
-            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-            </button>
+  <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+      <div class='container'>
+          <?php
+          MainController::printNavigationBar("edituser.php");
+          ?>
+      </div>
+  </nav>
 
-            <div class="collapse navbar-collapse" id="navbarSupportedContent">
-            <ul class="navbar-nav mr-auto">
-                <li class="nav-item">
-                    <a class="nav-link" href="index.php">Namai <span class="sr-only">(current)</span></a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="forum.php">Forumas</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="gallery.php">Galerija</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="login.php">Prisijungti</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="register.php">Registracija</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="settings.php">Nustatymai</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#">Atsijungti</a>
-                </li>
-                <li class="nav-item active">
-                    <a class="nav-link" href="adminpanel.php">Admin</a>
-                </li>
-            </ul>
-            <form class="form-inline my-2 my-lg-0" method="POST" action="search.php">
-                    <input class="form-control mr-sm-2" type="search" placeholder="Raktažodis paieškai" aria-label="Search">
-                    <button class="btn btn-outline-light my-2 my-sm-0" type="submit">Ieškoti</button>
-                </form>
-            </div>
-        </div>
-    </nav>
     <div class='container'>
-        <form method='POST' class='mainForm'>
-            <h1>Koreguojamas (naudotojo vardas) profilis</h1>
-            <h1>Profilio nustatymai</h1>
-            <div class="form-group">
-                <label for="inputFor">Slapyvardis*</label>
-                <input type="text" class="form-control" id="inputFor" value='Tortonas' disabled>
-            </div>
-            <div class="form-group">
-                <label for="inputFor">Rolė</label>
-                <select class="custom-select">
-                    <option selected value="1">Naudotojas</option>
-                    <option value="2">Moderatorius</option>
-                    <option value="3">Administratorius</option>
-                </select>
-            </div>
-            <div class="form-group">
-                <label for="inputFor">El. pašto adresas*</label>
-                <input type="email" class="form-control" id="inputFor" aria-describedby="emailHelp" placeholder="El. Paštas" value='Tortonas@yeet.com'>
-            </div>
-            <div class="form-group">
-                <label for="inputFor">Šalis</label>
-                <input type="text" class="form-control" id="inputFor" placeholder="Šalis" value='Lietuva'>
-            </div>
-            <div class="form-group">
-                <label for="inputFor">Adresas</label>
-                <input type="text" class="form-control" id="inputFor" placeholder="Adresas" value='Studentu g. 50'>
-            </div>
-            <div class="form-group">
-                <label for="inputFor">Telefono numeris</label>
-                <input type="text" class="form-control" id="inputFor" placeholder="Telefono numeris">
-            </div>
-            <div class="form-group">
-                <label for="inputFor">Pavardė</label>
-                <input type="text" class="form-control" id="inputFor" placeholder="Pavardė">
-            </div>
-            <div class="form-group">
-                <label for="inputFor">Gimimo data</label>
-                <input type="text" class="form-control" id="inputFor" placeholder="Gimimo data">
-            </div>
-            <div class="form-group">
-                <label for="inputFor">Miestas</label>
-                <input type="text" class="form-control" id="inputFor" placeholder="Miestas">
-            </div>
-            <div class="form-group">
-                <label for="inputFor">Mėgstamiausias žaidimas</label>
-                <input type="text" class="form-control" id="inputFor" placeholder="Mėgstamiausias žaidimas">
-            </div>
-            <div class="form-group">
-                <label for="inputFor">Biografinė žinutė</label>
-                <input type="text" class="form-control" id="inputFor" placeholder="Biografinė žinutė">
-            </div>
-            <div class="form-group">
-                <label for="inputFor">Discord ID</label>
-                <input type="text" class="form-control" id="inputFor" placeholder="Discord ID">
-            </div>
-            <div class="form-group">
-                <label for="inputFor">Facebook</label>
-                <input type="text" class="form-control" id="inputFor" placeholder="Facebook">
-            </div>
-            <div class="form-group">
-                <label for="inputFor">Instagram</label>
-                <input type="text" class="form-control" id="inputFor" placeholder="Instagram">
-            </div>
-            <div class="form-group">
-                <label for="inputFor">Skype</label>
-                <input type="text" class="form-control" id="inputFor" placeholder="Skype">
-            </div>
-            <div class="form-group">
-                <label for="inputFor">Parašas</label>
-                <input type="text" class="form-control" id="inputFor" placeholder="Parašas">
-            </div>
-            <div class="form-group">
-                <label for="inputFor">Tinklalapis</label>
-                <input type="text" class="form-control" id="inputFor" placeholder="Tinklalapis">
-            </div>
-            <div class="form-group">
-                <label for="inputFor">Mokykla</label>
-                <input type="text" class="form-control" id="inputFor" placeholder="Mokykla">
-            </div>
-            <div class="form-group">
-                <label for="inputFor">Aukštasis išsilavinimas</label>
-                <input type="text" class="form-control" id="inputFor" placeholder="Aukštasis išsilavinimas">
-            </div>
-                <button type="button" class="btn btn-primary">Išsaugoti nustatymus</button>
-        </form>
-
-        <form method='POST' class='mainForm'>
-            <h1>Slaptažodžio keitimo forma</h1>
-            <div class="form-group">
-                <label for="inputFor">Naujas slaptažodis</label>
-                <input type="password" class="form-control" id="inputFor" placeholder="Naujas slaptažodis">
-            </div>
-            <div class="form-group">
-                <label for="inputFor">Pakartokite naują slaptažodį</label>
-                <input type="password" class="form-control" id="inputFor" placeholder="Naujas slaptažodis">
-            </div>
-            <button type="button" class="btn btn-danger">Keisti slaptažodį</button>
-        </form>
+        <?php
+        $controller->printEditUserView();
+        ?>
     </div>
       
     <!-- Optional JavaScript -->
