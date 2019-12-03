@@ -46,7 +46,7 @@
                 </li>
                 <li class="nav-item">
                         <a class="nav-link" href="adminpanel.php">Admin</a>
-                    </li>
+                </li>
             </ul>
             <form class="form-inline my-2 my-lg-0" method="POST" action="search.php">
                     <input class="form-control mr-sm-2" type="search" placeholder="Raktažodis paieškai" aria-label="Search">
