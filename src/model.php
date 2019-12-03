@@ -105,6 +105,9 @@ class Model {
                     $_SESSION['role'] = $row['role'];
                     $_SESSION['uzblokuotas'] = $row['uzblokuotas'];
                     $_SESSION['uztildytas'] = $row['uztildytas'];
+                    $date = date('Y-m-d H:i:s');
+                    $sql = "UPDATE naudotojai SET paskutini_karta_prisijunges='$date' WHERE slapyvardis='$username'";
+                    $this->conn->query($sql);
                     return true;
                 }
                 else
@@ -186,6 +189,28 @@ class Model {
         }
     }
 
+    public function getDataByString($table, $column, $value)
+    {
+        $table = $this->secureInput($table);
+        $column = $this->secureInput($column);
+        $value = $this->secureInput($value);
+        $sql = "SELECT * FROM ".$table." WHERE ".$column."='".$value."'";
+        $result = mysqli_query($this->conn, $sql);
+
+        if (mysqli_num_rows($result) > 0)
+        {
+            while($row = $result->fetch_assoc())
+            {
+                return $row;
+            }
+        }
+        else
+        {
+            echo mysqli_error($this->conn);
+            return false;
+        }
+    }
+
     public function updateDataOneColumn($table, $rowId,  $column, $newValue)
     {
         $table = $this->secureInput($table);
@@ -200,6 +225,56 @@ class Model {
         else
         {
             echo mysqli_error($this->conn);
+            return false;
+        }
+    }
+
+    public function updateUser($table, $username, $newEmail, $newPassword, $newCountry, $newAddress,
+                               $newPhoneNum, $newSurname, $newRealName, $newBirthDate, $newCity, $newFavGame,
+                               $newDescription, $newDiscID, $newFaceID, $newInstaID, $newSkypeID, $newSign, $newSnapID,
+                               $newWebsite, $newSchool, $newDegree)
+    {
+        $table = $this->secureInput($table);
+        $username = $this->secureInput($username);
+        $newEmail = $this->secureInput($newEmail);
+        $newPassword = $this->secureInput($newPassword);
+        $newCountry = $this->secureInput($newCountry);
+        $newAddress = $this->secureInput($newAddress);
+        $newPhoneNum = $this->secureInput($newPhoneNum);
+        $newSurname = $this->secureInput($newSurname);
+        $newRealName = $this->secureInput($newRealName);
+        $newBirthDate = $this->secureInput($newBirthDate);
+        $newCity = $this->secureInput($newCity);
+        $newFavGame = $this->secureInput($newFavGame);
+        $newDescription = $this->secureInput($newDescription);
+        $newDiscID = $this->secureInput($newDiscID);
+        $newFaceID = $this->secureInput($newFaceID);
+        $newInstaID = $this->secureInput($newInstaID);
+        $newSkypeID = $this->secureInput($newSkypeID);
+        $newSign = $this->secureInput($newSign);
+        $newSnapID = $this->secureInput($newSnapID);
+        $newWebsite = $this->secureInput($newWebsite);
+        $newSchool = $this->secureInput($newSchool);
+        $newDegree = $this->secureInput($newDegree);
+
+        $sql = "UPDATE naudotojai SET email='$newEmail',
+         slaptazodis='$newPassword', salis='$newCountry', adresas='$newAddress',
+          telefono_nr='$newPhoneNum', pavarde='$newSurname', vardas='$newRealName',
+           gimimo_data='$newBirthDate', miestas='$newCity', megstamiausias_zaidimas='$newFavGame',
+            biografine_zinute='$newDescription', discord='$newDiscID', facebook='$newFaceID',
+             instagram='$newInstaID', skype='$newSkypeID', parasas='$newSign',
+              snapchat='$newSnapID', tinklalapis='$newWebsite', mokykla='$newSchool',
+               aukstasis_issilavinimas='$newDegree' WHERE slapyvardis='$username'";
+
+        if($this->conn->query($sql))
+        {
+            echo("<script>location.href = 'settings.php?edit=success';</script>");
+            return true;
+        }
+        else
+        {
+            echo mysqli_error($this->conn);
+            echo("<script>location.href = 'settings.php?edit=error';</script>");
             return false;
         }
     }
@@ -403,12 +478,12 @@ class Model {
                             $blocked = 0;
                             $muted = 0;
                             $path = NULL;
-                            $date = date('Y-m-d H:i:s');;
+                            $date = date('Y-m-d H:i:s');
                             mysqli_stmt_bind_param($stmt, "isssssiisissssssssssssssssss", $id, $username, $hashedPwd, $email, $date, $path, $blocked, $muted, $date, $role, $country, $address, $phoneNum,
                                 $realName, $surname, $birthDate, $city, $favGame, $description, $discID, $faceID, $isntaID, $skypeID, $sign, $snapID, $website, $school, $degree);
                             mysqli_stmt_execute($stmt);
                             echo("<script>location.href = 'register.php?signup=success';</script>");
-                            //exit();
+                            exit();
                         }
                     }
                 }
