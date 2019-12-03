@@ -56,7 +56,6 @@
         
         </div>
     </nav>
-
     <div class='container'>
         <form method='POST' class='mainForm'>
             <div class="form-group">
