@@ -327,4 +327,99 @@ class Model {
             return false;
         }
     }
+
+    public function registerUser($username, $email, $password, $passwordRepeat, $country, $address, $phoneNum, $surname, $realName, $birthDate, $city, $favGame, $description,
+                                 $discID, $faceID, $isntaID, $skypeID, $sign, $snapID, $website, $school, $degree)
+    {
+        $conn = $this->conn;
+
+        $username = $this->secureInput($username);
+        $email = $this->secureInput($email);
+        $password = $this->secureInput($password);
+        $passwordRepeat = $this->secureInput($passwordRepeat);
+        $country = $this->secureInput($country);
+        $address = $this->secureInput($address);
+        $phoneNum = $this->secureInput($phoneNum);
+        $realName = $this->secureInput($realName);
+        $surname = $this->secureInput($surname);
+        $birthDate = $this->secureInput($birthDate);
+        $city = $this->secureInput($city);
+        $favGame = $this->secureInput($favGame);
+        $description = $this->secureInput($description);
+        $discID = $this->secureInput($discID);
+        $faceID = $this->secureInput($faceID);
+        $isntaID = $this->secureInput($isntaID);
+        $skypeID = $this->secureInput($skypeID);
+        $sign = $this->secureInput($sign);
+        $snapID = $this->secureInput($snapID);
+        $website = $this->secureInput($website);
+        $school = $this->secureInput($school);
+        $degree = $this->secureInput($degree);
+
+        if(empty($username) || empty($password) || empty($passwordRepeat) | empty($email)) {
+            echo("<script>location.href = 'register.php?error=emptyfields';</script>");
+            exit();
+        }
+        else {
+            $sql = "SELECT * FROM naudotojai WHERE slapyvardis=? AND slaptazodis=?;";
+            $stmt = mysqli_stmt_init($conn);
+            if (!mysqli_stmt_prepare($stmt, $sql)) {
+                echo("<script>location.href = 'index.php?error=sqlerror';</script>");
+                exit();
+            }
+            else if (!preg_match("/^[a-zA-Z0-9]*$/", $username)){
+                echo("<script>location.href = 'signup.php?error=invalidname&=\".$username';</script>");
+                exit();
+            }
+            else if ($password !== $passwordRepeat) {
+                echo("<script>location.href = 'register.php?error=passwcheck&=\".$username';</script>");
+                exit();
+            }
+            else {
+                $sql = "SELECT slapyvardis FROM naudotojai WHERE slapyvardis=?";
+                $stmt = mysqli_stmt_init($conn);
+                if (!mysqli_stmt_prepare($stmt, $sql)) {
+                    echo("<script>location.href = 'register.php?error=sqlerror';</script>");
+                    exit();
+                }
+                else {
+                    mysqli_stmt_bind_param($stmt, "s", $username);
+                    mysqli_stmt_execute($stmt);
+                    mysqli_stmt_store_result($stmt);
+                    $resultCheck = mysqli_stmt_num_rows($stmt);
+                    if ($resultCheck > 0) {
+                        echo("<script>location.href = 'register.php?error=usertaken&=\".$username';</script>");
+                        exit();
+                    }
+                    else {
+                        $sql = ("SET CHARACTER SET utf8");
+                        $conn->query($sql);
+                        $sql = "INSERT INTO naudotojai (id, slapyvardis, slaptazodis, email, registracijos_data, avataro_kelias, uzblokuotas,
+                                            uztildytas, paskutini_karta_prisijunges, role, salis, adresas, telefono_nr, vardas, pavarde,
+                                            gimimo_data, miestas, megstamiausias_zaidimas, biografine_zinute, discord, facebook, instagram,
+                                            skype, parasas, snapchat, tinklalapis, mokykla, aukstasis_issilavinimas) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+                        $stmt = mysqli_stmt_init($conn);
+                        if (!mysqli_stmt_prepare($stmt, $sql)) {
+                            echo("<script>location.href = 'register.php?error=sqlerror';</script>");
+                            exit();
+                        }
+                        else {
+                            $hashedPwd = password_hash($password, PASSWORD_DEFAULT);
+                            $id = 0;
+                            $role = 1;
+                            $blocked = 0;
+                            $muted = 0;
+                            $path = NULL;
+                            $date = date('Y-m-d H:i:s');;
+                            mysqli_stmt_bind_param($stmt, "issssssiisisssssssssssssssss", $id, $username, $hashedPwd, $email, $date, $path, $blocked, $muted, $date, $role, $country, $address, $phoneNum,
+                                $realName, $surname, $birthDate, $city, $favGame, $description, $discID, $faceID, $isntaID, $skypeID, $sign, $snapID, $website, $school, $degree);
+                            mysqli_stmt_execute($stmt);
+                            echo("<script>location.href = 'register.php?signup=success';</script>");
+                            //exit();
+                        }
+                    }
+                }
+            }
+        }
+    }
 }
