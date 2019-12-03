@@ -286,13 +286,14 @@ class View
         echo ' <form method="POST" class="mainForm">
             <h1>Koreguojamas (naudotojo vardas) profilis</h1>
             <h1>Profilio nustatymai</h1>
+            <input type="hidden" name="id" value="'.$content['id'].'">
             <div class="form-group">
                 <label for="inputFor">Slapyvardis*</label>
                 <input type="text" class="form-control" id="inputFor" value="'.$content['slapyvardis'].'" disabled>
             </div>
             <div class="form-group">
                 <label for="inputFor">Rolė</label>
-                <select class="custom-select" name="teises">';
+                <select class="custom-select" name="role">';
                 if($content['role'] == 1)
                 {
                     echo '<option selected value = "1" > Naudotojas</option >
@@ -331,7 +332,7 @@ class View
             </div>
             <div class="form-group">
                 <label for="inputFor">Telefono numeris</label>
-                <input type="text" class="form-control" id="inputFor" name="numeris" placeholder="Telefono numeris">
+                <input type="text" class="form-control" id="inputFor" name="telefono_nr" placeholder="Telefono numeris">
             </div>
             <div class="form-group">
                 <label for="inputFor">Pavardė</label>
@@ -339,7 +340,7 @@ class View
             </div>
             <div class="form-group">
                 <label for="inputFor">Gimimo data</label>
-                <input type="text" class="form-control" id="inputFor" name="data" placeholder="Gimimo data">
+                <input type="text" class="form-control" id="inputFor" name="gimimo_data" placeholder="Gimimo data">
             </div>
             <div class="form-group">
                 <label for="inputFor">Miestas</label>
@@ -347,19 +348,19 @@ class View
             </div>
             <div class="form-group">
                 <label for="inputFor">Mėgstamiausias žaidimas</label>
-                <input type="text" class="form-control" id="inputFor" name="zaidimas" placeholder="Mėgstamiausias žaidimas">
+                <input type="text" class="form-control" id="inputFor" name="megstamiausias_zaidimas" placeholder="Mėgstamiausias žaidimas">
             </div>
             <div class="form-group">
                 <label for="inputFor">Biografinė žinutė</label>
-                <input type="text" class="form-control" id="inputFor" name="biografija" placeholder="Biografinė žinutė">
+                <input type="text" class="form-control" id="inputFor" name="biografine_zinute" placeholder="Biografinė žinutė">
             </div>
             <div class="form-group">
                 <label for="inputFor">Discord ID</label>
-                <input type="text" class="form-control" id="inputFor" name="dc" placeholder="Discord ID">
+                <input type="text" class="form-control" id="inputFor" name="discord" placeholder="Discord ID">
             </div>
             <div class="form-group">
                 <label for="inputFor">Facebook</label>
-                <input type="text" class="form-control" id="inputFor" name="fb" placeholder="Facebook">
+                <input type="text" class="form-control" id="inputFor" name="facebook" placeholder="Facebook">
             </div>
             <div class="form-group">
                 <label for="inputFor">Instagram</label>
@@ -368,6 +369,10 @@ class View
             <div class="form-group">
                 <label for="inputFor">Skype</label>
                 <input type="text" class="form-control" id="inputFor" name="skype" placeholder="Skype">
+            </div>
+            <div class="form-group">
+                <label for="inputFor">Snapchat</label>
+                <input type="text" class="form-control" id="inputFor" name="snapchat" placeholder="Snapchat">
             </div>
             <div class="form-group">
                 <label for="inputFor">Parašas</label>
@@ -383,7 +388,7 @@ class View
             </div>
             <div class="form-group">
                 <label for="inputFor">Aukštasis išsilavinimas</label>
-                <input type="text" class="form-control" id="inputFor" name="HE" placeholder="Aukštasis išsilavinimas">
+                <input type="text" class="form-control" id="inputFor" name="aukstasis_issilavinimas" placeholder="Aukštasis išsilavinimas">
             </div>
                 <button type="submit" class="btn btn-primary">Išsaugoti nustatymus</button>
         </form>
@@ -392,11 +397,11 @@ class View
             <h1>Slaptažodžio keitimo forma</h1>
             <div class="form-group">
                 <label for="inputFor">Naujas slaptažodis</label>
-                <input type="password" class="form-control" id="inputFor" placeholder="Naujas slaptažodis">
+                <input type="password" class="form-control" id="inputFor" name="slaptazodis	" placeholder="Naujas slaptažodis">
             </div>
             <div class="form-group">
                 <label for="inputFor">Pakartokite naują slaptažodį</label>
-                <input type="password" class="form-control" id="inputFor" placeholder="Naujas slaptažodis">
+                <input type="password" class="form-control" id="inputFor" name="slaptazodisPakartoti" placeholder="Naujas slaptažodis">
             </div>
             <button type="button" class="btn btn-danger">Keisti slaptažodį</button>
         </form>';

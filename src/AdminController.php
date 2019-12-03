@@ -23,13 +23,19 @@ class AdminController extends  MainController implements iController
     {
         if(!isset($_GET['id']))
         {
-            $this->printDanger('Ivyko klaida!');
+            //$this->printDanger('Ivyko klaida!');
             $this->redirect_to_another_page('adminpanel.php', 0);
             return;
         }
 
         $content = $this->getModel()->getDataByColumnFirst("naudotojai", 'id', $_GET['id']);
         $this->getView()->printEditUserAsAdmin($content);
+        foreach ($_POST as $param_name => $param_val) {
+            if($param_name != "id")
+            {
+                $this->updateDataOneColumn("naudotojai", $_GET['id'], $param_name, $param_val);
+            }
+        }
 
     }
 }
