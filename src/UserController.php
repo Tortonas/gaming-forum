@@ -29,7 +29,7 @@ class UserController extends MainController implements iController
             $description = $_POST['description'];
             $discID = $_POST['discID'];
             $faceID = $_POST['faceID'];
-            $isntaID = $_POST['isntaID'];
+            $instaID = $_POST['$instaID'];
             $skypeID = $_POST['skypeID'];
             $sign = $_POST['sign'];
             $snapID = $_POST['snapID'];
@@ -39,7 +39,7 @@ class UserController extends MainController implements iController
 
 
             $this->getModel()->registerUser($username, $email, $password, $passwordRepeat, $country, $address, $phoneNum, $surname, $realName, $birthDate, $city, $favGame, $description,
-                $discID, $faceID, $isntaID, $skypeID, $sign, $snapID, $website, $school, $degree);
+                $discID, $faceID, $instaID, $skypeID, $sign, $snapID, $website, $school, $degree);
         }
     }
 

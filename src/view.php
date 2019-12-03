@@ -448,7 +448,7 @@ class View
 
     // -- FORUM PAGE END
 
-    // rimvio naudotoju posisteme pradzia
+    // Rimvydo naudotoju posisteme pradzia
 
     public function printRegisterForm()
     {
@@ -515,7 +515,7 @@ class View
             </div>
             <div class="form-group">
                 <label for="inputFor">Instagram</label>
-                <input type="text" name="isntaID" class="form-control" id="inputFor" placeholder="Instagram">
+                <input type="text" name="instaID" class="form-control" id="inputFor" placeholder="Instagram">
             </div>
             <div class="form-group">
                 <label for="inputFor">Skype</label>
@@ -545,5 +545,134 @@ class View
         </form>';
     }
 
-    // pabaiga vartotojai
+    public function printSettingsForm($username, $email, $password, $country, $address, $phoneNum, $surname, $realName, $birthDate, $city, $favGame, $description,
+                                      $discID, $faceID, $instaID, $skypeID, $sign, $snapID, $website, $school, $degree)
+    {
+            echo '
+            <form method=\'POST\' class=\'mainForm\'>
+                <h1>Profilio nuotrauka</h1>
+                <div class=\'profile-picture--200px\'>
+                    <img src="img/profile pictures/default.png" alt="default profile picture" class="img-thumbnail">
+                    <div class="file-upload-form--small">
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text" id="inputGroupFileAddon01">Įkelti</span>
+                            </div>
+                            <div class="custom-file">
+                                <input type="file" class="custom-file-input" id="inputGroupFile01"
+                                aria-describedby="inputGroupFileAddon01">
+                                <label class="custom-file-label" for="inputGroupFile01">Pasirinkti nuotrauką</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <h1>Profilio nustatymai</h1>
+                <div class="form-group">
+                    <label for="inputFor">Slapyvardis*</label>
+                    <input type="text" class="form-control" id="inputFor" value="'.$username.'" disabled>
+                </div>
+                <div class="form-group">
+                    <label for="inputFor">El. pašto adresas*</label>
+                    <input type="email" name="email" class="form-control" id="inputFor" aria-describedby="emailHelp" placeholder="El. Paštas" value="'.$email.'">
+                </div>
+                <div class="form-group">
+                    <label for="inputFor">Slaptažodis*</label>
+                    <input type="password" name="password" class="form-control" id="inputFor" placeholder="Slaptažodis" value="'.$password.'">
+                </div>
+                <div class="form-group">
+                    <label for="inputFor">Šalis</label>
+                    <input type="text" name="country" class="form-control" id="inputFor" placeholder="Šalis" value="'.$country.'">
+                </div>
+                <div class="form-group">
+                    <label for="inputFor">Adresas</label>
+                    <input type="text" name="address" class="form-control" id="inputFor" placeholder="Adresas" value="'.$address.'">
+                </div>
+                <div class="form-group">
+                    <label for="inputFor">Telefono numeris</label>
+                    <input type="text" name="phoneNum" class="form-control" id="inputFor" placeholder="Telefono numeris" value="'.$phoneNum.'">
+                </div>
+                <div class="form-group">
+                    <label for="inputFor">Vardas</label>
+                    <input type="text" name="realName" class="form-control" id="inputFor" placeholder="Vardas" value="'.$realName.'">
+                </div>
+                <div class="form-group">
+                    <label for="inputFor">Pavardė</label>
+                    <input type="text" name="surname" class="form-control" id="inputFor" placeholder="Pavardė" value="'.$surname.'">
+                </div>
+                <div class="form-group">
+                    <label for="inputFor">Gimimo data</label>
+                    <input type="text" name="birthDate" class="form-control" id="inputFor" placeholder="Gimimo data" value="'.$birthDate.'">
+                </div>
+                <div class="form-group">
+                    <label for="inputFor">Miestas</label>
+                    <input type="text" name="city" class="form-control" id="inputFor" placeholder="Miestas" value="'.$city.'">
+                </div>
+                <div class="form-group">
+                    <label for="inputFor">Mėgstamiausias žaidimas</label>
+                    <input type="text" name="favGame" class="form-control" id="inputFor" placeholder="Mėgstamiausias žaidimas" value="'.$favGame.'">
+                </div>
+                <div class="form-group">
+                    <label for="inputFor">Biografinė žinutė</label>
+                    <input type="text" name="description" class="form-control" id="inputFor" placeholder="Biografinė žinutė" value="'.$description.'">
+                </div>
+                <div class="form-group">
+                    <label for="inputFor">Discord ID</label>
+                    <input type="text" name="discID" class="form-control" id="inputFor" placeholder="Discord ID" value="'.$discID.'">
+                </div>
+                <div class="form-group">
+                    <label for="inputFor">Facebook</label>
+                    <input type="text" name="faceID" class="form-control" id="inputFor" placeholder="Facebook" value="'.$faceID.'">
+                </div>
+                <div class="form-group">
+                    <label for="inputFor">Instagram</label>
+                    <input type="text" name="isntaID" class="form-control" id="inputFor" placeholder="Instagram" value="'.$instaID.'">
+                </div>
+                <div class="form-group">
+                    <label for="inputFor">Skype</label>
+                    <input type="text" name="skypeID" class="form-control" id="inputFor" placeholder="Skype" value="'.$skypeID.'">
+                </div>
+                <div class="form-group">
+                    <label for="inputFor">Snapchat</label>
+                    <input type="text" name="snapID" class="form-control" id="inputFor" placeholder="Snapchat" value="'.$snapID.'">
+                </div>
+                <div class="form-group">
+                    <label for="inputFor">Parašas</label>
+                    <input type="text" name="sign" class="form-control" id="inputFor" placeholder="Parašas" value="'.$sign.'">
+                </div>
+                <div class="form-group">
+                    <label for="inputFor">Tinklalapis</label>
+                    <input type="text" name="website" class="form-control" id="inputFor" placeholder="Tinklalapis" value="'.$website.'">
+                </div>
+                <div class="form-group">
+                    <label for="inputFor">Mokykla</label>
+                    <input type="text" name="school" class="form-control" id="inputFor" placeholder="Mokykla" value="'.$school.'">
+                </div>
+                <div class="form-group">
+                    <label for="inputFor">Aukštasis išsilavinimas</label>
+                    <input type="text" name="degree" class="form-control" id="inputFor" placeholder="Aukštasis išsilavinimas" value="'.$degree.'">
+                </div>
+                    <button type="submit" name="saveSettingsBtn" class="btn btn-primary">Išsaugoti nustatymus</button>
+            </form>';
+    }
+
+    public function printChangePasswordForm()
+    {
+        echo '<form method=\'POST\' class=\'mainForm\'>
+                <h1>Slaptažodžio keitimo forma</h1>
+                <div class="form-group">
+                    <label for="inputFor">Dabartinis slaptažodis</label>
+                    <input type="password" class="form-control" id="inputFor" placeholder="Senas slaptažodis">
+                </div>
+                <div class="form-group">
+                    <label for="inputFor">Naujas slaptažodis</label>
+                    <input type="password" class="form-control" id="inputFor" placeholder="Naujas slaptažodis">
+                </div>
+                <div class="form-group">
+                    <label for="inputFor">Pakartokite naują slaptažodį</label>
+                    <input type="password" class="form-control" id="inputFor" placeholder="Naujas slaptažodis">
+                </div>
+                <button type="button" class="btn btn-danger">Keisti slaptažodį</button>
+            </form>';
+    }
+    // Pabaiga
 }
