@@ -203,8 +203,10 @@ class ForumController extends MainController implements iController
 
         if(isset($_POST['searchBtn']))
         {
-            // TODO: Realizuoti paieska.
-            echo $_POST['searchText'];
+            $catalogList = $this->getModel()->getCatalogListByPattern($_POST['searchText']);
+            $themeList = $this->getModel()->getThemeListByPattern($_POST['searchText']);
+
+            $this->getView()->printCatalogSearchResults($catalogList, $themeList);
         }
     }
 
