@@ -356,33 +356,28 @@ class Model {
         $school = $this->secureInput($school);
         $degree = $this->secureInput($degree);
 
-        if(empty($username) || empty($password) || empty($passwordRepeat) | empty($email)) {
+        if (empty($username) || empty($password) || empty($passwordRepeat) | empty($email)) {
             echo("<script>location.href = 'register.php?error=emptyfields';</script>");
             exit();
-        }
-        else {
+        } else {
             $sql = "SELECT * FROM naudotojai WHERE slapyvardis=? AND slaptazodis=?;";
             $stmt = mysqli_stmt_init($conn);
             if (!mysqli_stmt_prepare($stmt, $sql)) {
                 echo("<script>location.href = 'index.php?error=sqlerror';</script>");
                 exit();
-            }
-            else if (!preg_match("/^[a-zA-Z0-9]*$/", $username)){
+            } else if (!preg_match("/^[a-zA-Z0-9]*$/", $username)) {
                 echo("<script>location.href = 'signup.php?error=invalidname&=\".$username';</script>");
                 exit();
-            }
-            else if ($password !== $passwordRepeat) {
+            } else if ($password !== $passwordRepeat) {
                 echo("<script>location.href = 'register.php?error=passwcheck&=\".$username';</script>");
                 exit();
-            }
-            else {
+            } else {
                 $sql = "SELECT slapyvardis FROM naudotojai WHERE slapyvardis=?";
                 $stmt = mysqli_stmt_init($conn);
                 if (!mysqli_stmt_prepare($stmt, $sql)) {
                     echo("<script>location.href = 'register.php?error=sqlerror';</script>");
                     exit();
-                }
-                else {
+                } else {
                     mysqli_stmt_bind_param($stmt, "s", $username);
                     mysqli_stmt_execute($stmt);
                     mysqli_stmt_store_result($stmt);
@@ -390,8 +385,7 @@ class Model {
                     if ($resultCheck > 0) {
                         echo("<script>location.href = 'register.php?error=usertaken&=\".$username';</script>");
                         exit();
-                    }
-                    else {
+                    } else {
                         $sql = ("SET CHARACTER SET utf8");
                         $conn->query($sql);
                         $sql = "INSERT INTO naudotojai (id, slapyvardis, slaptazodis, email, registracijos_data, avataro_kelias, uzblokuotas,
@@ -402,8 +396,7 @@ class Model {
                         if (!mysqli_stmt_prepare($stmt, $sql)) {
                             echo("<script>location.href = 'register.php?error=sqlerror';</script>");
                             exit();
-                        }
-                        else {
+                        } else {
                             $hashedPwd = password_hash($password, PASSWORD_DEFAULT);
                             $id = 0;
                             $role = 1;
@@ -420,6 +413,8 @@ class Model {
                     }
                 }
             }
+        }
+    }
 
     public function getCatalogListByPattern($pattern)
     {
