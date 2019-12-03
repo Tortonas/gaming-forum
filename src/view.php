@@ -292,7 +292,7 @@ class View
             </div>
             <div class="form-group">
                 <label for="inputFor">Rolė</label>
-                <select class="custom-select">';
+                <select class="custom-select" name="teises">';
                 if($content['role'] == 1)
                 {
                     echo '<option selected value = "1" > Naudotojas</option >
@@ -319,73 +319,73 @@ class View
             </div>
             <div class="form-group">
                 <label for="inputFor">El. pašto adresas*</label>
-                <input type="email" class="form-control" id="inputFor" aria-describedby="emailHelp" placeholder="El. Paštas" value="'.$content['email'].'">
+                <input type="email" class="form-control" id="inputFor" name="email" aria-describedby="emailHelp" placeholder="El. Paštas" value="'.$content['email'].'">
             </div>
             <div class="form-group">
                 <label for="inputFor">Šalis</label>
-                <input type="text" class="form-control" id="inputFor" placeholder="Šalis" value="'.$content['salis'].'">
+                <input type="text" class="form-control" id="inputFor" name="salis" placeholder="Šalis" value="'.$content['salis'].'">
             </div>
             <div class="form-group">
                 <label for="inputFor">Adresas</label>
-                <input type="text" class="form-control" id="inputFor" placeholder="Adresas" value="'.$content['adresas'].'">
+                <input type="text" class="form-control" id="inputFor" name="adresas" placeholder="Adresas" value="'.$content['adresas'].'">
             </div>
             <div class="form-group">
                 <label for="inputFor">Telefono numeris</label>
-                <input type="text" class="form-control" id="inputFor" placeholder="Telefono numeris">
+                <input type="text" class="form-control" id="inputFor" name="numeris" placeholder="Telefono numeris">
             </div>
             <div class="form-group">
                 <label for="inputFor">Pavardė</label>
-                <input type="text" class="form-control" id="inputFor" placeholder="Pavardė">
+                <input type="text" class="form-control" id="inputFor" name="pavarde" placeholder="Pavardė">
             </div>
             <div class="form-group">
                 <label for="inputFor">Gimimo data</label>
-                <input type="text" class="form-control" id="inputFor" placeholder="Gimimo data">
+                <input type="text" class="form-control" id="inputFor" name="data" placeholder="Gimimo data">
             </div>
             <div class="form-group">
                 <label for="inputFor">Miestas</label>
-                <input type="text" class="form-control" id="inputFor" placeholder="Miestas">
+                <input type="text" class="form-control" id="inputFor" name="miestas" placeholder="Miestas">
             </div>
             <div class="form-group">
                 <label for="inputFor">Mėgstamiausias žaidimas</label>
-                <input type="text" class="form-control" id="inputFor" placeholder="Mėgstamiausias žaidimas">
+                <input type="text" class="form-control" id="inputFor" name="zaidimas" placeholder="Mėgstamiausias žaidimas">
             </div>
             <div class="form-group">
                 <label for="inputFor">Biografinė žinutė</label>
-                <input type="text" class="form-control" id="inputFor" placeholder="Biografinė žinutė">
+                <input type="text" class="form-control" id="inputFor" name="biografija" placeholder="Biografinė žinutė">
             </div>
             <div class="form-group">
                 <label for="inputFor">Discord ID</label>
-                <input type="text" class="form-control" id="inputFor" placeholder="Discord ID">
+                <input type="text" class="form-control" id="inputFor" name="dc" placeholder="Discord ID">
             </div>
             <div class="form-group">
                 <label for="inputFor">Facebook</label>
-                <input type="text" class="form-control" id="inputFor" placeholder="Facebook">
+                <input type="text" class="form-control" id="inputFor" name="fb" placeholder="Facebook">
             </div>
             <div class="form-group">
                 <label for="inputFor">Instagram</label>
-                <input type="text" class="form-control" id="inputFor" placeholder="Instagram">
+                <input type="text" class="form-control" id="inputFor" name="instagram" placeholder="Instagram">
             </div>
             <div class="form-group">
                 <label for="inputFor">Skype</label>
-                <input type="text" class="form-control" id="inputFor" placeholder="Skype">
+                <input type="text" class="form-control" id="inputFor" name="skype" placeholder="Skype">
             </div>
             <div class="form-group">
                 <label for="inputFor">Parašas</label>
-                <input type="text" class="form-control" id="inputFor" placeholder="Parašas">
+                <input type="text" class="form-control" id="inputFor" name="parasas" placeholder="Parašas">
             </div>
             <div class="form-group">
                 <label for="inputFor">Tinklalapis</label>
-                <input type="text" class="form-control" id="inputFor" placeholder="Tinklalapis">
+                <input type="text" class="form-control" id="inputFor" name="tinklapis" placeholder="Tinklalapis">
             </div>
             <div class="form-group">
                 <label for="inputFor">Mokykla</label>
-                <input type="text" class="form-control" id="inputFor" placeholder="Mokykla">
+                <input type="text" class="form-control" id="inputFor" name="mokykla" placeholder="Mokykla">
             </div>
             <div class="form-group">
                 <label for="inputFor">Aukštasis išsilavinimas</label>
-                <input type="text" class="form-control" id="inputFor" placeholder="Aukštasis išsilavinimas">
+                <input type="text" class="form-control" id="inputFor" name="HE" placeholder="Aukštasis išsilavinimas">
             </div>
-                <button type="button" class="btn btn-primary">Išsaugoti nustatymus</button>
+                <button type="submit" class="btn btn-primary">Išsaugoti nustatymus</button>
         </form>
 
         <form method="POST" class="mainForm">

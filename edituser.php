@@ -1,4 +1,6 @@
 <?php
+session_start();
+include('src/autoloader.php');
 $controller = new AdminController();
 ?>
 <!doctype html>
