@@ -363,4 +363,25 @@ class Model {
             return false;
         }
     }
+
+    public function checkIfUserHasLikedThisThemeAnswer($userId, $themeAnsId)
+    {
+        $userId = $this->secureInput($userId);
+        $themeAnsId = $this->secureInput($themeAnsId);
+        $sql = "SELECT *
+                FROM temu_pamegimai
+                WHERE temu_pamegimai.fk_naudotojas='$userId' AND temu_pamegimai.fk_temos_atsakymas='$themeAnsId'";
+
+        $result = $this->conn->query($sql);
+        if(mysqli_num_rows($result) > 0)
+        {
+            echo 'false';
+            return false;
+        }
+        else
+        {
+            echo 'true';
+            return true;
+        }
+    }
 }

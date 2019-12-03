@@ -149,8 +149,11 @@ class ForumController extends MainController implements iController
 
         if(isset($_POST['likeBtn']))
         {
-            // TODO: Patikrinti ar jau palaikinta,jeigu palailkinta neleisti laikint
-            $this->getModel()->likeTheme($this->getDateTime(), $_SESSION['id'], $_POST['likeBtn']);
+            if($this->getModel()->checkIfUserHasLikedThisThemeAnswer($_SESSION['id'], $_POST['likeBtn']))
+            {
+                $this->getModel()->likeTheme($this->getDateTime(), $_SESSION['id'], $_POST['likeBtn']);
+            }
+
             $this->redirect_to_another_page('viewtheme.php?id='.$_GET['id'], 0);
         }
     }
