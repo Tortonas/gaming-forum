@@ -403,5 +403,48 @@ class View
 
     }
 
+    public function printCatalogSearchResults($catalogList, $themeAnsList)
+    {
+        if ($catalogList->num_rows > 0)
+        {
+            echo '<h1>Atrinkti katalogai:</h1>
+            <ul class="list-group">';
+
+            while ($row = $catalogList->fetch_assoc())
+            {
+                echo '<a href="./themes.php?id='.$row['id'].'"><li class="list-group-item">'.$row['pavadinimas'].'</li></a>';
+            }
+
+            echo '</ul>';
+        }
+        else
+        {
+            echo '<h2>Rastu katalogu nera!</h2>';
+        }
+
+        if ($themeAnsList->num_rows > 0)
+        {
+            echo '<h1>Atrinktos temos su temu atsakymais:</h1>
+            <div class="list-group">';
+
+            while($row = $themeAnsList->fetch_assoc())
+            {
+                echo '  <a href="./viewtheme.php?id='.$row['id'].'" class="list-group-item list-group-item-action flex-column align-items-start">
+                <div class="d-flex w-100 justify-content-between">
+                  <h5 class="mb-1">'.$row['pavadinimas'].'</h5>
+                </div>
+                <p class="mb-1">'.$row['tekstas'].'</p>
+              </a>';
+            }
+
+            echo '</div>';
+        }
+        else
+        {
+            echo '<h2>Rastu temu nera!</h2>';
+        }
+
+    }
+
     // -- FORUM PAGE END
 }

@@ -327,4 +327,40 @@ class Model {
             return false;
         }
     }
+
+    public function getCatalogListByPattern($pattern)
+    {
+        $pattern = $this->secureInput($pattern);
+        $sql = "SELECT id, pavadinimas
+                FROM katalogai
+                WHERE katalogai.pavadinimas LIKE '%$pattern%'";
+        if($result = $this->conn->query($sql))
+        {
+            return $result;
+        }
+        else
+        {
+            echo mysqli_error($this->conn);
+            return false;
+        }
+    }
+
+    public function getThemeListByPattern($pattern)
+    {
+        $pattern = $this->secureInput($pattern);
+        $sql = "SELECT katalogai.pavadinimas, temos.pavadinimas, temu_atsakymai.tekstas, temu_atsakymai.sukurimo_data, temos.id
+                FROM katalogai
+                JOIN temos ON temos.fk_katalogas=katalogai.id
+                JOIN temu_atsakymai ON temu_atsakymai.fk_tema=temos.id
+                WHERE tekstas LIKE '%$pattern%' OR temos.pavadinimas LIKE '%$pattern%'";
+        if($result = $this->conn->query($sql))
+        {
+            return $result;
+        }
+        else
+        {
+            echo mysqli_error($this->conn);
+            return false;
+        }
+    }
 }
