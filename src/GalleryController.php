@@ -10,10 +10,11 @@ class GalleryController extends MainController implements iController
     public function printPageView()
     {
         // TODO: Implement printPageView() method.
+
     }
 
     public function getTitle()
     {
-        // TODO: Implement getTitle() method.
+        echo "Gaming forum - galerija";
     }
 }

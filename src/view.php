@@ -404,4 +404,14 @@ class View
     }
 
     // -- FORUM PAGE END
+
+    // -- Gallery Page View START
+
+    public function print_Gallery_frontpage()
+    {
+        echo '<button type="button" class="btn btn-primary">Primary</button>';
+
+    }
+
+    // -- Gallery Page View END
 }
