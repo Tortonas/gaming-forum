@@ -420,6 +420,77 @@ class Model {
                     }
                 }
             }
+
+    public function getCatalogListByPattern($pattern)
+    {
+        $pattern = $this->secureInput($pattern);
+        $sql = "SELECT id, pavadinimas
+                FROM katalogai
+                WHERE katalogai.pavadinimas LIKE '%$pattern%'";
+        if($result = $this->conn->query($sql))
+        {
+            return $result;
+        }
+        else
+        {
+            echo mysqli_error($this->conn);
+            return false;
+        }
+    }
+
+    public function getThemeListByPattern($pattern)
+    {
+        $pattern = $this->secureInput($pattern);
+        $sql = "SELECT katalogai.pavadinimas, temos.pavadinimas, temu_atsakymai.tekstas, temu_atsakymai.sukurimo_data, temos.id
+                FROM katalogai
+                JOIN temos ON temos.fk_katalogas=katalogai.id
+                JOIN temu_atsakymai ON temu_atsakymai.fk_tema=temos.id
+                WHERE tekstas LIKE '%$pattern%' OR temos.pavadinimas LIKE '%$pattern%'";
+        if($result = $this->conn->query($sql))
+        {
+            return $result;
+        }
+        else
+        {
+            echo mysqli_error($this->conn);
+            return false;
+        }
+    }
+
+    public function checkIfUserHasLikedThisThemeAnswer($userId, $themeAnsId)
+    {
+        $userId = $this->secureInput($userId);
+        $themeAnsId = $this->secureInput($themeAnsId);
+        $sql = "SELECT *
+                FROM temu_pamegimai
+                WHERE temu_pamegimai.fk_naudotojas='$userId' AND temu_pamegimai.fk_temos_atsakymas='$themeAnsId'";
+
+        $result = $this->conn->query($sql);
+        if(mysqli_num_rows($result) > 0)
+        {
+            return false;
+        }
+        else
+        {
+            return true;
+        }
+    }
+
+    public function checkIfICanEditThisTheme($userId, $themeAnsId)
+    {
+        $userId = $this->secureInput($userId);
+        $themeAnsId = $this->secureInput($themeAnsId);
+        $sql = "SELECT * FROM
+                temu_atsakymai
+                WHERE temu_atsakymai.fk_naudotojas = '$userId' AND id = '$themeAnsId'";
+        $result = $this->conn->query($sql);
+        if(mysqli_num_rows($result) > 0)
+        {
+            return true;
+        }
+        else
+        {
+            return false;
         }
     }
 }
