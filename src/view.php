@@ -404,4 +404,91 @@ class View
     }
 
     // -- FORUM PAGE END
+
+    // rimvio naudotoju posisteme pradzia
+
+    public function printRegisterForm()
+    {
+        echo '        <form method=\'POST\' class=\'mainForm\'>
+            <div class="form-group">
+                <label for="inputFor">Slapyvardis*</label>
+                <input type="text" class="form-control" id="inputFor" placeholder="Slapyvardis">
+            </div>
+            <div class="form-group">
+                <label for="inputFor">El. pašto adresas*</label>
+                <input type="email" class="form-control" id="inputFor" aria-describedby="emailHelp" placeholder="El. Paštas">
+            </div>
+            <div class="form-group">
+                <label for="inputFor">Slaptažodis*</label>
+                <input type="password" class="form-control" id="inputFor" placeholder="Slaptažodis">
+            </div>
+            <div class="form-group">
+                <label for="inputFor">Šalis</label>
+                <input type="text" class="form-control" id="inputFor" placeholder="Šalis">
+            </div>
+            <div class="form-group">
+                <label for="inputFor">Adresas</label>
+                <input type="text" class="form-control" id="inputFor" placeholder="Adresas">
+            </div>
+            <div class="form-group">
+                <label for="inputFor">Telefono numeris</label>
+                <input type="text" class="form-control" id="inputFor" placeholder="Telefono numeris">
+            </div>
+            <div class="form-group">
+                <label for="inputFor">Pavardė</label>
+                <input type="text" class="form-control" id="inputFor" placeholder="Pavardė">
+            </div>
+            <div class="form-group">
+                <label for="inputFor">Gimimo data</label>
+                <input type="text" class="form-control" id="inputFor" placeholder="Gimimo data">
+            </div>
+            <div class="form-group">
+                <label for="inputFor">Miestas</label>
+                <input type="text" class="form-control" id="inputFor" placeholder="Miestas">
+            </div>
+            <div class="form-group">
+                <label for="inputFor">Mėgstamiausias žaidimas</label>
+                <input type="text" class="form-control" id="inputFor" placeholder="Mėgstamiausias žaidimas">
+            </div>
+            <div class="form-group">
+                <label for="inputFor">Biografinė žinutė</label>
+                <input type="text" class="form-control" id="inputFor" placeholder="Biografinė žinutė">
+            </div>
+            <div class="form-group">
+                <label for="inputFor">Discord ID</label>
+                <input type="text" class="form-control" id="inputFor" placeholder="Discord ID">
+            </div>
+            <div class="form-group">
+                <label for="inputFor">Facebook</label>
+                <input type="text" class="form-control" id="inputFor" placeholder="Facebook">
+            </div>
+            <div class="form-group">
+                <label for="inputFor">Instagram</label>
+                <input type="text" class="form-control" id="inputFor" placeholder="Instagram">
+            </div>
+            <div class="form-group">
+                <label for="inputFor">Skype</label>
+                <input type="text" class="form-control" id="inputFor" placeholder="Skype">
+            </div>
+            <div class="form-group">
+                <label for="inputFor">Parašas</label>
+                <input type="text" class="form-control" id="inputFor" placeholder="Parašas">
+            </div>
+            <div class="form-group">
+                <label for="inputFor">Tinklalapis</label>
+                <input type="text" class="form-control" id="inputFor" placeholder="Tinklalapis">
+            </div>
+            <div class="form-group">
+                <label for="inputFor">Mokykla</label>
+                <input type="text" class="form-control" id="inputFor" placeholder="Mokykla">
+            </div>
+            <div class="form-group">
+                <label for="inputFor">Aukštasis išsilavinimas</label>
+                <input type="text" class="form-control" id="inputFor" placeholder="Aukštasis išsilavinimas">
+            </div>
+                <button type="submit" name="registerBtn" class="btn btn-primary">Registruotis</button>
+        </form>';
+    }
+
+    // pabaiga vartotojai
 }
