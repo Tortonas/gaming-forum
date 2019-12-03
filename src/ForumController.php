@@ -203,8 +203,7 @@ class ForumController extends MainController implements iController
 
         if(isset($_POST['searchBtn']))
         {
-            // TODO: Realizuoti paieska.
-            echo $_POST['searchText'];
+            echo 'soon';
         }
     }
 
