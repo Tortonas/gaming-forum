@@ -411,7 +411,7 @@ class Model {
                             $muted = 0;
                             $path = NULL;
                             $date = date('Y-m-d H:i:s');;
-                            mysqli_stmt_bind_param($stmt, "issssssiisisssssssssssssssss", $id, $username, $hashedPwd, $email, $date, $path, $blocked, $muted, $date, $role, $country, $address, $phoneNum,
+                            mysqli_stmt_bind_param($stmt, "isssssiisissssssssssssssssss", $id, $username, $hashedPwd, $email, $date, $path, $blocked, $muted, $date, $role, $country, $address, $phoneNum,
                                 $realName, $surname, $birthDate, $city, $favGame, $description, $discID, $faceID, $isntaID, $skypeID, $sign, $snapID, $website, $school, $degree);
                             mysqli_stmt_execute($stmt);
                             echo("<script>location.href = 'register.php?signup=success';</script>");
