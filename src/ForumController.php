@@ -169,10 +169,14 @@ class ForumController extends MainController implements iController
             return;
         }
 
-        // TODO: Patikrinti ar as turiu teises redaguoti sita tema.
+        if(!$this->getModel()->checkIfICanEditThisTheme($_SESSION['id'], $_GET['id']) || !$_SESSION['id'] == 3)
+        {
+            $this->printDanger('Neturite teises matyti sio puslapio!');
+            $this->redirect_to_another_page('forum.php', 0);
+            return;
+        }
 
         $content = $this->getModel()->getDataByColumnFirst('temu_atsakymai', 'id', $_GET['id']);
-
 
         $this->getView()->printEditTheme($content['tekstas']);
 

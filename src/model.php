@@ -375,13 +375,29 @@ class Model {
         $result = $this->conn->query($sql);
         if(mysqli_num_rows($result) > 0)
         {
-            echo 'false';
             return false;
         }
         else
         {
-            echo 'true';
             return true;
+        }
+    }
+
+    public function checkIfICanEditThisTheme($userId, $themeAnsId)
+    {
+        $userId = $this->secureInput($userId);
+        $themeAnsId = $this->secureInput($themeAnsId);
+        $sql = "SELECT * FROM
+                temu_atsakymai
+                WHERE temu_atsakymai.fk_naudotojas = '$userId' AND id = '$themeAnsId'";
+        $result = $this->conn->query($sql);
+        if(mysqli_num_rows($result) > 0)
+        {
+            return true;
+        }
+        else
+        {
+            return false;
         }
     }
 }
