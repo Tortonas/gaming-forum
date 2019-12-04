@@ -409,7 +409,66 @@ class View
 
     public function print_Gallery_frontpage()
     {
-        echo '<button type="button" class="btn btn-primary">Primary</button>';
+        echo '<br><h1>Nuotraukos įkėlimas</h1>
+        <form method="post" enctype="multipart/form-data">
+            <div class="file-upload-form--medium">
+                <div class="input-group">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text" id="inputGroupFileAddon01">Įkelti</span>
+                    </div>
+                    <div class="custom-file">
+                        <input type="file" class="custom-file-input" id="inputGroupFile01" name="photo"
+                        aria-describedby="inputGroupFileAddon01" accept="image/gif, image/jpeg, image/png" required>
+                        <label class="custom-file-label" for="inputGroupFile01">Pasirinkti nuotrauką</label>
+                    </div>
+                </div>
+                <div class="form-group">
+                <br>
+                    <label for="inputFor">Etiketės</label>
+                    <input type="text" class="form-control" id="inputFor" placeholder="fortnite;dance;gaming" name="tags"
+                    pattern="^([AaĄąBbCcČčDdEeĘęĖėFfGgHhIiĮįYyJjKkLlMmNnOoPpRrSsŠšTtUuŲųŪūVvZzŽžqQwWxX]{2,};?){0,}" title="Įveskite etiketę nors iš 2 raidžių ir atskirkite etiketes ; symboliu!">
+                </div>
+                <div class="form-group">
+                    <label for="comment">Pavadinimas:</label>
+                    <input type="text" class="form-control" id="inputFor" placeholder="Nuotraukos pavadinimas" name="img_name"
+                    pattern="^([AaĄąBbCcČčDdEeĘęĖėFfGgHhIiĮįYyJjKkLlMmNnOoPpRrSsŠšTtUuŲųŪūVvZzŽžqQwWxX][AaĄąBbCcČčDdEeĘęĖėFfGgHhIiĮįYyJjKkLlMmNnOoPpRrSsŠšTtUuŲųŪūVvZzŽžqQwWxX ]{2,})" title="Įveskite etiketę nors iš 2 raidžių ir atskirkite etiketes ; symboliu!" required>
+                    <br>
+                    <button type="submit" name="submitBtn" class="btn btn-danger">Įkelti</button>
+                </div>
+            </div>
+        </form>
+
+        <form class="form-inline my-2 my-lg-0" method="POST" action="search.php">
+            <input class="form-control mr-sm-2" type="search" placeholder="Raktažodis paieškai" aria-label="Search">
+            <button class="btn btn-primary" type="submit">Ieškoti</button>
+        </form>
+        <figure class="figure">
+                <a href="viewphoto.php"><img src="./img/1.png" id="imageInput" alt="fortnite dance" class="img-thumbnail rounded"></a>
+            <figcaption class="figure-caption">Nuotraukos aprasymas</figcaption>
+            <button type="button" class="btn btn-primary btn-sm">
+                Pamėgti <span class="badge badge-light">4</span>
+            </button>
+            <a href="viewphoto.php"><button class="btn btn-primary btn-sm">Komentuoti</button></a>
+            <a href="#"><button class="btn btn-danger btn-sm">Ištrinti</button></a>
+        </figure>
+        <figure class="figure">
+                <a href="viewphoto.php"><img src="./img/2.png" id="imageInput" alt="fortnite dance" class="img-thumbnail rounded"></a>
+            <figcaption class="figure-caption">Nuotraukos aprasymas</figcaption>
+            <button type="button" class="btn btn-primary btn-sm">
+                Pamėgti <span class="badge badge-light">4</span>
+            </button>
+            <a href="viewphoto.php"><button class="btn btn-primary btn-sm">Komentuoti</button></a>
+        </figure>
+        <figure class="figure">
+            <a href="viewphoto.php"><img src="./img/3.png" id="imageInput" alt="fortnite dance" class="img-thumbnail rounded"></a>
+            <figcaption class="figure-caption">Nuotraukos aprasymas</figcaption>
+            <button type="button" class="btn btn-primary btn-sm">
+                Pamėgti <span class="badge badge-light">4</span>
+            </button>
+            <a href="viewphoto.php"><button class="btn btn-primary btn-sm">Komentuoti</button></a>
+        </figure>';
+
+
 
     }
 
