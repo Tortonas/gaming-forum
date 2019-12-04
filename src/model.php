@@ -672,15 +672,20 @@ class Model {
         {
             return false;
         } else {
-            $sql = "SELECT email FROM slaptazodziu_priminikliai WHERE tokenas='$token' LIMIT 1";
+            $date = date('Y-m-d H:i:s');
+            $sql = "SELECT token, fk_naudotojas FROM slaptazodziu_priminikliai WHERE tokenas='$token' AND pabaigos_data >= '$date' LIMIT 1";
             $results = mysqli_query($this->conn, $sql);
-            $email = mysqli_fetch_assoc($results)['email'];
+            $dbToken = mysqli_fetch_assoc($results)['token'];
+            $usrId = mysqli_fetch_assoc($results)['fk_naudotojas'];
 
-            if ($email) {
+            if ($token === $dbToken) {
                 $hashedPwd = password_hash($newPass, PASSWORD_DEFAULT);
-                $sql = "UPDATE naudotojai SET slaptazodis='$hashedPwd' WHERE email='$email'";
+                $sql = "UPDATE naudotojai SET slaptazodis='$hashedPwd' WHERE id='$usrId'";
                 $results = mysqli_query($this->conn, $sql);
                 header('location: index.php?changepass=success');
+                return true;
+            } else {
+                return false;
             }
         }
     }
