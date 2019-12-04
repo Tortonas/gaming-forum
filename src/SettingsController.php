@@ -54,7 +54,7 @@ class SettingsController extends MainController implements iController
             $repeatNewPasswd = $this->getModel()->secureInput($_POST['repeatNewPasswd']);
             $this->getModel()->changePasswd($username, $oldPasswd, $newPasswd, $repeatNewPasswd);
         }
-    }
+    } 
 
     public function getTitle()
     {
