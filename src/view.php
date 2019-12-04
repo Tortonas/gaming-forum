@@ -657,7 +657,7 @@ class View
 
     public function printProfPic($picPath)
     {
-        echo '<form action="upload.php" method=\'POST\' class=\'mainForm\' enctype="multipart/form-data">
+        echo '<form method=\'POST\' class=\'mainForm\' enctype="multipart/form-data">
                 <h1>Profilio nuotrauka</h1>
                 <div class=\'profile-picture--200px\'>
                     <img src="'.$picPath.'" alt="default profile picture" class="img-thumbnail">
