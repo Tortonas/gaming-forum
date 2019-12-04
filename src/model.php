@@ -108,6 +108,8 @@ class Model {
                     $date = date('Y-m-d H:i:s');
                     $sql = "UPDATE naudotojai SET paskutini_karta_prisijunges='$date' WHERE slapyvardis='$username'";
                     $this->conn->query($sql);
+                    $sql = "INSERT INTO naudotoju_ipai (ip, paskutinis_prisijungimas, fk_naudotojas) VALUES (".$this->getUserIpAddr().", ".$date.", ".$row['id'].")";
+                    $this->conn->query($sql);
                     return true;
                 }
                 else
@@ -603,48 +605,83 @@ class Model {
             }
         }
     }
-
-    public function changeProfilePic($username)
+  
+    function getUserIpAddr()
     {
-        $targetDir = "img/profile pictures/";
-        $fileName = basename($_FILES["profPicLoc"]["name"]);
-        $targetFilePath = $targetDir . $fileName;
-        $fileType = pathinfo($targetFilePath, PATHINFO_EXTENSION);
-
-        if (!empty($_FILES["profPicLoc"]["name"])) {
-            // Allow certain file formats
-            $allowTypes = array('jpg', 'png', 'jpeg', 'gif');
-            if (in_array($fileType, $allowTypes)) {
-                // Upload file to server
-                if (move_uploaded_file($_FILES["profPicLoc"]["tmp_name"], $targetFilePath)) {
-                    // Insert image file name into database
-                    $stmt = mysqli_stmt_init($this->conn);
-                    $sql = "UPDATE naudotojai SET avataro_kelias=? WHERE slapyvardis=?";
-                    if (mysqli_stmt_prepare($stmt, $sql))
-                    {
-                        mysqli_stmt_bind_param($stmt, "ss", $targetFilePath, $username);
-                        mysqli_stmt_execute($stmt);
-                        $statusMsg = "The file " . $fileName . " has been uploaded successfully.";
-                        return true;
-                    } else {
-                        $statusMsg = "File upload failed, please try again.";
-                    }
-                } else {
-                    $statusMsg = "Sorry, there was an error uploading your file.";
-                }
-            } else {
-                $statusMsg = 'Sorry, only JPG, JPEG, PNG, GIF, & PDF files are allowed to upload.';
-            }
+        if(!empty($_SERVER['HTTP_CLIENT_IP']))
+        {
+            $ip = $_SERVER['HTTP_CLIENT_IP'];
+        } else if(!empty($_SERVER['HTTP_X_FORWARDED_FOR'])) {
+            $ip = $_SERVER['HTTP_X_FORWARDED_FOR'];
         } else {
-            $statusMsg = 'Please select a file to upload.';
+            $ip = $_SERVER['REMOTE_ADDR'];
         }
-
-        // Display status message
-        echo $statusMsg;
+        return $ip;
     }
 
     public function returnConn()
     {
         return $this->conn;
+    }
+
+    public function remindPassword($email)
+    {
+        $errors = [];
+        $query = "SELECT email FROM naudotojai WHERE email='$email'";
+        $results = mysqli_query($this->conn, $query);
+
+        if (empty($email)) {
+            array_push($errors, "Your email is required");
+            return false;
+        } else if (mysqli_num_rows($results) <= 0) {
+            array_push($errors, "Sorry, no user exists on our system with that email");
+            return false;
+        }
+        $token = bin2hex(random_bytes(50));
+        $date = date('Y-m-d H:i:s');
+        $expireDate = date("Y-m-d H:i:s", strtotime('+1 hours'));
+
+        $query = "SELECT id FROM naudotojai WHERE email='$email'";
+        $res = $this->conn->query($query);
+        $row = $res->fetch_assoc();
+        $id = $row['id'];
+        $sql = "INSERT INTO slaptazodziu_priminikliai(tokenas, sukurimo_data, pabaigos_data, fk_naudotojasIndex) VALUES ('$token', '$date', '$email', '$expireDate', '$id')";
+        $results = mysqli_query($this->conn, $sql);
+
+        $to = $email;
+        $subject = "Susigrąžinkite slaptažodį ispgame.tk svetainėje";
+        $msg = "Paspauskite šią <a href=\"ispgame.tk/newpass.php?token=" . $token . "\">nuorodą</a>, kad atnaujintumėte slaptažodį";
+        $msg = wordwrap($msg, 70);
+        $headers = "From: info@ispgame.tk";
+        mail($to, $subject, $msg, $headers);
+        header('location: index.php?emailsent=true');
+        return true;
+    }
+
+    public function changeRemindedPass($pass, $passRepeat)
+    {
+        $newPass = $this->secureInput($pass);
+        $newPassC = $this->secureInput($passRepeat);
+
+        $token = $_GET['token'];
+        if (empty($newPass) || empty($newPassC))
+        {
+            return false;
+        }
+        if ($newPass !== $newPassC)
+        {
+            return false;
+        } else {
+            $sql = "SELECT email FROM slaptazodziu_priminikliai WHERE tokenas='$token' LIMIT 1";
+            $results = mysqli_query($this->conn, $sql);
+            $email = mysqli_fetch_assoc($results)['email'];
+
+            if ($email) {
+                $hashedPwd = password_hash($newPass, PASSWORD_DEFAULT);
+                $sql = "UPDATE naudotojai SET slaptazodis='$hashedPwd' WHERE email='$email'";
+                $results = mysqli_query($this->conn, $sql);
+                header('location: index.php?changepass=success');
+            }
+        }
     }
 }
