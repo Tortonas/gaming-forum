@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 4.9.1
+-- version 4.8.5
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Nov 08, 2019 at 07:53 PM
--- Server version: 10.2.27-MariaDB
--- PHP Version: 7.2.23
+-- Generation Time: Dec 04, 2019 at 10:25 PM
+-- Server version: 10.1.39-MariaDB
+-- PHP Version: 7.3.5
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET AUTOCOMMIT = 0;
@@ -71,10 +71,6 @@ CREATE TABLE `galerijos_nuotraukos_pamegimai` (
 
 CREATE TABLE `galerijos_nuotrauku_etiketes` (
   `id` int(11) NOT NULL,
-  `pavadinimas` varchar(1000) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `nuotraukos_kelias` varchar(1000) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `formatas` varchar(1000) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `sukurimo_data` varchar(1000) COLLATE utf8mb4_unicode_ci NOT NULL,
   `fk_nuotrauka` int(11) NOT NULL,
   `fk_etikete` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -118,8 +114,8 @@ CREATE TABLE `naudotojai` (
   `email` varchar(40) COLLATE utf8mb4_unicode_ci NOT NULL,
   `registracijos_data` datetime NOT NULL,
   `avataro_kelias` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `uzblokuotas` int(1) NOT NULL DEFAULT 0,
-  `uztildytas` int(1) NOT NULL DEFAULT 0,
+  `uzblokuotas` int(1) NOT NULL DEFAULT '0',
+  `uztildytas` int(1) NOT NULL DEFAULT '0',
   `paskutini_karta_prisijunges` datetime NOT NULL,
   `role` int(2) NOT NULL,
   `salis` varchar(20) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
@@ -445,28 +441,28 @@ ALTER TABLE `zurnalo_irasai`
 -- Constraints for table `galerijos_nuotraukos`
 --
 ALTER TABLE `galerijos_nuotraukos`
-  ADD CONSTRAINT `galerijos_nuotraukos_fk0` FOREIGN KEY (`fk_naudotojas`) REFERENCES `naudotojai` (`id`);
+  ADD CONSTRAINT `galerijos_nuotraukos_fk0` FOREIGN KEY (`fk_naudotojas`) REFERENCES `naudotojai` (`id`) ON DELETE CASCADE;
 
 --
 -- Constraints for table `galerijos_nuotraukos_pamegimai`
 --
 ALTER TABLE `galerijos_nuotraukos_pamegimai`
-  ADD CONSTRAINT `galerijos_nuotraukos_pamegimai_fk0` FOREIGN KEY (`fk_komentaras`) REFERENCES `galerijos_nuotrauku_komentarai` (`id`),
-  ADD CONSTRAINT `galerijos_nuotraukos_pamegimai_fk1` FOREIGN KEY (`fk_nuotrauka`) REFERENCES `galerijos_nuotraukos` (`id`);
+  ADD CONSTRAINT `galerijos_nuotraukos_pamegimai_fk0` FOREIGN KEY (`fk_komentaras`) REFERENCES `galerijos_nuotrauku_komentarai` (`id`) ON DELETE CASCADE,
+  ADD CONSTRAINT `galerijos_nuotraukos_pamegimai_fk1` FOREIGN KEY (`fk_nuotrauka`) REFERENCES `galerijos_nuotraukos` (`id`) ON DELETE CASCADE;
 
 --
 -- Constraints for table `galerijos_nuotrauku_etiketes`
 --
 ALTER TABLE `galerijos_nuotrauku_etiketes`
-  ADD CONSTRAINT `galerijos_nuotrauku_etiketes_fk0` FOREIGN KEY (`fk_nuotrauka`) REFERENCES `galerijos_nuotraukos` (`id`),
-  ADD CONSTRAINT `galerijos_nuotrauku_etiketes_fk1` FOREIGN KEY (`fk_etikete`) REFERENCES `galerijos_nuotraukos_etikete` (`id`);
+  ADD CONSTRAINT `galerijos_nuotrauku_etiketes_fk0` FOREIGN KEY (`fk_nuotrauka`) REFERENCES `galerijos_nuotraukos` (`id`) ON DELETE CASCADE,
+  ADD CONSTRAINT `galerijos_nuotrauku_etiketes_fk1` FOREIGN KEY (`fk_etikete`) REFERENCES `galerijos_nuotraukos_etikete` (`id`) ON DELETE CASCADE;
 
 --
 -- Constraints for table `galerijos_nuotrauku_komentarai`
 --
 ALTER TABLE `galerijos_nuotrauku_komentarai`
-  ADD CONSTRAINT `galerijos_nuotrauku_komentarai_fk0` FOREIGN KEY (`fk_naudotojas`) REFERENCES `naudotojai` (`id`),
-  ADD CONSTRAINT `galerijos_nuotrauku_komentarai_fk1` FOREIGN KEY (`fk_galerijos_nuotrauka`) REFERENCES `galerijos_nuotraukos` (`id`);
+  ADD CONSTRAINT `galerijos_nuotrauku_komentarai_fk0` FOREIGN KEY (`fk_naudotojas`) REFERENCES `naudotojai` (`id`) ON DELETE CASCADE,
+  ADD CONSTRAINT `galerijos_nuotrauku_komentarai_fk1` FOREIGN KEY (`fk_galerijos_nuotrauka`) REFERENCES `galerijos_nuotraukos` (`id`) ON DELETE CASCADE;
 
 --
 -- Constraints for table `naudotojai`
@@ -478,40 +474,40 @@ ALTER TABLE `naudotojai`
 -- Constraints for table `naudotoju_ipai`
 --
 ALTER TABLE `naudotoju_ipai`
-  ADD CONSTRAINT `fk_naudotojas00` FOREIGN KEY (`fk_naudotojas`) REFERENCES `naudotojai` (`id`);
+  ADD CONSTRAINT `fk_naudotojas00` FOREIGN KEY (`fk_naudotojas`) REFERENCES `naudotojai` (`id`) ON DELETE CASCADE;
 
 --
 -- Constraints for table `slaptazodziu_priminikliai`
 --
 ALTER TABLE `slaptazodziu_priminikliai`
-  ADD CONSTRAINT `fk_naudotojas1` FOREIGN KEY (`fk_naudotojas`) REFERENCES `naudotojai` (`id`);
+  ADD CONSTRAINT `fk_naudotojas1` FOREIGN KEY (`fk_naudotojas`) REFERENCES `naudotojai` (`id`) ON DELETE CASCADE;
 
 --
 -- Constraints for table `temos`
 --
 ALTER TABLE `temos`
-  ADD CONSTRAINT `temos_fk0` FOREIGN KEY (`fk_naudotojas`) REFERENCES `naudotojai` (`id`),
-  ADD CONSTRAINT `temos_fk1` FOREIGN KEY (`fk_katalogas`) REFERENCES `katalogai` (`id`);
+  ADD CONSTRAINT `temos_fk0` FOREIGN KEY (`fk_naudotojas`) REFERENCES `naudotojai` (`id`) ON DELETE CASCADE,
+  ADD CONSTRAINT `temos_fk1` FOREIGN KEY (`fk_katalogas`) REFERENCES `katalogai` (`id`) ON DELETE CASCADE;
 
 --
 -- Constraints for table `temu_atsakymai`
 --
 ALTER TABLE `temu_atsakymai`
-  ADD CONSTRAINT `temu_atsakymai_fk0` FOREIGN KEY (`fk_naudotojas`) REFERENCES `naudotojai` (`id`),
-  ADD CONSTRAINT `temu_atsakymai_fk1` FOREIGN KEY (`fk_tema`) REFERENCES `temos` (`id`);
+  ADD CONSTRAINT `temu_atsakymai_fk0` FOREIGN KEY (`fk_naudotojas`) REFERENCES `naudotojai` (`id`) ON DELETE CASCADE,
+  ADD CONSTRAINT `temu_atsakymai_fk1` FOREIGN KEY (`fk_tema`) REFERENCES `temos` (`id`) ON DELETE CASCADE;
 
 --
 -- Constraints for table `temu_pamegimai`
 --
 ALTER TABLE `temu_pamegimai`
-  ADD CONSTRAINT `temu_pamegimai_fk0` FOREIGN KEY (`fk_naudotojas`) REFERENCES `naudotojai` (`id`),
-  ADD CONSTRAINT `temu_pamegimai_fk1` FOREIGN KEY (`fk_temos_atsakymas`) REFERENCES `temu_atsakymai` (`id`);
+  ADD CONSTRAINT `temu_pamegimai_fk0` FOREIGN KEY (`fk_naudotojas`) REFERENCES `naudotojai` (`id`) ON DELETE CASCADE,
+  ADD CONSTRAINT `temu_pamegimai_fk1` FOREIGN KEY (`fk_temos_atsakymas`) REFERENCES `temu_atsakymai` (`id`) ON DELETE CASCADE;
 
 --
 -- Constraints for table `zurnalo_irasai`
 --
 ALTER TABLE `zurnalo_irasai`
-  ADD CONSTRAINT `fk_naudotojas0` FOREIGN KEY (`fk_naudotojas`) REFERENCES `naudotojai` (`id`);
+  ADD CONSTRAINT `fk_naudotojas0` FOREIGN KEY (`fk_naudotojas`) REFERENCES `naudotojai` (`id`) ON DELETE CASCADE;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
