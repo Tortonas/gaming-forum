@@ -25,7 +25,7 @@ class View
             self::printNavbarItem("Prisijungti", "login.php", $location);
         } else {
             if ($_SESSION['role'] == 3) {
-                self::printNavbarItem("Admin", "admin.php", $location);
+                self::printNavbarItem("Admin", "adminpanel.php", $location);
             }
             self::printNavbarItem("Nustatymai", "settings.php", $location);
             self::printNavbarItem("Atsijungti", "logout.php", $location);
