@@ -657,7 +657,6 @@ class View
 
     public function printProfPic($picPath)
     {
-        //<img src="img/profile pictures/default.png" alt="default profile picture" class="img-thumbnail">
         echo '<form action="upload.php" method=\'POST\' class=\'mainForm\' enctype="multipart/form-data">
                 <h1>Profilio nuotrauka</h1>
                 <div class=\'profile-picture--200px\'>
@@ -681,13 +680,29 @@ class View
     public function printRemindPass()
     {
         echo '<form method=\'POST\' class=\'mainForm\'>
-                    <h1>Slaptažodžio priminimas!</h1>
-                    <div class="form-group">
-                        <label for="inputFor">El. pašto adresas</label>
-                        <input type="email" name="email" class="form-control" id="inputFor" aria-describedby="emailHelp" placeholder="El. Paštas">
-                    </div>
-                        <button type="submit" name="remindPassBtn" class="btn btn-primary">Siųsti priminimą</button>
-               </form>';
+            <h1>Slaptažodžio priminimas!</h1>
+            <div class="form-group">
+                <label for="inputFor">El. pašto adresas</label>
+                <input type="email" name="email" class="form-control" id="inputFor" aria-describedby="emailHelp" placeholder="El. Paštas">
+            </div>
+                <button type="submit" name="remindPassBtn" class="btn btn-primary">Siųsti priminimą</button>
+        </form>';
+    }
+
+    public function printNewPassForm()
+    {
+        echo '<form method=\'POST\' class=\'mainForm\'>
+                <h1>Slaptažodžio keitimo forma</h1>
+                <div class="form-group">
+                    <label for="inputFor">Naujas slaptažodis</label>
+                    <input type="password" name="newPasswd" class="form-control" id="inputFor" placeholder="Naujas slaptažodis">
+                </div>
+                <div class="form-group">
+                    <label for="inputFor">Pakartokite naują slaptažodį</label>
+                    <input type="password"  name="repeatNewPasswd" class="form-control" id="inputFor" placeholder="Naujas slaptažodis">
+                </div>
+                <button type="submit" name="newPassBtn" class="btn btn-danger">Keisti slaptažodį</button>
+            </form>';
     }
     // Pabaiga
 }

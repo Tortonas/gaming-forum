@@ -650,11 +650,38 @@ class Model {
 
         $to = $email;
         $subject = "Susigrąžinkite slaptažodį ispgame.tk svetainėje";
-        $msg = "Paspauskite šią <a href=\"new_password.php?token=" . $token . "\">nuorodą</a>, kad atnaujintomete slaptažodį";
+        $msg = "Paspauskite šią <a href=\"ispgame.tk/newpass.php?token=" . $token . "\">nuorodą</a>, kad atnaujintumėte slaptažodį";
         $msg = wordwrap($msg, 70);
         $headers = "From: info@ispgame.tk";
         mail($to, $subject, $msg, $headers);
-        header('location: pending.php?email=' . $email);
+        header('location: index.php?emailsent=true');
         return true;
+    }
+
+    public function changeRemindedPass($pass, $passRepeat)
+    {
+        $newPass = $this->secureInput($pass);
+        $newPassC = $this->secureInput($passRepeat);
+
+        $token = $_GET['token'];
+        if (empty($newPass) || empty($newPassC))
+        {
+            return false;
+        }
+        if ($newPass !== $newPassC)
+        {
+            return false;
+        } else {
+            $sql = "SELECT email FROM slaptazodziu_priminikliai WHERE tokenas='$token' LIMIT 1";
+            $results = mysqli_query($this->conn, $sql);
+            $email = mysqli_fetch_assoc($results)['email'];
+
+            if ($email) {
+                $hashedPwd = password_hash($newPass, PASSWORD_DEFAULT);
+                $sql = "UPDATE naudotojai SET slaptazodis='$hashedPwd' WHERE email='$email'";
+                $results = mysqli_query($this->conn, $sql);
+                header('location: index.php?changepass=success');
+            }
+        }
     }
 }

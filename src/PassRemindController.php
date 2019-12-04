@@ -26,6 +26,21 @@ class PassRemindController extends MainController implements iController
         }
     }
 
+    public function printPageNewPass()
+    {
+        $this->getView()->printNewPassForm();
+
+        if (isset($_POST['newPassBtn']))
+        {
+            if ($this->getModel()->changeRemindedPass($_POST['newPasswd'], $_POST['repeatNewPasswd']))
+            {
+                $this->printSuccess('Sėkmingai pakeista');
+            } else {
+                $this->printDanger('Klaida');
+            }
+        }
+    }
+
     public function getTitle()
     {
         echo 'Gaming Forum - Priminti Slaptažodį';
