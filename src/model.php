@@ -229,15 +229,13 @@ class Model {
         }
     }
 
-    public function updateUser($table, $username, $newEmail, $newPassword, $newCountry, $newAddress,
+    public function updateUser($username, $newEmail, $newCountry, $newAddress,
                                $newPhoneNum, $newSurname, $newRealName, $newBirthDate, $newCity, $newFavGame,
                                $newDescription, $newDiscID, $newFaceID, $newInstaID, $newSkypeID, $newSign, $newSnapID,
                                $newWebsite, $newSchool, $newDegree)
     {
-        $table = $this->secureInput($table);
         $username = $this->secureInput($username);
         $newEmail = $this->secureInput($newEmail);
-        $newPassword = $this->secureInput($newPassword);
         $newCountry = $this->secureInput($newCountry);
         $newAddress = $this->secureInput($newAddress);
         $newPhoneNum = $this->secureInput($newPhoneNum);
@@ -258,7 +256,7 @@ class Model {
         $newDegree = $this->secureInput($newDegree);
 
         $sql = "UPDATE naudotojai SET email='$newEmail',
-         slaptazodis='$newPassword', salis='$newCountry', adresas='$newAddress',
+         salis='$newCountry', adresas='$newAddress',
           telefono_nr='$newPhoneNum', pavarde='$newSurname', vardas='$newRealName',
            gimimo_data='$newBirthDate', miestas='$newCity', megstamiausias_zaidimas='$newFavGame',
             biografine_zinute='$newDescription', discord='$newDiscID', facebook='$newFaceID',
@@ -431,7 +429,7 @@ class Model {
         $school = $this->secureInput($school);
         $degree = $this->secureInput($degree);
 
-        if (empty($username) || empty($password) || empty($passwordRepeat) | empty($email)) {
+        if (empty($username) || empty($password) || empty($passwordRepeat) || empty($email)) {
             echo("<script>location.href = 'register.php?error=emptyfields';</script>");
             exit();
         } else {
@@ -561,6 +559,60 @@ class Model {
         else
         {
             return false;
+        }
+    }
+
+    public function changePasswd($username, $password, $newPasswd, $repeatNewPasswd)
+    {
+        $conn = $this->conn;
+        $username = $this->secureInput($username);
+        $password = $this->secureInput($password);
+        $newPasswd = $this->secureInput($newPasswd);
+        $repeatNewPasswd = $this->secureInput($repeatNewPasswd);
+
+        $sql = "SELECT * FROM naudotojai WHERE slapyvardis='$username'";
+        $result = $conn->query($sql);
+
+        if ($result->num_rows > 0)
+        {
+            while($row = $result->fetch_assoc())
+            {
+                if(password_verify($password, $row['slaptazodis']))
+                {
+                    if ($newPasswd !== $repeatNewPasswd) {
+                        echo("<script>location.href = 'settings.php?error=passwcheck';</script>");
+                        exit();
+                    } else {
+                        $sql = "SELECT slapyvardis FROM naudotojai WHERE slapyvardis=?";
+                        $stmt = mysqli_stmt_init($conn);
+                        if (!mysqli_stmt_prepare($stmt, $sql)) {
+                            echo("<script>location.href = 'settings.php?error=sqlerror';</script>");
+                            exit();
+                        } else {
+                            mysqli_stmt_bind_param($stmt, "s", $username);
+                            mysqli_stmt_execute($stmt);
+                            $sql = ("SET CHARACTER SET utf8");
+                            $conn->query($sql);
+                            $hashedPwd = password_hash($newPasswd, PASSWORD_DEFAULT);
+                            $sql = "UPDATE naudotojai SET slaptazodis=? WHERE slapyvardis=?";
+                            if (!mysqli_stmt_prepare($stmt, $sql)) {
+                                echo("<script>location.href = 'settings.php?error=sqlerror';</script>");
+                                exit();
+                            } else {
+                                mysqli_stmt_bind_param($stmt, "ss", $hashedPwd, $username);
+                                mysqli_stmt_execute($stmt);
+                                echo("<script>location.href = 'settings.php?changepasswd=success';</script>");
+                                exit();
+                            }
+                        }
+                    }
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            }
         }
     }
 }
