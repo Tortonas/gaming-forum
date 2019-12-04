@@ -268,13 +268,11 @@ class Model {
 
         if($this->conn->query($sql))
         {
-            echo("<script>location.href = 'settings.php?edit=success';</script>");
             return true;
         }
         else
         {
             echo mysqli_error($this->conn);
-            echo("<script>location.href = 'settings.php?edit=error';</script>");
             return false;
         }
     }
@@ -432,34 +430,28 @@ class Model {
         $degree = $this->secureInput($degree);
 
         if (empty($username) || empty($password) || empty($passwordRepeat) || empty($email)) {
-            echo("<script>location.href = 'register.php?error=emptyfields';</script>");
-            exit();
+            return false;
         } else {
             $sql = "SELECT * FROM naudotojai WHERE slapyvardis=? AND slaptazodis=?;";
             $stmt = mysqli_stmt_init($conn);
             if (!mysqli_stmt_prepare($stmt, $sql)) {
-                echo("<script>location.href = 'index.php?error=sqlerror';</script>");
-                exit();
+                return false;
             } else if (!preg_match("/^[a-zA-Z0-9]*$/", $username)) {
-                echo("<script>location.href = 'signup.php?error=invalidname&=\".$username';</script>");
-                exit();
+                return false;
             } else if ($password !== $passwordRepeat) {
-                echo("<script>location.href = 'register.php?error=passwcheck&=\".$username';</script>");
-                exit();
+                return false;
             } else {
                 $sql = "SELECT slapyvardis FROM naudotojai WHERE slapyvardis=?";
                 $stmt = mysqli_stmt_init($conn);
                 if (!mysqli_stmt_prepare($stmt, $sql)) {
-                    echo("<script>location.href = 'register.php?error=sqlerror';</script>");
-                    exit();
+                    return false;
                 } else {
                     mysqli_stmt_bind_param($stmt, "s", $username);
                     mysqli_stmt_execute($stmt);
                     mysqli_stmt_store_result($stmt);
                     $resultCheck = mysqli_stmt_num_rows($stmt);
                     if ($resultCheck > 0) {
-                        echo("<script>location.href = 'register.php?error=usertaken&=\".$username';</script>");
-                        exit();
+                        return false;
                     } else {
                         $sql = ("SET CHARACTER SET utf8");
                         $conn->query($sql);
@@ -469,8 +461,7 @@ class Model {
                                             skype, parasas, snapchat, tinklalapis, mokykla, aukstasis_issilavinimas) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
                         $stmt = mysqli_stmt_init($conn);
                         if (!mysqli_stmt_prepare($stmt, $sql)) {
-                            echo("<script>location.href = 'register.php?error=sqlerror';</script>");
-                            exit();
+                            return false;
                         } else {
                             $hashedPwd = password_hash($password, PASSWORD_DEFAULT);
                             $id = 0;
@@ -482,8 +473,7 @@ class Model {
                             mysqli_stmt_bind_param($stmt, "isssssiisissssssssssssssssss", $id, $username, $hashedPwd, $email, $date, $path, $blocked, $muted, $date, $role, $country, $address, $phoneNum,
                                 $realName, $surname, $birthDate, $city, $favGame, $description, $discID, $faceID, $isntaID, $skypeID, $sign, $snapID, $website, $school, $degree);
                             mysqli_stmt_execute($stmt);
-                            echo("<script>location.href = 'register.php?signup=success';</script>");
-                            exit();
+                            return true;
                         }
                     }
                 }
@@ -598,13 +588,11 @@ class Model {
                             $hashedPwd = password_hash($newPasswd, PASSWORD_DEFAULT);
                             $sql = "UPDATE naudotojai SET slaptazodis=? WHERE slapyvardis=?";
                             if (!mysqli_stmt_prepare($stmt, $sql)) {
-                                echo("<script>location.href = 'settings.php?error=sqlerror';</script>");
-                                exit();
+                                return false;
                             } else {
                                 mysqli_stmt_bind_param($stmt, "ss", $hashedPwd, $username);
                                 mysqli_stmt_execute($stmt);
-                                echo("<script>location.href = 'settings.php?changepasswd=success';</script>");
-                                exit();
+                                return true;
                             }
                         }
                     }
@@ -617,8 +605,9 @@ class Model {
             }
         }
     }
-
-    function getUserIpAddr(){
+  
+    function getUserIpAddr()
+    {
         if(!empty($_SERVER['HTTP_CLIENT_IP'])){
             $ip = $_SERVER['HTTP_CLIENT_IP'];
         }elseif(!empty($_SERVER['HTTP_X_FORWARDED_FOR'])){
@@ -627,5 +616,49 @@ class Model {
             $ip = $_SERVER['REMOTE_ADDR'];
         }
         return $ip;
+    }
+  
+    public function changeProfilePic($username)
+    {
+        $targetDir = "img/profile pictures/";
+        $fileName = basename($_FILES["profPicLoc"]["name"]);
+        $targetFilePath = $targetDir . $fileName;
+        $fileType = pathinfo($targetFilePath, PATHINFO_EXTENSION);
+
+        if (!empty($_FILES["profPicLoc"]["name"])) {
+            // Allow certain file formats
+            $allowTypes = array('jpg', 'png', 'jpeg', 'gif');
+            if (in_array($fileType, $allowTypes)) {
+                // Upload file to server
+                if (move_uploaded_file($_FILES["profPicLoc"]["tmp_name"], $targetFilePath)) {
+                    // Insert image file name into database
+                    $stmt = mysqli_stmt_init($this->conn);
+                    $sql = "UPDATE naudotojai SET avataro_kelias=? WHERE slapyvardis=?";
+                    if (mysqli_stmt_prepare($stmt, $sql))
+                    {
+                        mysqli_stmt_bind_param($stmt, "ss", $targetFilePath, $username);
+                        mysqli_stmt_execute($stmt);
+                        $statusMsg = "The file " . $fileName . " has been uploaded successfully.";
+                        return true;
+                    } else {
+                        $statusMsg = "File upload failed, please try again.";
+                    }
+                } else {
+                    $statusMsg = "Sorry, there was an error uploading your file.";
+                }
+            } else {
+                $statusMsg = 'Sorry, only JPG, JPEG, PNG, GIF, & PDF files are allowed to upload.';
+            }
+        } else {
+            $statusMsg = 'Please select a file to upload.';
+        }
+
+        // Display status message
+        echo $statusMsg;
+    }
+
+    public function returnConn()
+    {
+        return $this->conn;
     }
 }

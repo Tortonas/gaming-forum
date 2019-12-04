@@ -550,22 +550,6 @@ class View
     {
             echo '
             <form method=\'POST\' class=\'mainForm\'>
-                <h1>Profilio nuotrauka</h1>
-                <div class=\'profile-picture--200px\'>
-                    <img src="img/profile pictures/default.png" alt="default profile picture" class="img-thumbnail">
-                    <div class="file-upload-form--small">
-                        <div class="input-group">
-                            <div class="input-group-prepend">
-                                <span class="input-group-text" id="inputGroupFileAddon01">Įkelti</span>
-                            </div>
-                            <div class="custom-file">
-                                <input type="file" class="custom-file-input" id="inputGroupFile01"
-                                aria-describedby="inputGroupFileAddon01">
-                                <label class="custom-file-label" for="inputGroupFile01">Pasirinkti nuotrauką</label>
-                            </div>
-                        </div>
-                    </div>
-                </div>
                 <h1>Profilio nustatymai</h1>
                 <div class="form-group">
                     <label for="inputFor">Slapyvardis*</label>
@@ -669,6 +653,29 @@ class View
                 </div>
                 <button type="submit" name="changePasswdBtn" class="btn btn-danger">Keisti slaptažodį</button>
             </form>';
+    }
+
+    public function printProfPic($picPath)
+    {
+        //<img src="img/profile pictures/default.png" alt="default profile picture" class="img-thumbnail">
+        echo '<form action="upload.php" method=\'POST\' class=\'mainForm\' enctype="multipart/form-data">
+                <h1>Profilio nuotrauka</h1>
+                <div class=\'profile-picture--200px\'>
+                    <img src="'.$picPath.'" alt="default profile picture" class="img-thumbnail">
+                    <div class="file-upload-form--small">
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <button type="submit" name="uploadProfPic" class="input-group-text" id="inputGroupFileAddon01">Įkelti</button>
+                            </div>
+                            <div class="custom-file">
+                                <input type="file" name="profPicLoc" class="custom-file-input" id="inputGroupFile01"
+                                aria-describedby="inputGroupFileAddon01">
+                                <label class="custom-file-label" for="inputGroupFile01">Pasirinkti nuotrauką</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+              </form>';
     }
     // Pabaiga
 }
