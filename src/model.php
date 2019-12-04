@@ -338,6 +338,15 @@ class Model {
         }
     }
 
+    public function getLastCreatedTheme()
+    {
+        $sql = "SELECT id FROM temos ORDER BY id DESC LIMIT 1";
+        $result = $this->conn->query($sql);
+        $id = $result->fetch_assoc();
+
+        return $id['id'];
+    }
+
     public function likeTheme($date, $userId, $themeAnsId)
     {
         $date = $this->secureInput($date);
