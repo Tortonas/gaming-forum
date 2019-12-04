@@ -105,6 +105,11 @@ class Model {
                     $_SESSION['role'] = $row['role'];
                     $_SESSION['uzblokuotas'] = $row['uzblokuotas'];
                     $_SESSION['uztildytas'] = $row['uztildytas'];
+                    $date = date('Y-m-d H:i:s');
+                    $sql = "UPDATE naudotojai SET paskutini_karta_prisijunges='$date' WHERE slapyvardis='$username'";
+                    $this->conn->query($sql);
+                    $sql = "INSERT INTO naudotoju_ipai (ip, paskutinis_prisijungimas, fk_naudotojas) VALUES (".$this->getUserIpAddr().", ".$date.", ".$row['id'].")";
+                    $this->conn->query($sql);
                     return true;
                 }
                 else
@@ -186,12 +191,80 @@ class Model {
         }
     }
 
+    public function getDataByString($table, $column, $value)
+    {
+        $table = $this->secureInput($table);
+        $column = $this->secureInput($column);
+        $value = $this->secureInput($value);
+        $sql = "SELECT * FROM ".$table." WHERE ".$column."='".$value."'";
+        $result = mysqli_query($this->conn, $sql);
+
+        if (mysqli_num_rows($result) > 0)
+        {
+            while($row = $result->fetch_assoc())
+            {
+                return $row;
+            }
+        }
+        else
+        {
+            echo mysqli_error($this->conn);
+            return false;
+        }
+    }
+
     public function updateDataOneColumn($table, $rowId,  $column, $newValue)
     {
         $table = $this->secureInput($table);
         $column = $this->secureInput($column);
         $newValue = $this->secureInput($newValue);
         $sql = "UPDATE ".$table." SET ".$column."='".$newValue."' WHERE id=".$rowId;
+
+        if($this->conn->query($sql))
+        {
+            return true;
+        }
+        else
+        {
+            echo mysqli_error($this->conn);
+            return false;
+        }
+    }
+
+    public function updateUser($username, $newEmail, $newCountry, $newAddress,
+                               $newPhoneNum, $newSurname, $newRealName, $newBirthDate, $newCity, $newFavGame,
+                               $newDescription, $newDiscID, $newFaceID, $newInstaID, $newSkypeID, $newSign, $newSnapID,
+                               $newWebsite, $newSchool, $newDegree)
+    {
+        $username = $this->secureInput($username);
+        $newEmail = $this->secureInput($newEmail);
+        $newCountry = $this->secureInput($newCountry);
+        $newAddress = $this->secureInput($newAddress);
+        $newPhoneNum = $this->secureInput($newPhoneNum);
+        $newSurname = $this->secureInput($newSurname);
+        $newRealName = $this->secureInput($newRealName);
+        $newBirthDate = $this->secureInput($newBirthDate);
+        $newCity = $this->secureInput($newCity);
+        $newFavGame = $this->secureInput($newFavGame);
+        $newDescription = $this->secureInput($newDescription);
+        $newDiscID = $this->secureInput($newDiscID);
+        $newFaceID = $this->secureInput($newFaceID);
+        $newInstaID = $this->secureInput($newInstaID);
+        $newSkypeID = $this->secureInput($newSkypeID);
+        $newSign = $this->secureInput($newSign);
+        $newSnapID = $this->secureInput($newSnapID);
+        $newWebsite = $this->secureInput($newWebsite);
+        $newSchool = $this->secureInput($newSchool);
+        $newDegree = $this->secureInput($newDegree);
+
+        $sql = "UPDATE naudotojai SET email='$newEmail',
+         salis='$newCountry', adresas='$newAddress',
+          telefono_nr='$newPhoneNum', pavarde='$newSurname', vardas='$newRealName',
+           gimimo_data='$newBirthDate', miestas='$newCity', megstamiausias_zaidimas='$newFavGame',
+            biografine_zinute='$newDescription', discord='$newDiscID', facebook='$newFaceID',
+             instagram='$newInstaID', skype='$newSkypeID', parasas='$newSign',
+              snapchat='$newSnapID', tinklalapis='$newWebsite', mokykla='$newSchool',
+               aukstasis_issilavinimas='$newDegree' WHERE slapyvardis='$username'";
 
         if($this->conn->query($sql))
         {
@@ -325,6 +398,306 @@ class Model {
         {
             echo mysqli_error($this->conn);
             return false;
+        }
+    }
+
+    public function registerUser($username, $email, $password, $passwordRepeat, $country, $address, $phoneNum, $surname, $realName, $birthDate, $city, $favGame, $description,
+                                 $discID, $faceID, $isntaID, $skypeID, $sign, $snapID, $website, $school, $degree)
+    {
+        $conn = $this->conn;
+
+        $username = $this->secureInput($username);
+        $email = $this->secureInput($email);
+        $password = $this->secureInput($password);
+        $passwordRepeat = $this->secureInput($passwordRepeat);
+        $country = $this->secureInput($country);
+        $address = $this->secureInput($address);
+        $phoneNum = $this->secureInput($phoneNum);
+        $realName = $this->secureInput($realName);
+        $surname = $this->secureInput($surname);
+        $birthDate = $this->secureInput($birthDate);
+        $city = $this->secureInput($city);
+        $favGame = $this->secureInput($favGame);
+        $description = $this->secureInput($description);
+        $discID = $this->secureInput($discID);
+        $faceID = $this->secureInput($faceID);
+        $isntaID = $this->secureInput($isntaID);
+        $skypeID = $this->secureInput($skypeID);
+        $sign = $this->secureInput($sign);
+        $snapID = $this->secureInput($snapID);
+        $website = $this->secureInput($website);
+        $school = $this->secureInput($school);
+        $degree = $this->secureInput($degree);
+
+        if (empty($username) || empty($password) || empty($passwordRepeat) || empty($email)) {
+            return false;
+        } else {
+            $sql = "SELECT * FROM naudotojai WHERE slapyvardis=? AND slaptazodis=?;";
+            $stmt = mysqli_stmt_init($conn);
+            if (!mysqli_stmt_prepare($stmt, $sql)) {
+                return false;
+            } else if (!preg_match("/^[a-zA-Z0-9]*$/", $username)) {
+                return false;
+            } else if ($password !== $passwordRepeat) {
+                return false;
+            } else {
+                $sql = "SELECT slapyvardis FROM naudotojai WHERE slapyvardis=?";
+                $stmt = mysqli_stmt_init($conn);
+                if (!mysqli_stmt_prepare($stmt, $sql)) {
+                    return false;
+                } else {
+                    mysqli_stmt_bind_param($stmt, "s", $username);
+                    mysqli_stmt_execute($stmt);
+                    mysqli_stmt_store_result($stmt);
+                    $resultCheck = mysqli_stmt_num_rows($stmt);
+                    if ($resultCheck > 0) {
+                        return false;
+                    } else {
+                        $sql = ("SET CHARACTER SET utf8");
+                        $conn->query($sql);
+                        $sql = "INSERT INTO naudotojai (id, slapyvardis, slaptazodis, email, registracijos_data, avataro_kelias, uzblokuotas,
+                                            uztildytas, paskutini_karta_prisijunges, role, salis, adresas, telefono_nr, vardas, pavarde,
+                                            gimimo_data, miestas, megstamiausias_zaidimas, biografine_zinute, discord, facebook, instagram,
+                                            skype, parasas, snapchat, tinklalapis, mokykla, aukstasis_issilavinimas) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+                        $stmt = mysqli_stmt_init($conn);
+                        if (!mysqli_stmt_prepare($stmt, $sql)) {
+                            return false;
+                        } else {
+                            $hashedPwd = password_hash($password, PASSWORD_DEFAULT);
+                            $id = 0;
+                            $role = 1;
+                            $blocked = 0;
+                            $muted = 0;
+                            $path = NULL;
+                            $date = date('Y-m-d H:i:s');
+                            mysqli_stmt_bind_param($stmt, "isssssiisissssssssssssssssss", $id, $username, $hashedPwd, $email, $date, $path, $blocked, $muted, $date, $role, $country, $address, $phoneNum,
+                                $realName, $surname, $birthDate, $city, $favGame, $description, $discID, $faceID, $isntaID, $skypeID, $sign, $snapID, $website, $school, $degree);
+                            mysqli_stmt_execute($stmt);
+                            return true;
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    public function getCatalogListByPattern($pattern)
+    {
+        $pattern = $this->secureInput($pattern);
+        $sql = "SELECT id, pavadinimas
+                FROM katalogai
+                WHERE katalogai.pavadinimas LIKE '%$pattern%'";
+        if($result = $this->conn->query($sql))
+        {
+            return $result;
+        }
+        else
+        {
+            echo mysqli_error($this->conn);
+            return false;
+        }
+    }
+
+    public function getThemeListByPattern($pattern)
+    {
+        $pattern = $this->secureInput($pattern);
+        $sql = "SELECT katalogai.pavadinimas, temos.pavadinimas, temu_atsakymai.tekstas, temu_atsakymai.sukurimo_data, temos.id
+                FROM katalogai
+                JOIN temos ON temos.fk_katalogas=katalogai.id
+                JOIN temu_atsakymai ON temu_atsakymai.fk_tema=temos.id
+                WHERE tekstas LIKE '%$pattern%' OR temos.pavadinimas LIKE '%$pattern%'";
+        if($result = $this->conn->query($sql))
+        {
+            return $result;
+        }
+        else
+        {
+            echo mysqli_error($this->conn);
+            return false;
+        }
+    }
+
+    public function checkIfUserHasLikedThisThemeAnswer($userId, $themeAnsId)
+    {
+        $userId = $this->secureInput($userId);
+        $themeAnsId = $this->secureInput($themeAnsId);
+        $sql = "SELECT *
+                FROM temu_pamegimai
+                WHERE temu_pamegimai.fk_naudotojas='$userId' AND temu_pamegimai.fk_temos_atsakymas='$themeAnsId'";
+
+        $result = $this->conn->query($sql);
+        if(mysqli_num_rows($result) > 0)
+        {
+            return false;
+        }
+        else
+        {
+            return true;
+        }
+    }
+
+    public function checkIfICanEditThisTheme($userId, $themeAnsId)
+    {
+        $userId = $this->secureInput($userId);
+        $themeAnsId = $this->secureInput($themeAnsId);
+        $sql = "SELECT * FROM
+                temu_atsakymai
+                WHERE temu_atsakymai.fk_naudotojas = '$userId' AND id = '$themeAnsId'";
+        $result = $this->conn->query($sql);
+        if(mysqli_num_rows($result) > 0)
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+
+    public function changePasswd($username, $password, $newPasswd, $repeatNewPasswd)
+    {
+        $conn = $this->conn;
+        $username = $this->secureInput($username);
+        $password = $this->secureInput($password);
+        $newPasswd = $this->secureInput($newPasswd);
+        $repeatNewPasswd = $this->secureInput($repeatNewPasswd);
+
+        $sql = "SELECT * FROM naudotojai WHERE slapyvardis='$username'";
+        $result = $conn->query($sql);
+
+        if ($result->num_rows > 0)
+        {
+            while($row = $result->fetch_assoc())
+            {
+                if(password_verify($password, $row['slaptazodis']))
+                {
+                    if ($newPasswd !== $repeatNewPasswd) {
+                        echo("<script>location.href = 'settings.php?error=passwcheck';</script>");
+                        exit();
+                    } else {
+                        $sql = "SELECT slapyvardis FROM naudotojai WHERE slapyvardis=?";
+                        $stmt = mysqli_stmt_init($conn);
+                        if (!mysqli_stmt_prepare($stmt, $sql)) {
+                            echo("<script>location.href = 'settings.php?error=sqlerror';</script>");
+                            exit();
+                        } else {
+                            mysqli_stmt_bind_param($stmt, "s", $username);
+                            mysqli_stmt_execute($stmt);
+                            $sql = ("SET CHARACTER SET utf8");
+                            $conn->query($sql);
+                            $hashedPwd = password_hash($newPasswd, PASSWORD_DEFAULT);
+                            $sql = "UPDATE naudotojai SET slaptazodis=? WHERE slapyvardis=?";
+                            if (!mysqli_stmt_prepare($stmt, $sql)) {
+                                return false;
+                            } else {
+                                mysqli_stmt_bind_param($stmt, "ss", $hashedPwd, $username);
+                                mysqli_stmt_execute($stmt);
+                                return true;
+                            }
+                        }
+                    }
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+        }
+    }
+  
+    function getUserIpAddr()
+    {
+        if(!empty($_SERVER['HTTP_CLIENT_IP']))
+        {
+            $ip = $_SERVER['HTTP_CLIENT_IP'];
+        } else if(!empty($_SERVER['HTTP_X_FORWARDED_FOR'])) {
+            $ip = $_SERVER['HTTP_X_FORWARDED_FOR'];
+        } else {
+            $ip = $_SERVER['REMOTE_ADDR'];
+        }
+        return $ip;
+    }
+
+    public function returnConn()
+    {
+        return $this->conn;
+    }
+
+    public function remindPassword($email)
+    {
+        $errors = [];
+        $query = "SELECT email FROM naudotojai WHERE email='$email'";
+        $results = mysqli_query($this->conn, $query);
+
+        if (empty($email)) {
+            array_push($errors, "Your email is required");
+            return false;
+        } else if (mysqli_num_rows($results) <= 0) {
+            array_push($errors, "Sorry, no user exists on our system with that email");
+            return false;
+        }
+        $token = bin2hex(random_bytes(50));
+        $date = date('Y-m-d H:i:s');
+        $expireDate = date("Y-m-d H:i:s", strtotime('+1 hours'));
+
+        $query = "SELECT id FROM naudotojai WHERE email='$email'";
+        $res = $this->conn->query($query);
+        $row = $res->fetch_assoc();
+        $id = $row['id'];
+        $sql = "INSERT INTO slaptazodziu_priminikliai(tokenas, sukurimo_data, pabaigos_data, fk_naudotojas) VALUES ('$token', '$date', '$expireDate', '$id')";
+        if($this->conn->query($sql))
+        {
+
+        } else {
+            echo mysqli_error($this->conn);
+            return false;
+        }
+
+        $to = $email;
+        $subject = "Susigrąžinkite slaptažodį ispgame.tk svetainėje";
+        $msg = "Paspauskite šią <a href=\"ispgame.tk/newpass.php?token=" . $token . "\">nuorodą</a>, kad atnaujintumėte slaptažodį";
+        $msg = wordwrap($msg, 70);
+        $headers = "From: info@ispgame.tk";
+        mail($to, $subject, $msg, $headers);
+        header('location: index.php?emailsent=true');
+        return true;
+    }
+
+    public function changeRemindedPass($pass, $passRepeat)
+    {
+        $newPass = $this->secureInput($pass);
+        $newPassC = $this->secureInput($passRepeat);
+
+        $token = $_GET['token'];
+        if (empty($newPass) || empty($newPassC))
+        {
+            return false;
+        }
+        if ($newPass !== $newPassC)
+        {
+            return false;
+        } else {
+            $date = date('Y-m-d H:i:s');
+            $sql = "SELECT tokenas, fk_naudotojas FROM slaptazodziu_priminikliai WHERE tokenas='$token' AND pabaigos_data >= '$date' LIMIT 1";
+            $result = $this->conn->query($sql);
+            if ($result->num_rows > 0) {
+                $row = $result->fetch_assoc();
+                $dbToken = $row['tokenas'];
+                $usrId = $row['fk_naudotojas'];
+
+                if ($token === $dbToken) {
+                    $hashedPwd = password_hash($newPass, PASSWORD_DEFAULT);
+                    $sql = "UPDATE naudotojai SET slaptazodis='$hashedPwd' WHERE id='$usrId'";
+                    $results = mysqli_query($this->conn, $sql);
+                    header('location: index.php?changepass=success');
+                    return true;
+                } else {
+                    return false;
+                }
+            } else {
+                return false;
+            }
         }
     }
 }
