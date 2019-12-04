@@ -681,16 +681,20 @@ class Model {
             $date = date('Y-m-d H:i:s');
             $sql = "SELECT tokenas, fk_naudotojas FROM slaptazodziu_priminikliai WHERE tokenas='$token' AND pabaigos_data >= '$date' LIMIT 1";
             $result = $this->conn->query($sql);
-            $row = $result->fetch_assoc();
-            $dbToken = $row['tokenas'];
-            $usrId = $row['fk_naudotojas'];
+            if ($result->num_rows > 0) {
+                $row = $result->fetch_assoc();
+                $dbToken = $row['tokenas'];
+                $usrId = $row['fk_naudotojas'];
 
-            if ($token === $dbToken) {
-                $hashedPwd = password_hash($newPass, PASSWORD_DEFAULT);
-                $sql = "UPDATE naudotojai SET slaptazodis='$hashedPwd' WHERE id='$usrId'";
-                $results = mysqli_query($this->conn, $sql);
-                header('location: index.php?changepass=success');
-                return true;
+                if ($token === $dbToken) {
+                    $hashedPwd = password_hash($newPass, PASSWORD_DEFAULT);
+                    $sql = "UPDATE naudotojai SET slaptazodis='$hashedPwd' WHERE id='$usrId'";
+                    $results = mysqli_query($this->conn, $sql);
+                    header('location: index.php?changepass=success');
+                    return true;
+                } else {
+                    return false;
+                }
             } else {
                 return false;
             }
