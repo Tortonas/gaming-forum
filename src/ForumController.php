@@ -56,6 +56,19 @@ class ForumController extends MainController implements iController
         $themeList = $this->getModel()->getDataByColumn('temos', 'fk_katalogas', $_GET['id']);
 
         $this->getView()->printForumThemes($themeList, $this->getModel()->getDataByColumnFirst('katalogai', 'id', $_GET['id']));
+
+        if(isset($_POST['deleteThemeBtn']))
+        {
+            if($this->getModel()->removeData('temos', $_POST['deleteThemeBtn']))
+            {
+                $this->printSuccess('Istrinta!');
+                $this->redirect_to_another_page('themes.php?id=' . $_GET['id'], 0);
+            }
+            else
+            {
+                $this->printDanger('Klaida!');
+            }
+        }
     }
 
 
@@ -105,6 +118,12 @@ class ForumController extends MainController implements iController
 
         $likeCount = array();
         $likeCountIter = 0;
+
+        if($themeAnswerList == null)
+        {
+            $this->printDanger('Tema su tokiu ID neegzistuoja!');
+            return;
+        }
 
         while($row = $themeAnswerList->fetch_assoc())
         {
