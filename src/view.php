@@ -227,13 +227,13 @@ class View
                     <form method="POST" class="form-group">
                         <h4>' . $row['slapyvardis'] . '</h4>
                         <h6>' . $row['sukurimo_data'] . '</h6>
-                        <p>' . $row['tekstas'] . '</p>
-                        <button type="submit" name="likeBtn" value="' . $row['id'] . '" class="btn btn-primary btn-sm">
-                            Pamėgti <span class="badge badge-light">' . $likeCount[$likeCountIter++] . '</span>
-                        </button>';
+                        <p>' . $row['tekstas'] . '</p>';
 
                 if ($_SESSION['role'] >= 3 || $_SESSION['slapyvardis'] == $row['slapyvardis']) {
-                    echo '                        <a href="edittheme.php?id=' . $row['id'] . '"> <button type="button" class="btn btn-primary btn-sm">Redaguoti</button> </a>
+                    echo '<button type="submit" name="likeBtn" value="' . $row['id'] . '" class="btn btn-primary btn-sm">
+                            Pamėgti <span class="badge badge-light">' . $likeCount[$likeCountIter++] . '</span>
+                        </button>
+                    <a href="edittheme.php?id=' . $row['id'] . '"> <button type="button" class="btn btn-primary btn-sm">Redaguoti</button> </a>
                         <button type="submit" name="deleteBtn" value=' . $row['id'] . ' class="btn btn-danger btn-sm">Naikinti</button>';
                 }
 

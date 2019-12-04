@@ -92,9 +92,12 @@ class ForumController extends MainController implements iController
                 return;
             }
 
+
             if($this->getModel()->createNewTheme($_POST['themeName'], $this->getDateTime(), $_SESSION['id'], $_GET['id'], $_POST['themeText']))
             {
                 $this->printSuccess('Tema sukurta!');
+                $newThemeId = $this->getModel()->getLastCreatedTheme();
+                $this->redirect_to_another_page('viewtheme.php?id=' . $newThemeId, 1);
             }
             else
             {
