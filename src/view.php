@@ -545,7 +545,7 @@ class View
         </form>';
     }
 
-    public function printSettingsForm($username, $email, $password, $country, $address, $phoneNum, $surname, $realName, $birthDate, $city, $favGame, $description,
+    public function printSettingsForm($username, $email, $country, $address, $phoneNum, $surname, $realName, $birthDate, $city, $favGame, $description,
                                       $discID, $faceID, $instaID, $skypeID, $sign, $snapID, $website, $school, $degree)
     {
             echo '
@@ -574,10 +574,6 @@ class View
                 <div class="form-group">
                     <label for="inputFor">El. pašto adresas*</label>
                     <input type="email" name="email" class="form-control" id="inputFor" aria-describedby="emailHelp" placeholder="El. Paštas" value="'.$email.'">
-                </div>
-                <div class="form-group">
-                    <label for="inputFor">Slaptažodis*</label>
-                    <input type="password" name="password" class="form-control" id="inputFor" placeholder="Slaptažodis" value="'.$password.'">
                 </div>
                 <div class="form-group">
                     <label for="inputFor">Šalis</label>
@@ -625,7 +621,7 @@ class View
                 </div>
                 <div class="form-group">
                     <label for="inputFor">Instagram</label>
-                    <input type="text" name="isntaID" class="form-control" id="inputFor" placeholder="Instagram" value="'.$instaID.'">
+                    <input type="text" name="$instaID" class="form-control" id="inputFor" placeholder="Instagram" value="'.$instaID.'">
                 </div>
                 <div class="form-group">
                     <label for="inputFor">Skype</label>
@@ -661,17 +657,17 @@ class View
                 <h1>Slaptažodžio keitimo forma</h1>
                 <div class="form-group">
                     <label for="inputFor">Dabartinis slaptažodis</label>
-                    <input type="password" class="form-control" id="inputFor" placeholder="Senas slaptažodis">
+                    <input type="password" name="oldPasswd" class="form-control" id="inputFor" placeholder="Senas slaptažodis">
                 </div>
                 <div class="form-group">
                     <label for="inputFor">Naujas slaptažodis</label>
-                    <input type="password" class="form-control" id="inputFor" placeholder="Naujas slaptažodis">
+                    <input type="password" name="newPasswd" class="form-control" id="inputFor" placeholder="Naujas slaptažodis">
                 </div>
                 <div class="form-group">
                     <label for="inputFor">Pakartokite naują slaptažodį</label>
-                    <input type="password" class="form-control" id="inputFor" placeholder="Naujas slaptažodis">
+                    <input type="password"  name="repeatNewPasswd" class="form-control" id="inputFor" placeholder="Naujas slaptažodis">
                 </div>
-                <button type="button" class="btn btn-danger">Keisti slaptažodį</button>
+                <button type="submit" name="changePasswdBtn" class="btn btn-danger">Keisti slaptažodį</button>
             </form>';
     }
     // Pabaiga
