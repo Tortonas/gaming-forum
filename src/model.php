@@ -617,45 +617,6 @@ class Model {
         }
         return $ip;
     }
-  
-    public function changeProfilePic($username)
-    {
-        $targetDir = "img/profile pictures/";
-        $fileName = basename($_FILES["profPicLoc"]["name"]);
-        $targetFilePath = $targetDir . $fileName;
-        $fileType = pathinfo($targetFilePath, PATHINFO_EXTENSION);
-
-        if (!empty($_FILES["profPicLoc"]["name"])) {
-            // Allow certain file formats
-            $allowTypes = array('jpg', 'png', 'jpeg', 'gif');
-            if (in_array($fileType, $allowTypes)) {
-                // Upload file to server
-                if (move_uploaded_file($_FILES["profPicLoc"]["tmp_name"], $targetFilePath)) {
-                    // Insert image file name into database
-                    $stmt = mysqli_stmt_init($this->conn);
-                    $sql = "UPDATE naudotojai SET avataro_kelias=? WHERE slapyvardis=?";
-                    if (mysqli_stmt_prepare($stmt, $sql))
-                    {
-                        mysqli_stmt_bind_param($stmt, "ss", $targetFilePath, $username);
-                        mysqli_stmt_execute($stmt);
-                        $statusMsg = "The file " . $fileName . " has been uploaded successfully.";
-                        return true;
-                    } else {
-                        $statusMsg = "File upload failed, please try again.";
-                    }
-                } else {
-                    $statusMsg = "Sorry, there was an error uploading your file.";
-                }
-            } else {
-                $statusMsg = 'Sorry, only JPG, JPEG, PNG, GIF, & PDF files are allowed to upload.';
-            }
-        } else {
-            $statusMsg = 'Please select a file to upload.';
-        }
-
-        // Display status message
-        echo $statusMsg;
-    }
 
     public function returnConn()
     {
