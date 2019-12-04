@@ -108,6 +108,8 @@ class Model {
                     $date = date('Y-m-d H:i:s');
                     $sql = "UPDATE naudotojai SET paskutini_karta_prisijunges='$date' WHERE slapyvardis='$username'";
                     $this->conn->query($sql);
+                    $sql = "INSERT INTO naudotoju_ipai (ip, paskutinis_prisijungimas, fk_naudotojas) VALUES (".$this->getUserIpAddr().", ".$date.", ".$row['id'].")";
+                    $this->conn->query($sql);
                     return true;
                 }
                 else
@@ -614,5 +616,16 @@ class Model {
                 }
             }
         }
+    }
+
+    function getUserIpAddr(){
+        if(!empty($_SERVER['HTTP_CLIENT_IP'])){
+            $ip = $_SERVER['HTTP_CLIENT_IP'];
+        }elseif(!empty($_SERVER['HTTP_X_FORWARDED_FOR'])){
+            $ip = $_SERVER['HTTP_X_FORWARDED_FOR'];
+        }else{
+            $ip = $_SERVER['REMOTE_ADDR'];
+        }
+        return $ip;
     }
 }
