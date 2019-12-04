@@ -40,7 +40,7 @@ class UserController extends MainController implements iController
 
             if($this->getModel()->registerUser($username, $email, $password, $passwordRepeat, $country, $address, $phoneNum, $surname, $realName, $birthDate, $city, $favGame, $description,
                 $discID, $faceID, $instaID, $skypeID, $sign, $snapID, $website, $school, $degree)) {
-                $this->getView()->printSuccess('Registracija sėkming!');
+                $this->getView()->printSuccess('Registracija sėkminga!');
             } else {
                 $this->getView()->printDanger('Klaida');
             }

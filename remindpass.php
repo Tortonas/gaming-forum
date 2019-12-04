@@ -1,3 +1,8 @@
+<?php
+session_start();
+include('src/autoloader.php');
+$controller = new PassRemindController();
+?>
 <!doctype html>
 <html lang="en">
   <head>
@@ -9,63 +14,21 @@
     <link rel="stylesheet" href="./style/stylesheet.css">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 
-    <title>Hello, world!</title>
+    <title><?php $controller->getTitle() ?></title>
   </head>
   <body>
-      
-    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
-        <div class='container'>
-            <a class="navbar-brand" href="index.php">Gaming Forumas  </a>
-            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-            </button>
-
-            <div class="collapse navbar-collapse" id="navbarSupportedContent">
-            <ul class="navbar-nav mr-auto">
-                <li class="nav-item">
-                    <a class="nav-link" href="index.php">Namai <span class="sr-only">(current)</span></a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="forum.php">Forumas</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="gallery.php">Galerija</a>
-                </li>
-                <li class="nav-item active">
-                    <a class="nav-link" href="login.php">Prisijungti</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="register.php">Registracija</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="settings.php">Nustatymai</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#">Atsijungti</a>
-                </li>
-                <li class="nav-item">
-                        <a class="nav-link" href="adminpanel.php">Admin</a>
-                    </li>
-            </ul>
-            <form class="form-inline my-2 my-lg-0" method="POST" action="search.php">
-                    <input class="form-control mr-sm-2" type="search" placeholder="Raktažodis paieškai" aria-label="Search">
-                    <button class="btn btn-outline-light my-2 my-sm-0" type="submit">Ieškoti</button>
-                </form>
-            </div>
-        
-        </div>
-    </nav>
-
-    <div class='container'>
-        <form method='POST' class='mainForm'>
-            <h1>Slaptažodžio priminimas!</h1>
-            <div class="form-group">
-                <label for="inputFor">El. pašto adresas</label>
-                <input type="email" class="form-control" id="inputFor" aria-describedby="emailHelp" placeholder="El. Paštas">
-            </div>
-                <button type="button" class="btn btn-primary">Siųsti priminimą</button>
-        </form>
-    </div>
+      <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+          <div class='container'>
+              <?php
+                MainController::printNavigationBar("remindpass.php");
+              ?>
+          </div>
+      </nav>
+      <div class='container'>
+          <?php
+            $controller->printPageView();
+          ?>
+      </div>
       
     <!-- Optional JavaScript -->
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->

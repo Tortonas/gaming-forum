@@ -608,11 +608,12 @@ class Model {
   
     function getUserIpAddr()
     {
-        if(!empty($_SERVER['HTTP_CLIENT_IP'])){
+        if(!empty($_SERVER['HTTP_CLIENT_IP']))
+        {
             $ip = $_SERVER['HTTP_CLIENT_IP'];
-        }elseif(!empty($_SERVER['HTTP_X_FORWARDED_FOR'])){
+        } else if(!empty($_SERVER['HTTP_X_FORWARDED_FOR'])) {
             $ip = $_SERVER['HTTP_X_FORWARDED_FOR'];
-        }else{
+        } else {
             $ip = $_SERVER['REMOTE_ADDR'];
         }
         return $ip;
@@ -621,5 +622,39 @@ class Model {
     public function returnConn()
     {
         return $this->conn;
+    }
+
+    public function remindPassword($email)
+    {
+        $errors = [];
+        $query = "SELECT email FROM naudotojai WHERE email='$email'";
+        $results = mysqli_query($this->conn, $query);
+
+        if (empty($email)) {
+            array_push($errors, "Your email is required");
+            return false;
+        } else if (mysqli_num_rows($results) <= 0) {
+            array_push($errors, "Sorry, no user exists on our system with that email");
+            return false;
+        }
+        $token = bin2hex(random_bytes(50));
+        $date = date('Y-m-d H:i:s');
+        $expireDate = date("Y-m-d H:i:s", strtotime('+1 hours'));
+
+        $query = "SELECT id FROM naudotojai WHERE email='$email'";
+        $res = $this->conn->query($query);
+        $row = $res->fetch_assoc();
+        $id = $row['id'];
+        $sql = "INSERT INTO slaptazodziu_priminikliai(tokenas, sukurimo_data, pabaigos_data, fk_naudotojasIndex) VALUES ('$token', '$date', '$email', '$expireDate', '$id')";
+        $results = mysqli_query($this->conn, $sql);
+
+        $to = $email;
+        $subject = "Susigrąžinkite slaptažodį ispgame.tk svetainėje";
+        $msg = "Paspauskite šią <a href=\"new_password.php?token=" . $token . "\">nuorodą</a>, kad atnaujintomete slaptažodį";
+        $msg = wordwrap($msg, 70);
+        $headers = "From: info@ispgame.tk";
+        mail($to, $subject, $msg, $headers);
+        header('location: pending.php?email=' . $email);
+        return true;
     }
 }

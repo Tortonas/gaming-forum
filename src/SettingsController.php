@@ -71,19 +71,6 @@ class SettingsController extends MainController implements iController
                 $this->getView()->printDanger('Klaida');
             }
         }
-
-        if (isset($_POST['uploadProfPic']))
-        {
-            if (isset($_POST['profPicLoc']))
-            {
-                if ($this->getModel()->changeProfilePic($_SESSION['slapyvardis']))
-                {
-                    $this->printSuccess('Nuotrauka sėkmingai pakeista!');
-                } else {
-                    $this->printDanger('Klaida');
-                }
-            }
-        }
     }
 
     public function getTitle()
