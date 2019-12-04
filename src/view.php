@@ -158,17 +158,20 @@ class View
 
     public function printForumThemes($themeList, $categoryName)
     {
-        echo '        <h1>' . $categoryName['pavadinimas'] . ' temos:</h1>';
+        echo '        <h1>' . $categoryName['pavadinimas'] . ' temos:</h1>
+        <form method="POST">';
 
         if ($themeList) {
             while ($row = $themeList->fetch_assoc()) {
                 if ($_SESSION['role'] >= 3) {
-                    echo '<h2> <a href="viewtheme.php?id=' . $row['id'] . '">' . $row['pavadinimas'] . '</a> <button class="btn btn-danger btn-sm">Naikinti</button></h2>';
+                    echo '<h2> <a href="viewtheme.php?id=' . $row['id'] . '">' . $row['pavadinimas'] . '</a> <button class="btn btn-danger btn-sm" type="submit" name="deleteThemeBtn" value="'.$row['id'].'">Naikinti</button></h2>';
                 } else {
                     echo '<h2> <a href="viewtheme.php?id=' . $row['id'] . '">' . $row['pavadinimas'] . '</a></h2>';
                 }
             }
         }
+
+        echo '</form>';
 
         if ($_SESSION['role'] > 0) {
             echo '<a href="createtheme.php?id=' . $_GET['id'] . '"> <button type="button" class="btn btn-primary">Sukurti naują temą</button> </a>';
@@ -177,7 +180,7 @@ class View
 
     public function printCreateTheme()
     {
-        echo '        <h1>Sukurti naują temą - (kategorijos pavadinimas):</h1>
+        echo '        <h1>Sukurti naują temą:</h1>
         <form method="POST">
         <div class="form-group">
             <label for="inputFor">Temos pavadinimas</label>
@@ -207,13 +210,13 @@ class View
                     <form method="POST" class="form-group">
                         <h4>' . $row['slapyvardis'] . '</h4>
                         <h6>' . $row['sukurimo_data'] . '</h6>
-                        <p>' . $row['tekstas'] . '</p>
-                        <button type="submit" name="likeBtn" value="' . $row['id'] . '" class="btn btn-primary btn-sm">
-                            Pamėgti <span class="badge badge-light">' . $likeCount[$likeCountIter++] . '</span>
-                        </button>';
+                        <p>' . $row['tekstas'] . '</p>';
 
                 if ($_SESSION['role'] >= 3 || $_SESSION['slapyvardis'] == $row['slapyvardis']) {
-                    echo '                        <a href="edittheme.php?id=' . $row['id'] . '"> <button type="button" class="btn btn-primary btn-sm">Redaguoti</button> </a>
+                    echo '<button type="submit" name="likeBtn" value="' . $row['id'] . '" class="btn btn-primary btn-sm">
+                            Pamėgti <span class="badge badge-light">' . $likeCount[$likeCountIter++] . '</span>
+                        </button>
+                    <a href="edittheme.php?id=' . $row['id'] . '"> <button type="button" class="btn btn-primary btn-sm">Redaguoti</button> </a>
                         <button type="submit" name="deleteBtn" value=' . $row['id'] . ' class="btn btn-danger btn-sm">Naikinti</button>';
                 }
 
