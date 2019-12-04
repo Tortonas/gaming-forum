@@ -25,7 +25,7 @@ class View
             self::printNavbarItem("Prisijungti", "login.php", $location);
         } else {
             if ($_SESSION['role'] == 3) {
-                self::printNavbarItem("Admin", "admin.php", $location);
+                self::printNavbarItem("Admin", "adminpanel.php", $location);
             }
             self::printNavbarItem("Nustatymai", "settings.php", $location);
             self::printNavbarItem("Atsijungti", "logout.php", $location);
@@ -98,40 +98,23 @@ class View
 
     // -- ADMIN PAGE VIEW START
 
-    public function printAdminPanel()
+    public function printAdminPanel($users)
     {
-        echo '<ul class="list-group">
-            <li class="list-group-item">
-                HENRIUX420 
+        echo '
+                <ul class="list-group">';
+        if ($users) {
+            while ($row = mysqli_fetch_assoc($users)) {
+             echo'<li class="list-group-item">
+                '.$row['slapyvardis'].' 
                 <button type="button" class="btn btn-warning btn-sm">Užtildyti</button>
                 <button type="button" class="btn btn-danger btn-sm">Užblokuoti</button>
-                <a href="edituser.php"> <button type="button" class="btn btn-primary btn-sm">Redaguoti naudotoją</button> </a>
-            </li>
-            <li class="list-group-item">
-                VALEEE                
-                <button type="button" class="btn btn-warning btn-sm">Užtildyti</button>
-                <button type="button" class="btn btn-danger btn-sm">Užblokuoti</button>
-                <a href="edituser.php"> <button type="button" class="btn btn-primary btn-sm">Redaguoti naudotoją</button> </a>
-            </li>
-            <li class="list-group-item">
-                ELYGAAA
-                <button type="button" class="btn btn-warning btn-sm">Užtildyti</button>
-                <button type="button" class="btn btn-danger btn-sm">Užblokuoti</button>
-                <a href="edituser.php"> <button type="button" class="btn btn-primary btn-sm">Redaguoti naudotoją</button> </a>
-            </li>
-            <li class="list-group-item">
-                RIMV3
-                <button type="button" class="btn btn-warning btn-sm">Užtildyti</button>
-                <button type="button" class="btn btn-danger btn-sm">Užblokuoti</button>
-                <a href="edituser.php"> <button type="button" class="btn btn-primary btn-sm">Redaguoti naudotoją</button> </a>
-            </li>
-            <li class="list-group-item">
-                Random
-                <button type="button" class="btn btn-warning btn-sm">Užtildyti</button>
-                <button type="button" class="btn btn-danger btn-sm">Užblokuoti</button>
-                <a href="edituser.php"> <button type="button" class="btn btn-primary btn-sm">Redaguoti naudotoją</button> </a>
-            </li>
-        </ul>';
+                <a href="edituser.php?id='.$row['id'].'"><button type="button" class="btn btn-primary btn-sm">Redaguoti naudotoją</button> </a>
+                </li>';
+
+            }
+        }
+
+        echo '</ul>';
     }
 
     // -- ADMIN PAGE VIEW END
@@ -332,63 +315,63 @@ class View
             </div>
             <div class="form-group">
                 <label for="inputFor">Telefono numeris</label>
-                <input type="text" class="form-control" id="inputFor" name="telefono_nr" placeholder="Telefono numeris">
+                <input type="text" class="form-control" id="inputFor" name="telefono_nr" placeholder="Telefono numeris" value="'.$content['telefono_nr'].'">
             </div>
             <div class="form-group">
                 <label for="inputFor">Pavardė</label>
-                <input type="text" class="form-control" id="inputFor" name="pavarde" placeholder="Pavardė">
+                <input type="text" class="form-control" id="inputFor" name="pavarde" placeholder="Pavardė" value="'.$content['pavarde'].'">
             </div>
             <div class="form-group">
                 <label for="inputFor">Gimimo data</label>
-                <input type="text" class="form-control" id="inputFor" name="gimimo_data" placeholder="Gimimo data">
+                <input type="text" class="form-control" id="inputFor" name="gimimo_data" placeholder="Gimimo data" value="'.$content['gimimo_data'].'">
             </div>
             <div class="form-group">
                 <label for="inputFor">Miestas</label>
-                <input type="text" class="form-control" id="inputFor" name="miestas" placeholder="Miestas">
+                <input type="text" class="form-control" id="inputFor" name="miestas" placeholder="Miestas" value="'.$content['miestas'].'">
             </div>
             <div class="form-group">
                 <label for="inputFor">Mėgstamiausias žaidimas</label>
-                <input type="text" class="form-control" id="inputFor" name="megstamiausias_zaidimas" placeholder="Mėgstamiausias žaidimas">
+                <input type="text" class="form-control" id="inputFor" name="megstamiausias_zaidimas" placeholder="Mėgstamiausias žaidimas" value="'.$content['megstamiausias_zaidimas'].'">
             </div>
             <div class="form-group">
                 <label for="inputFor">Biografinė žinutė</label>
-                <input type="text" class="form-control" id="inputFor" name="biografine_zinute" placeholder="Biografinė žinutė">
+                <input type="text" class="form-control" id="inputFor" name="biografine_zinute" placeholder="Biografinė žinutė" value="'.$content['biografine_zinute'].'">
             </div>
             <div class="form-group">
                 <label for="inputFor">Discord ID</label>
-                <input type="text" class="form-control" id="inputFor" name="discord" placeholder="Discord ID">
+                <input type="text" class="form-control" id="inputFor" name="discord" placeholder="Discord ID" value="'.$content['discord'].'">
             </div>
             <div class="form-group">
                 <label for="inputFor">Facebook</label>
-                <input type="text" class="form-control" id="inputFor" name="facebook" placeholder="Facebook">
+                <input type="text" class="form-control" id="inputFor" name="facebook" placeholder="Facebook" value="'.$content['facebook'].'">
             </div>
             <div class="form-group">
                 <label for="inputFor">Instagram</label>
-                <input type="text" class="form-control" id="inputFor" name="instagram" placeholder="Instagram">
+                <input type="text" class="form-control" id="inputFor" name="instagram" placeholder="Instagram" value="'.$content['instagram'].'">
             </div>
             <div class="form-group">
                 <label for="inputFor">Skype</label>
-                <input type="text" class="form-control" id="inputFor" name="skype" placeholder="Skype">
+                <input type="text" class="form-control" id="inputFor" name="skype" placeholder="Skype" value="'.$content['skype'].'">
             </div>
             <div class="form-group">
                 <label for="inputFor">Snapchat</label>
-                <input type="text" class="form-control" id="inputFor" name="snapchat" placeholder="Snapchat">
+                <input type="text" class="form-control" id="inputFor" name="snapchat" placeholder="Snapchat" value="'.$content['snapchat'].'">
             </div>
             <div class="form-group">
                 <label for="inputFor">Parašas</label>
-                <input type="text" class="form-control" id="inputFor" name="parasas" placeholder="Parašas">
+                <input type="text" class="form-control" id="inputFor" name="parasas" placeholder="Parašas" value="'.$content['parasas'].'">
             </div>
             <div class="form-group">
                 <label for="inputFor">Tinklalapis</label>
-                <input type="text" class="form-control" id="inputFor" name="tinklapis" placeholder="Tinklalapis">
+                <input type="text" class="form-control" id="inputFor" name="tinklalapis" placeholder="Tinklalapis" value="'.$content['tinklalapis'].'">
             </div>
             <div class="form-group">
                 <label for="inputFor">Mokykla</label>
-                <input type="text" class="form-control" id="inputFor" name="mokykla" placeholder="Mokykla">
+                <input type="text" class="form-control" id="inputFor" name="mokykla" placeholder="Mokykla" value="'.$content['mokykla'].'">
             </div>
             <div class="form-group">
                 <label for="inputFor">Aukštasis išsilavinimas</label>
-                <input type="text" class="form-control" id="inputFor" name="aukstasis_issilavinimas" placeholder="Aukštasis išsilavinimas">
+                <input type="text" class="form-control" id="inputFor" name="aukstasis_issilavinimas" placeholder="Aukštasis išsilavinimas" value="'.$content['aukstasis_issilavinimas'].'">
             </div>
                 <button type="submit" class="btn btn-primary">Išsaugoti nustatymus</button>
         </form>
