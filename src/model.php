@@ -645,8 +645,14 @@ class Model {
         $res = $this->conn->query($query);
         $row = $res->fetch_assoc();
         $id = $row['id'];
-        $sql = "INSERT INTO slaptazodziu_priminikliai(tokenas, sukurimo_data, pabaigos_data, fk_naudotojasIndex) VALUES ('$token', '$date', '$email', '$expireDate', '$id')";
-        $results = mysqli_query($this->conn, $sql);
+        $sql = "INSERT INTO slaptazodziu_priminikliai(tokenas, sukurimo_data, pabaigos_data, fk_naudotojas) VALUES ('$token', '$date', '$expireDate', '$id')";
+        if($this->conn->query($sql))
+        {
+
+        } else {
+            echo mysqli_error($this->conn);
+            return false;
+        }
 
         $to = $email;
         $subject = "Susigrąžinkite slaptažodį ispgame.tk svetainėje";
@@ -673,10 +679,11 @@ class Model {
             return false;
         } else {
             $date = date('Y-m-d H:i:s');
-            $sql = "SELECT token, fk_naudotojas FROM slaptazodziu_priminikliai WHERE tokenas='$token' AND pabaigos_data >= '$date' LIMIT 1";
-            $results = mysqli_query($this->conn, $sql);
-            $dbToken = mysqli_fetch_assoc($results)['token'];
-            $usrId = mysqli_fetch_assoc($results)['fk_naudotojas'];
+            $sql = "SELECT tokenas, fk_naudotojas FROM slaptazodziu_priminikliai WHERE tokenas='$token' AND pabaigos_data >= '$date' LIMIT 1";
+            $result = $this->conn->query($sql);
+            $row = $result->fetch_assoc();
+            $dbToken = $row['tokenas'];
+            $usrId = $row['fk_naudotojas'];
 
             if ($token === $dbToken) {
                 $hashedPwd = password_hash($newPass, PASSWORD_DEFAULT);
