@@ -29,7 +29,7 @@ class UserController extends MainController implements iController
             $description = $_POST['description'];
             $discID = $_POST['discID'];
             $faceID = $_POST['faceID'];
-            $instaID = $_POST['$instaID'];
+            $instaID = $_POST['instaID'];
             $skypeID = $_POST['skypeID'];
             $sign = $_POST['sign'];
             $snapID = $_POST['snapID'];
@@ -38,8 +38,12 @@ class UserController extends MainController implements iController
             $degree = $_POST['degree'];
 
 
-            $this->getModel()->registerUser($username, $email, $password, $passwordRepeat, $country, $address, $phoneNum, $surname, $realName, $birthDate, $city, $favGame, $description,
-                $discID, $faceID, $instaID, $skypeID, $sign, $snapID, $website, $school, $degree);
+            if($this->getModel()->registerUser($username, $email, $password, $passwordRepeat, $country, $address, $phoneNum, $surname, $realName, $birthDate, $city, $favGame, $description,
+                $discID, $faceID, $instaID, $skypeID, $sign, $snapID, $website, $school, $degree)) {
+                $this->getView()->printSuccess('Registracija sėkming!');
+            } else {
+                $this->getView()->printDanger('Klaida');
+            }
         }
     }
 

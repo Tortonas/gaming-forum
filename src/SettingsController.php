@@ -11,9 +11,15 @@ class SettingsController extends MainController implements iController
     // settings.php
     public function printPageView()
     {
-        if (isset($_SESSION['slapyvardis'])) {
+        if (isset($_SESSION['slapyvardis']))
+        {
             $username = $this->getModel()->secureInput($_SESSION['slapyvardis']);
             $row = $this->getModel()->getDataByString('naudotojai', 'slapyvardis', $username);
+            if (($picPath = $row['avataro_kelias']) === NULL)
+            {
+                $picPath = "img/profile pictures/default.png";
+            }
+            $this->getView()->printProfPic($picPath);
             $this->getView()->printSettingsForm($row['slapyvardis'], $row['email'], $row['salis'], $row['adresas'], $row['telefono_nr'],
                 $row['pavarde'], $row['vardas'], $row['gimimo_data'], $row['miestas'], $row['megstamiausias_zaidimas'],
                 $row['biografine_zinute'], $row['discord'], $row['facebook'], $row['instagram'], $row['skype'], $row['parasas'],
@@ -21,7 +27,8 @@ class SettingsController extends MainController implements iController
             $this->getView()->printChangePasswordForm();
         }
 
-        if (isset($_POST['saveSettingsBtn'])) {
+        if (isset($_POST['saveSettingsBtn']))
+        {
             $email = $this->getModel()->secureInput($_POST['email']);
             $country = $this->getModel()->secureInput($_POST['country']);
             $address = $this->getModel()->secureInput($_POST['address']);
@@ -41,9 +48,14 @@ class SettingsController extends MainController implements iController
             $website = $this->getModel()->secureInput($_POST['website']);
             $school = $this->getModel()->secureInput($_POST['school']);
             $degree = $this->getModel()->secureInput($_POST['degree']);
-            $this->getModel()->updateUser($username, $email, $country, $address,
+            if ($this->getModel()->updateUser($username, $email, $country, $address,
                 $phoneNum, $surname, $realName, $birthDate, $city, $favGame, $description, $discID, $faceID, $instaID,
-                $skypeID, $sign, $snapID, $website, $school, $degree);
+                $skypeID, $sign, $snapID, $website, $school, $degree))
+            {
+                $this->getView()->printSuccess('Pakeitimai išsaugoti');
+            } else {
+                $this->getView()->printDanger('Klaida');
+            }
         }
 
         if (isset($_POST['changePasswdBtn']))
@@ -52,9 +64,27 @@ class SettingsController extends MainController implements iController
             $oldPasswd = $this->getModel()->secureInput($_POST['oldPasswd']);
             $newPasswd = $this->getModel()->secureInput($_POST['newPasswd']);
             $repeatNewPasswd = $this->getModel()->secureInput($_POST['repeatNewPasswd']);
-            $this->getModel()->changePasswd($username, $oldPasswd, $newPasswd, $repeatNewPasswd);
+            if ($this->getModel()->changePasswd($username, $oldPasswd, $newPasswd, $repeatNewPasswd))
+            {
+                $this->getView()->printSuccess('Slaptažodis sėkmingai pakeistas');
+            } else {
+                $this->getView()->printDanger('Klaida');
+            }
         }
-    } 
+
+        if (isset($_POST['uploadProfPic']))
+        {
+            if (isset($_POST['profPicLoc']))
+            {
+                if ($this->getModel()->changeProfilePic($_SESSION['slapyvardis']))
+                {
+                    $this->printSuccess('Nuotrauka sėkmingai pakeista!');
+                } else {
+                    $this->printDanger('Klaida');
+                }
+            }
+        }
+    }
 
     public function getTitle()
     {
