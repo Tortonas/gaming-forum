@@ -494,10 +494,11 @@ class Model {
         {
             return false;
         }
-        else
-        {
+        else {
             echo mysqli_error($this->conn);
             return true;
+        }
+    }
 
     public function registerUser($username, $email, $password, $passwordRepeat, $country, $address, $phoneNum, $surname, $realName, $birthDate, $city, $favGame, $description,
                                  $discID, $faceID, $isntaID, $skypeID, $sign, $snapID, $website, $school, $degree)
