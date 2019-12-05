@@ -548,7 +548,7 @@ class Model {
     }
 
     public function registerUser($username, $email, $password, $passwordRepeat, $country, $address, $phoneNum, $surname, $realName, $birthDate, $city, $favGame, $description,
-                                 $discID, $faceID, $isntaID, $skypeID, $sign, $snapID, $website, $school, $degree)
+                                 $discID, $faceID, $instaID, $skypeID, $sign, $snapID, $website, $school, $degree)
     {
         $conn = $this->conn;
 
@@ -567,7 +567,7 @@ class Model {
         $description = $this->secureInput($description);
         $discID = $this->secureInput($discID);
         $faceID = $this->secureInput($faceID);
-        $isntaID = $this->secureInput($isntaID);
+        $instaID = $this->secureInput($instaID);
         $skypeID = $this->secureInput($skypeID);
         $sign = $this->secureInput($sign);
         $snapID = $this->secureInput($snapID);
@@ -617,7 +617,7 @@ class Model {
                             $path = NULL;
                             $date = date('Y-m-d H:i:s');
                             mysqli_stmt_bind_param($stmt, "isssssiisissssssssssssssssss", $id, $username, $hashedPwd, $email, $date, $path, $blocked, $muted, $date, $role, $country, $address, $phoneNum,
-                                $realName, $surname, $birthDate, $city, $favGame, $description, $discID, $faceID, $isntaID, $skypeID, $sign, $snapID, $website, $school, $degree);
+                                $realName, $surname, $birthDate, $city, $favGame, $description, $discID, $faceID, $instaID, $skypeID, $sign, $snapID, $website, $school, $degree);
                             mysqli_stmt_execute($stmt);
                             return true;
                         }
