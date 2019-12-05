@@ -679,6 +679,22 @@ class Model {
         }
     }
 
+    public function gallery_increase_img_like_count($img_id)
+    {
+        $SQL_increase_like_count = "UPDATE galerijos_nuotraukos_pamegimai
+                                    SET nuotraukos_pamegimas = nuotraukos_pamegimas + 1
+                                    WHERE fk_nuotrauka = ".$img_id;
+
+        if($this->conn->query($SQL_increase_like_count))
+        {
+            return false;
+        }
+        else {
+            echo mysqli_error($this->conn);
+            return true;
+        }
+    }
+
     public function registerUser($username, $email, $password, $passwordRepeat, $country, $address, $phoneNum, $surname, $realName, $birthDate, $city, $favGame, $description,
                                  $discID, $faceID, $instaID, $skypeID, $sign, $snapID, $website, $school, $degree)
     {
