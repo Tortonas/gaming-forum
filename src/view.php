@@ -506,10 +506,15 @@ class View
                     {
                         echo '<a href="#"><button class="btn btn-danger btn-sm" name="delete_img" type="submit" value="'.$image['img_id'].'">Ištrinti</button></a> '  ;
                     }
-                
-                    echo '<button type="submit" name="like_button" value="'.$image['img_id'].'" class="btn btn-primary btn-sm">
+
+                    if ($_SESSION['role'] > 0)
+                    {
+                        echo '<button type="submit" name="like_button" value="'.$image['img_id'].'" class="btn btn-primary btn-sm">
                             Pamėgti <span class="badge badge-light">'.$image['likes'].'</span>
-                        </button>
+                        </button>';
+                    }
+
+                    echo '
                         
                         <a href="viewphoto.php?img='.$image['img_id'].'">
                             <button class="btn btn-primary btn-sm" type="button">Komentuoti</button>
@@ -530,11 +535,14 @@ class View
             echo '<a href="#"><button class="btn btn-danger btn-sm" name="delete_img" type="submit" value="'.$image['img_id'].'">Ištrinti</button></a> ';
         }
 
-        echo '<button type="submit" name="like_button" value="'.$image['img_id'].'" class="btn btn-primary btn-sm">
+        if($_SESSION['role'] > 0)
+        {
+            echo '<button type="submit" name="like_button" value="'.$image['img_id'].'" class="btn btn-primary btn-sm">
                             Pamėgti <span class="badge badge-light">'.$image['likes'].'</span>
-                        </button>
+                        </button>';
+        }
                         
-                    </form>
+                    echo '</form>
             </figure>';
     }
 
