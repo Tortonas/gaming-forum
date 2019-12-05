@@ -140,6 +140,116 @@ class GalleryController extends MainController implements iController
         }
     }
 
+    public function printCommentPageView()
+    {
+        $error_flag = false;
+
+        if(isset($_GET['img'])) {
+
+            $img_id = $_GET['img'];
+
+            if (isset($_SESSION['message'])) {
+                $this->getView()->printSuccess($_SESSION['message']);
+                unset($_SESSION['message']);
+            }
+
+            $img_data = $this->getModel()->gallery_get_image($img_id);
+            if ($img_data != -1) {
+                if (isset($_POST['delete_img'])) {
+                    echo '<h1>Delete!</h1>';
+                }
+
+                if (isset($_POST['like_button'])) {
+                    echo '<h1>LIKE!</h1>';
+                }
+
+                if (isset($_POST['comment'])) {
+                    $comment = $_POST['comment'];
+                    $user_id = $_SESSION['id'];
+                    $date = $img_date = date("Y-m-d H:m:s");
+
+                    $error_flag = $this->getModel()->gallery_add_image_comment($img_id, $user_id, $comment, $date);
+                    if ($error_flag != true) {
+                        $this->getView()->printSuccess("Sėkmingai pavyko įkelti komentarą");
+                    } else {
+                        $this->getView()->printDanger("Nepavyko įkelti komentaro į duombazėję!");
+                    }
+                }
+
+                if (isset($_POST['delete_comment'])) {
+                    $comment_id = $_POST['delete_comment'];
+
+                    $error_flag = $this->getModel()->gallery_delete_image_comment($comment_id);
+                    if ($error_flag != true) {
+                        $this->getView()->printSuccess("Sėkmingai pavyko ištrinti komentarą iš duombazės!");
+                    } else {
+                        $this->getView()->printDanger("Nepavyko ištrinti komentaro iš duombazės!");
+                    }
+
+                }
+
+
+                $this->getView()->print_gallery_comment_section_image($img_data);
+                $this->getView()->print_gallery_comment_section_comment_form();
+
+                $comments = $this->getModel()->gallery_get_all_image_comments($img_id);
+                if ($comments != -1) {
+                    foreach ($comments as $comment) {
+                        $this->getView()->print_gallery_comment_section_comment($comment);
+                    }
+                } else {
+                    $this->getView()->printDanger("Nepavyko gauti nuotraukos komentarų iš duombazės!");
+                }
+
+            } else {
+                $this->getView()->printDanger("Nepavyko rasti nuotraukos duombazėje!");
+            }
+        }else
+        {
+            $this->redirect_to_another_page('gallery.php',0);
+        }
+    }
+
+    public function printCommentEditView()
+    {
+        $error_flag = false;
+
+        if(isset($_GET['img']) && isset($_GET['comment_id'])) {
+            $img_id = $_GET['img'];
+            $comment_id = $_GET['comment_id'];
+
+            if (isset($_POST['edit_comment']) && isset($_POST['text']))
+            {
+                $comment_id = $_POST['edit_comment'];
+                $text = $_POST['text'];
+
+                $error_flag = $this->getModel()->gallery_update_image_comment($comment_id,$text);
+                if($error_flag != true)
+                {
+                    $_SESSION['message'] = "Pavyko sėkmingai atnaujinti komentarą!";
+                    $this->redirect_to_another_page("viewphoto.php?img=".$img_id,0);
+                }else
+                {
+                    $this->getView()->printDanger("Nepavyko atnaujinti komentaro duombazėje!");
+                }
+            }
+
+            $comment = $this->getModel()->gallery_get_image_comment($comment_id);
+
+            if($comment != -1)
+            {
+                $this->getView()->print_gallery_image_comment_edit($comment);
+
+            }else
+            {
+                $this->getView()->printDanger("Nepavyko rasti nuotraukos komentaro duombazėje!");
+            }
+        }else
+        {
+            $this->redirect_to_another_page('gallery.php',0);
+        }
+    }
+
     public function getTitle()
     {
         echo "Gaming Forum - Galerija";
