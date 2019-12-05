@@ -547,6 +547,124 @@ class Model {
         }
     }
 
+    public function gallery_get_image($img_id)
+    {
+        $SQL_get_image = "SELECT gallery.id as img_id, gallery.pavadinimas as img_pav, gallery.nuotraukos_kelias, gallery.fk_naudotojas, likes.id as like_id, likes.nuotraukos_pamegimas as likes
+                            FROM galerijos_nuotraukos as gallery
+                            JOIN galerijos_nuotraukos_pamegimai as likes
+                                ON gallery.id = likes.fk_nuotrauka
+                            WHERE gallery.id = ".$img_id;
+
+        $result = $this->conn->query($SQL_get_image);
+
+        if ($result->num_rows > 0)
+        {
+            $result = $result->fetch_assoc();
+            return $result;
+        }
+        else
+        {
+            echo mysqli_error($this->conn);
+            return -1;
+        }
+    }
+
+    public function gallery_add_image_comment($img_id, $user_id, $text, $date)
+    {
+        $text = $this->secureInput($text);
+        $SQL_add_image_comment = "INSERT INTO `galerijos_nuotrauku_komentarai` (`tekstas`, `sukurimo_data`, `fk_naudotojas`, `fk_galerijos_nuotrauka`) 
+                                    VALUES ('".$text."', '".$date."', '".$user_id."', '".$img_id."')";
+
+        if($this->conn->query($SQL_add_image_comment))
+        {
+            return false;
+        }
+        else {
+            echo mysqli_error($this->conn);
+            return true;
+        }
+    }
+
+    public function gallery_get_all_image_comments($img_id)
+    {
+        $SQL_get_all_image_comments = "SELECT comment.id, comment.tekstas, comment.sukurimo_data, comment.fk_galerijos_nuotrauka as img_id, naudotojai.id as user_id, naudotojai.slapyvardis as user_name
+                                        FROM galerijos_nuotrauku_komentarai as comment
+                                        JOIN naudotojai 
+                                        ON comment.fk_naudotojas = naudotojai.id
+                                        WHERE fk_galerijos_nuotrauka = ".$img_id."
+                                        ORDER BY sukurimo_data ASC";
+
+        $result = $this->conn->query($SQL_get_all_image_comments);
+
+        if ($result->num_rows > 0)
+        {
+            $comments = [];
+            while($row = $result->fetch_assoc())
+            {
+                array_push($comments, $row);
+            }
+            return $comments;
+        }
+        else
+        {
+            echo mysqli_error($this->conn);
+            return -1;
+        }
+
+
+    }
+
+    public function gallery_delete_image_comment($comment_id)
+    {
+        $SQL_delete_image_comment = "DELETE FROM `galerijos_nuotrauku_komentarai` 
+                                        WHERE `galerijos_nuotrauku_komentarai`.`id` = ".$comment_id;
+
+        if($this->conn->query($SQL_delete_image_comment))
+        {
+            return false;
+        }
+        else {
+            echo mysqli_error($this->conn);
+            return true;
+        }
+    }
+
+    public function gallery_get_image_comment($comment_id)
+    {
+        $SQL_get_image_comment = "SELECT * 
+                                    FROM galerijos_nuotrauku_komentarai
+                                    WHERE id = ".$comment_id;
+
+        $result = $this->conn->query($SQL_get_image_comment);
+
+        if ($result->num_rows > 0)
+        {
+            $result = $result->fetch_assoc();
+            return $result;
+        }
+        else
+        {
+            echo mysqli_error($this->conn);
+            return -1;
+        }
+    }
+
+    public function gallery_update_image_comment($comment_id, $comment)
+    {
+        $SQL_update_image_comment = "UPDATE galerijos_nuotrauku_komentarai 
+                                        SET tekstas = '".$comment."' 
+                                        WHERE id = ".$comment_id;
+
+        if($this->conn->query($SQL_update_image_comment))
+        {
+            return false;
+        }
+        else {
+            echo mysqli_error($this->conn);
+            return true;
+        }
+    }
+
     public function registerUser($username, $email, $password, $passwordRepeat, $country, $address, $phoneNum, $surname, $realName, $birthDate, $city, $favGame, $description,
                                  $discID, $faceID, $instaID, $skypeID, $sign, $snapID, $website, $school, $degree)
     {

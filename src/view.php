@@ -497,7 +497,7 @@ class View
     public function print_gallery_images($image)
     {
         echo '<figure class="figure">
-                <a href="viewphoto.php"><img src="'.$image['nuotraukos_kelias'].'" id="imageInput" alt="fortnite dance" class="img-thumbnail rounded"></a>
+                <a href="viewphoto.php?img='.$image['img_id'].'"><img src="'.$image['nuotraukos_kelias'].'" id="imageInput" alt="fortnite dance" class="img-thumbnail rounded"></a>
                 <figcaption class="figure-caption"><p name="pavadinimas">'.$image['pavadinimas'].'</p></figcaption>
                 
                     <form method="post">';
@@ -516,6 +516,71 @@ class View
                         </a>
                     </form>
             </figure>';
+    }
+
+    public function print_gallery_comment_section_image($image)
+    {
+        echo '<figure class="figure">
+                <img src="'.$image['nuotraukos_kelias'].'" id="imageInput" alt="fortnite dance" class="img-thumbnail rounded">
+                <figcaption class="figure-caption">'.$image['img_pav'].'</figcaption>
+                <form method="post">';
+
+        if ($_SESSION['role'] == 3 || $_SESSION['id'] == $image['fk_naudotojas'])
+        {
+            echo '<a href="#"><button class="btn btn-danger btn-sm" name="delete_img" type="submit" value="'.$image['img_id'].'">Ištrinti</button></a> ';
+        }
+
+        echo '<button type="submit" name="like_button" value="'.$image['img_id'].'" class="btn btn-primary btn-sm">
+                            Pamėgti <span class="badge badge-light">'.$image['likes'].'</span>
+                        </button>
+                        
+                    </form>
+            </figure>';
+    }
+
+    public function print_gallery_comment_section_comment_form()
+    {
+        echo '<form method="POST">
+                <div class="form-group">
+                    <label for="comment">Komentuoti:</label>
+                    <textarea class="form-control" rows="5" id="comment" name="comment" required></textarea>
+                    <button type="submit" class="btn btn-danger">Komentuoti</button>
+                </div>
+            </form>';
+    }
+
+    public function print_gallery_comment_section_comment($comment)
+    {
+        echo '<div class="theme-answer">
+                <form method="POST" class="form-group">
+                    <h4>'.$comment['user_name'].'</h4>
+                    <h6>'.$comment['sukurimo_data'].'</h6>
+                    <p>'.$comment['tekstas'].'</p>';
+
+                    if($_SESSION['role'] == 3 || $_SESSION['id'] == $comment['user_id'])
+                    {
+                        echo '<a href="editcomment.php?img='.$comment['img_id'].'&comment_id='.$comment['id'].'"> <button name="edit_comment" type="button" class="btn btn-primary btn-sm">Redaguoti</button> </a>
+                        <button type="submit" name="delete_comment" value="'.$comment['id'].'" class="btn btn-danger btn-sm">Naikinti</button>';
+                    }
+
+            echo '</form>
+            </div>';
+    }
+
+    public function print_gallery_image_comment_edit($comment)
+    {
+        echo '<h1>Redaguoti nuotraukos komentarą</h1>
+        
+        <form method="post">
+        
+        <div class="form-group">
+            <label for="exampleFormControlTextarea3">Turinys</label>
+            <textarea class="form-control" id="exampleFormControlTextarea3" name="text" rows="7" required>'.$comment['tekstas'].'</textarea>
+        </div>
+        
+        
+            <button type="submit" name="edit_comment" value="'.$comment['id'].'" class="btn btn-danger">Pateikti atnaujintą atsakymą</button>
+        </form>';
     }
 
     // -- Gallery Page View END
