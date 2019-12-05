@@ -122,7 +122,16 @@ class GalleryController extends MainController implements iController
 
         if(isset($_POST['like_button']))
         {
-            echo '<h1>LIKED IMAGE!</h1>';
+            $img_id = $_POST['like_button'];
+
+            $error_flag = $this->getModel()->gallery_increase_img_like_count($img_id);
+            if($error_flag != true)
+            {
+                $this->getView()->printSuccess("Sėkmingai pavyko pamėgti nuotrauką!");
+            }else
+            {
+                $this->getView()->printDanger("Nepavyko pamėgti nuotraukos!");
+            }
         }
 
         if(isset($_POST['delete_img']))
@@ -177,6 +186,19 @@ class GalleryController extends MainController implements iController
 
         if(isset($_GET['img'])) {
 
+            if (isset($_POST['like_button'])) {
+                $img_id = $_POST['like_button'];
+
+                $error_flag = $this->getModel()->gallery_increase_img_like_count($img_id);
+                if($error_flag != true)
+                {
+                    $this->getView()->printSuccess("Sėkmingai pavyko pamėgti nuotrauką!");
+                }else
+                {
+                    $this->getView()->printDanger("Nepavyko pamėgti nuotraukos!");
+                }
+            }
+
             $img_id = $_GET['img'];
 
             if (isset($_SESSION['message'])) {
@@ -216,10 +238,6 @@ class GalleryController extends MainController implements iController
                     }
 
                     $this->redirect_to_another_page("gallery.php",0);
-                }
-
-                if (isset($_POST['like_button'])) {
-                    echo '<h1>LIKE!</h1>';
                 }
 
                 if (isset($_POST['comment'])) {
