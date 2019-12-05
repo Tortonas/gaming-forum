@@ -585,6 +585,20 @@ class Model {
         }
     }
 
+    public function gallery_delete_image($img_id)
+    {
+        $SQL_delete_img = "DELETE FROM `galerijos_nuotraukos` WHERE `galerijos_nuotraukos`.`id` = ".$img_id;
+
+        if($this->conn->query($SQL_delete_img))
+        {
+            return false;
+        }
+        else {
+            echo mysqli_error($this->conn);
+            return true;
+        }
+    }
+
     public function gallery_get_all_image_comments($img_id)
     {
         $SQL_get_all_image_comments = "SELECT comment.id, comment.tekstas, comment.sukurimo_data, comment.fk_galerijos_nuotrauka as img_id, naudotojai.id as user_id, naudotojai.slapyvardis as user_name

@@ -110,6 +110,16 @@ class GalleryController extends MainController implements iController
             }
         }
 
+        if (isset($_SESSION['message'])) {
+            $this->getView()->printSuccess($_SESSION['message']);
+            unset($_SESSION['message']);
+        }
+
+        if (isset($_SESSION['error'])) {
+            $this->getView()->printDanger($_SESSION['error']);
+            unset($_SESSION['error']);
+        }
+
         if(isset($_POST['like_button']))
         {
             echo '<h1>LIKED IMAGE!</h1>';
@@ -117,7 +127,28 @@ class GalleryController extends MainController implements iController
 
         if(isset($_POST['delete_img']))
         {
-            echo '<h1>DELETE IMAGE!</h1>';
+            $error_flag = false;
+            $img_id = $_POST['delete_img'];
+
+            $img = $this->getModel()->gallery_get_image($img_id);
+
+            $error_flag = $this->getModel()->gallery_delete_image($img_id);
+
+            if ($error_flag != true)
+            {
+                $error_flag = !unlink($img['nuotraukos_kelias']);
+                if ($error_flag != true)
+                {
+                    $this->printSuccess("Sėkmingai pavyko ištrinti nuotrauką!");
+                }else
+                {
+                    $this->getView()->printDanger("Nepavyko ištrinti nuotraukos iš katalogo");
+                }
+            }else
+            {
+                $this->getView()->printDanger("Nepavyko ištrinti nuotraukos iš duombazės");
+            }
+
         }
 
         if($_SESSION['role'] > 0)
@@ -153,10 +184,38 @@ class GalleryController extends MainController implements iController
                 unset($_SESSION['message']);
             }
 
+            if (isset($_SESSION['error'])) {
+                $this->getView()->printDanger($_SESSION['error']);
+                unset($_SESSION['error']);
+            }
+
             $img_data = $this->getModel()->gallery_get_image($img_id);
             if ($img_data != -1) {
                 if (isset($_POST['delete_img'])) {
-                    echo '<h1>Delete!</h1>';
+
+                    $error_flag = false;
+                    $img_id = $_POST['delete_img'];
+
+                    $img = $this->getModel()->gallery_get_image($img_id);
+
+                    $error_flag = $this->getModel()->gallery_delete_image($img_id);
+
+                    if ($error_flag != true)
+                    {
+                        $error_flag = !unlink($img['nuotraukos_kelias']);
+                        if ($error_flag != true)
+                        {
+                            $_SESSION['message'] = "Sėkmingai pavyko ištrinti nuotrauką!";
+                        }else
+                        {
+                            $_SESSION['error'] = "Nepavyko ištrinti nuotraukos iš katalogo";
+                        }
+                    }else
+                    {
+                        $_SESSION['error'] = "Nepavyko ištrinti nuotraukos iš duombazės";
+                    }
+
+                    $this->redirect_to_another_page("gallery.php",0);
                 }
 
                 if (isset($_POST['like_button'])) {
