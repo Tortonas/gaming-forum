@@ -120,6 +120,11 @@ class GalleryController extends MainController implements iController
             echo '<h1>DELETE IMAGE!</h1>';
         }
 
+        if($_SESSION['role'] > 0)
+        {
+            $this->getView()->print_gallery_image_upload();
+        }
+
         $this->getView()->print_Gallery_frontpage();
 
         $images = $this->getModel()->gallery_get_all_imgs();
@@ -131,7 +136,7 @@ class GalleryController extends MainController implements iController
             }
         }else
         {
-            $this->getView()->printDanger("Nepavyko rasti nuotraukų duomabazėje!11111111");
+            //$this->getView()->printDanger("Nepavyko rasti nuotraukų duomabazėje!11111111");
         }
     }
 
