@@ -198,7 +198,7 @@ class GalleryController extends MainController implements iController
                         $this->getView()->print_gallery_comment_section_comment($comment);
                     }
                 } else {
-                    $this->getView()->printDanger("Nepavyko gauti nuotraukos komentarų iš duombazės!");
+                    //$this->getView()->printDanger("Nepavyko gauti nuotraukos komentarų iš duombazės!");
                 }
 
             } else {
