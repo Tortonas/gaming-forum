@@ -36,7 +36,7 @@ class GalleryController extends MainController implements iController
                         move_uploaded_file($file_tmp_name,$file_destination);
 
                         $img_name = $_POST['img_name'];
-                        $img_date = date("Y-m-d");
+                        $img_date = date("Y-m-d H:m:s");
                         $img_user_id = $_SESSION['id'];
 
                         $img_id = $this->getModel()->gallery_insert_img($img_name,$file_destination,$file_actual_ext,$img_date,$img_user_id);
@@ -190,7 +190,9 @@ class GalleryController extends MainController implements iController
 
 
                 $this->getView()->print_gallery_comment_section_image($img_data);
-                $this->getView()->print_gallery_comment_section_comment_form();
+                if($_SESSION['role'] > 0) {
+                    $this->getView()->print_gallery_comment_section_comment_form();
+                }
 
                 $comments = $this->getModel()->gallery_get_all_image_comments($img_id);
                 if ($comments != -1) {
