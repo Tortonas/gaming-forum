@@ -56,6 +56,19 @@ class ForumController extends MainController implements iController
         $themeList = $this->getModel()->getDataByColumn('temos', 'fk_katalogas', $_GET['id']);
 
         $this->getView()->printForumThemes($themeList, $this->getModel()->getDataByColumnFirst('katalogai', 'id', $_GET['id']));
+
+        if(isset($_POST['deleteThemeBtn']))
+        {
+            if($this->getModel()->removeData('temos', $_POST['deleteThemeBtn']))
+            {
+                $this->printSuccess('Istrinta!');
+                $this->redirect_to_another_page('themes.php?id=' . $_GET['id'], 0);
+            }
+            else
+            {
+                $this->printDanger('Klaida!');
+            }
+        }
     }
 
 
@@ -79,9 +92,12 @@ class ForumController extends MainController implements iController
                 return;
             }
 
+
             if($this->getModel()->createNewTheme($_POST['themeName'], $this->getDateTime(), $_SESSION['id'], $_GET['id'], $_POST['themeText']))
             {
                 $this->printSuccess('Tema sukurta!');
+                $newThemeId = $this->getModel()->getLastCreatedTheme();
+                $this->redirect_to_another_page('viewtheme.php?id=' . $newThemeId, 1);
             }
             else
             {
@@ -105,6 +121,12 @@ class ForumController extends MainController implements iController
 
         $likeCount = array();
         $likeCountIter = 0;
+
+        if($themeAnswerList == null)
+        {
+            $this->printDanger('Tema su tokiu ID neegzistuoja!');
+            return;
+        }
 
         while($row = $themeAnswerList->fetch_assoc())
         {
@@ -149,7 +171,11 @@ class ForumController extends MainController implements iController
 
         if(isset($_POST['likeBtn']))
         {
-            $this->getModel()->likeTheme($this->getDateTime(), $_SESSION['id'], $_POST['likeBtn']);
+            if($this->getModel()->checkIfUserHasLikedThisThemeAnswer($_SESSION['id'], $_POST['likeBtn']))
+            {
+                $this->getModel()->likeTheme($this->getDateTime(), $_SESSION['id'], $_POST['likeBtn']);
+            }
+
             $this->redirect_to_another_page('viewtheme.php?id='.$_GET['id'], 0);
         }
     }
@@ -165,10 +191,14 @@ class ForumController extends MainController implements iController
             return;
         }
 
-        // TODO: Patikrinti ar as turiu teises redaguoti sita tema.
+        if(!$this->getModel()->checkIfICanEditThisTheme($_SESSION['id'], $_GET['id']) || !$_SESSION['id'] == 3)
+        {
+            $this->printDanger('Neturite teises matyti sio puslapio!');
+            $this->redirect_to_another_page('forum.php', 0);
+            return;
+        }
 
         $content = $this->getModel()->getDataByColumnFirst('temu_atsakymai', 'id', $_GET['id']);
-
 
         $this->getView()->printEditTheme($content['tekstas']);
 
@@ -203,8 +233,10 @@ class ForumController extends MainController implements iController
 
         if(isset($_POST['searchBtn']))
         {
-            // TODO: Realizuoti paieska.
-            echo $_POST['searchText'];
+            $catalogList = $this->getModel()->getCatalogListByPattern($_POST['searchText']);
+            $themeList = $this->getModel()->getThemeListByPattern($_POST['searchText']);
+
+            $this->getView()->printCatalogSearchResults($catalogList, $themeList);
         }
     }
 

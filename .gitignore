@@ -3,3 +3,4 @@ src/database.config
 .DS_Store
 ._*
 /vendor
+/dashboard

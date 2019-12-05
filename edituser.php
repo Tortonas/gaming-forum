@@ -1,4 +1,5 @@
 <?php
+exit(0); // kadangi sitas PHP scriptas mete errora, refactorines issitrint sita eilute.
 $controller = new AdminController();
 ?>
 <!doctype html>

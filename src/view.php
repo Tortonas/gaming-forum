@@ -25,7 +25,7 @@ class View
             self::printNavbarItem("Prisijungti", "login.php", $location);
         } else {
             if ($_SESSION['role'] == 3) {
-                self::printNavbarItem("Admin", "admin.php", $location);
+                self::printNavbarItem("Admin", "adminpanel.php", $location);
             }
             self::printNavbarItem("Nustatymai", "settings.php", $location);
             self::printNavbarItem("Atsijungti", "logout.php", $location);
@@ -175,17 +175,20 @@ class View
 
     public function printForumThemes($themeList, $categoryName)
     {
-        echo '        <h1>' . $categoryName['pavadinimas'] . ' temos:</h1>';
+        echo '        <h1>' . $categoryName['pavadinimas'] . ' temos:</h1>
+        <form method="POST">';
 
         if ($themeList) {
             while ($row = $themeList->fetch_assoc()) {
                 if ($_SESSION['role'] >= 3) {
-                    echo '<h2> <a href="viewtheme.php?id=' . $row['id'] . '">' . $row['pavadinimas'] . '</a> <button class="btn btn-danger btn-sm">Naikinti</button></h2>';
+                    echo '<h2> <a href="viewtheme.php?id=' . $row['id'] . '">' . $row['pavadinimas'] . '</a> <button class="btn btn-danger btn-sm" type="submit" name="deleteThemeBtn" value="'.$row['id'].'">Naikinti</button></h2>';
                 } else {
                     echo '<h2> <a href="viewtheme.php?id=' . $row['id'] . '">' . $row['pavadinimas'] . '</a></h2>';
                 }
             }
         }
+
+        echo '</form>';
 
         if ($_SESSION['role'] > 0) {
             echo '<a href="createtheme.php?id=' . $_GET['id'] . '"> <button type="button" class="btn btn-primary">Sukurti naują temą</button> </a>';
@@ -194,7 +197,7 @@ class View
 
     public function printCreateTheme()
     {
-        echo '        <h1>Sukurti naują temą - (kategorijos pavadinimas):</h1>
+        echo '        <h1>Sukurti naują temą:</h1>
         <form method="POST">
         <div class="form-group">
             <label for="inputFor">Temos pavadinimas</label>
@@ -224,13 +227,13 @@ class View
                     <form method="POST" class="form-group">
                         <h4>' . $row['slapyvardis'] . '</h4>
                         <h6>' . $row['sukurimo_data'] . '</h6>
-                        <p>' . $row['tekstas'] . '</p>
-                        <button type="submit" name="likeBtn" value="' . $row['id'] . '" class="btn btn-primary btn-sm">
-                            Pamėgti <span class="badge badge-light">' . $likeCount[$likeCountIter++] . '</span>
-                        </button>';
+                        <p>' . $row['tekstas'] . '</p>';
 
                 if ($_SESSION['role'] >= 3 || $_SESSION['slapyvardis'] == $row['slapyvardis']) {
-                    echo '                        <a href="edittheme.php?id=' . $row['id'] . '"> <button type="button" class="btn btn-primary btn-sm">Redaguoti</button> </a>
+                    echo '<button type="submit" name="likeBtn" value="' . $row['id'] . '" class="btn btn-primary btn-sm">
+                            Pamėgti <span class="badge badge-light">' . $likeCount[$likeCountIter++] . '</span>
+                        </button>
+                    <a href="edittheme.php?id=' . $row['id'] . '"> <button type="button" class="btn btn-primary btn-sm">Redaguoti</button> </a>
                         <button type="submit" name="deleteBtn" value=' . $row['id'] . ' class="btn btn-danger btn-sm">Naikinti</button>';
                 }
 
@@ -403,6 +406,49 @@ class View
 
     }
 
+    public function printCatalogSearchResults($catalogList, $themeAnsList)
+    {
+        if ($catalogList->num_rows > 0)
+        {
+            echo '<h1>Atrinkti katalogai:</h1>
+            <ul class="list-group">';
+
+            while ($row = $catalogList->fetch_assoc())
+            {
+                echo '<a href="./themes.php?id='.$row['id'].'"><li class="list-group-item">'.$row['pavadinimas'].'</li></a>';
+            }
+
+            echo '</ul>';
+        }
+        else
+        {
+            echo '<h2>Rastu katalogu nera!</h2>';
+        }
+
+        if ($themeAnsList->num_rows > 0)
+        {
+            echo '<h1>Atrinktos temos su temu atsakymais:</h1>
+            <div class="list-group">';
+
+            while($row = $themeAnsList->fetch_assoc())
+            {
+                echo '  <a href="./viewtheme.php?id='.$row['id'].'" class="list-group-item list-group-item-action flex-column align-items-start">
+                <div class="d-flex w-100 justify-content-between">
+                  <h5 class="mb-1">'.$row['pavadinimas'].'</h5>
+                </div>
+                <p class="mb-1">'.$row['tekstas'].'</p>
+              </a>';
+            }
+
+            echo '</div>';
+        }
+        else
+        {
+            echo '<h2>Rastu temu nera!</h2>';
+        }
+
+    }
+
     // -- FORUM PAGE END
 
     // -- Gallery Page View START
@@ -473,4 +519,263 @@ class View
     }
 
     // -- Gallery Page View END
+
+    // Rimvydo naudotoju posisteme pradzia
+
+    public function printRegisterForm()
+    {
+        echo '        <form method=\'POST\' class=\'mainForm\'>
+            <div class="form-group">
+                <label for="inputFor">Slapyvardis*</label>
+                <input type="text" name="username" class="form-control" id="inputFor" placeholder="Slapyvardis">
+            </div>
+            <div class="form-group">
+                <label for="inputFor">El. pašto adresas*</label>
+                <input type="email" name="email" class="form-control" id="inputFor" aria-describedby="emailHelp" placeholder="El. Paštas">
+            </div>
+            <div class="form-group">
+                <label for="inputFor">Slaptažodis*</label>
+                <input type="password" name="password" class="form-control" id="inputFor" placeholder="Slaptažodis">
+            </div>
+            <div class="form-group">
+                <label for="inputFor">Pakartoti slaptažodį*</label>
+                <input type="password" name="passwordRepeat" class="form-control" id="inputFor" placeholder="Pakartoti slaptažodį">
+            </div>
+            <div class="form-group">
+                <label for="inputFor">Šalis</label>
+                <input type="text" name="country" class="form-control" id="inputFor" placeholder="Šalis">
+            </div>
+            <div class="form-group">
+                <label for="inputFor">Adresas</label>
+                <input type="text" name="address" class="form-control" id="inputFor" placeholder="Adresas">
+            </div>
+            <div class="form-group">
+                <label for="inputFor">Telefono numeris</label>
+                <input type="text" name="phoneNum" class="form-control" id="inputFor" placeholder="Telefono numeris">
+            </div>
+            <div class="form-group">
+                <label for="inputFor">Vardas</label>
+                <input type="text" name="realName" class="form-control" id="inputFor" placeholder="Vardas">
+            </div>
+            <div class="form-group">
+                <label for="inputFor">Pavardė</label>
+                <input type="text" name="surname" class="form-control" id="inputFor" placeholder="Pavardė">
+            </div>
+            <div class="form-group">
+                <label for="inputFor">Gimimo data</label>
+                <input type="text" name="birthDate" class="form-control" id="inputFor" placeholder="Gimimo data">
+            </div>
+            <div class="form-group">
+                <label for="inputFor">Miestas</label>
+                <input type="text" name="city" class="form-control" id="inputFor" placeholder="Miestas">
+            </div>
+            <div class="form-group">
+                <label for="inputFor">Mėgstamiausias žaidimas</label>
+                <input type="text" name="favGame" class="form-control" id="inputFor" placeholder="Mėgstamiausias žaidimas">
+            </div>
+            <div class="form-group">
+                <label for="inputFor">Biografinė žinutė</label>
+                <input type="text" name="description" class="form-control" id="inputFor" placeholder="Biografinė žinutė">
+            </div>
+            <div class="form-group">
+                <label for="inputFor">Discord ID</label>
+                <input type="text" name="discID" class="form-control" id="inputFor" placeholder="Discord ID">
+            </div>
+            <div class="form-group">
+                <label for="inputFor">Facebook</label>
+                <input type="text" name="faceID" class="form-control" id="inputFor" placeholder="Facebook">
+            </div>
+            <div class="form-group">
+                <label for="inputFor">Instagram</label>
+                <input type="text" name="instaID" class="form-control" id="inputFor" placeholder="Instagram">
+            </div>
+            <div class="form-group">
+                <label for="inputFor">Skype</label>
+                <input type="text" name="skypeID" class="form-control" id="inputFor" placeholder="Skype">
+            </div>
+            <div class="form-group">
+                <label for="inputFor">Snapchat</label>
+                <input type="text" name="snapID" class="form-control" id="inputFor" placeholder="Snapchat">
+            </div>
+            <div class="form-group">
+                <label for="inputFor">Parašas</label>
+                <input type="text" name="sign" class="form-control" id="inputFor" placeholder="Parašas">
+            </div>
+            <div class="form-group">
+                <label for="inputFor">Tinklalapis</label>
+                <input type="text" name="website" class="form-control" id="inputFor" placeholder="Tinklalapis">
+            </div>
+            <div class="form-group">
+                <label for="inputFor">Mokykla</label>
+                <input type="text" name="school" class="form-control" id="inputFor" placeholder="Mokykla">
+            </div>
+            <div class="form-group">
+                <label for="inputFor">Aukštasis išsilavinimas</label>
+                <input type="text" name="degree" class="form-control" id="inputFor" placeholder="Aukštasis išsilavinimas">
+            </div>
+                <button type="submit" name="registerBtn" class="btn btn-primary">Registruotis</button>
+        </form>';
+    }
+
+    public function printSettingsForm($username, $email, $country, $address, $phoneNum, $surname, $realName, $birthDate, $city, $favGame, $description,
+                                      $discID, $faceID, $instaID, $skypeID, $sign, $snapID, $website, $school, $degree)
+    {
+            echo '
+            <form method=\'POST\' class=\'mainForm\'>
+                <h1>Profilio nustatymai</h1>
+                <div class="form-group">
+                    <label for="inputFor">Slapyvardis*</label>
+                    <input type="text" class="form-control" id="inputFor" value="'.$username.'" disabled>
+                </div>
+                <div class="form-group">
+                    <label for="inputFor">El. pašto adresas*</label>
+                    <input type="email" name="email" class="form-control" id="inputFor" aria-describedby="emailHelp" placeholder="El. Paštas" value="'.$email.'">
+                </div>
+                <div class="form-group">
+                    <label for="inputFor">Šalis</label>
+                    <input type="text" name="country" class="form-control" id="inputFor" placeholder="Šalis" value="'.$country.'">
+                </div>
+                <div class="form-group">
+                    <label for="inputFor">Adresas</label>
+                    <input type="text" name="address" class="form-control" id="inputFor" placeholder="Adresas" value="'.$address.'">
+                </div>
+                <div class="form-group">
+                    <label for="inputFor">Telefono numeris</label>
+                    <input type="text" name="phoneNum" class="form-control" id="inputFor" placeholder="Telefono numeris" value="'.$phoneNum.'">
+                </div>
+                <div class="form-group">
+                    <label for="inputFor">Vardas</label>
+                    <input type="text" name="realName" class="form-control" id="inputFor" placeholder="Vardas" value="'.$realName.'">
+                </div>
+                <div class="form-group">
+                    <label for="inputFor">Pavardė</label>
+                    <input type="text" name="surname" class="form-control" id="inputFor" placeholder="Pavardė" value="'.$surname.'">
+                </div>
+                <div class="form-group">
+                    <label for="inputFor">Gimimo data</label>
+                    <input type="text" name="birthDate" class="form-control" id="inputFor" placeholder="Gimimo data" value="'.$birthDate.'">
+                </div>
+                <div class="form-group">
+                    <label for="inputFor">Miestas</label>
+                    <input type="text" name="city" class="form-control" id="inputFor" placeholder="Miestas" value="'.$city.'">
+                </div>
+                <div class="form-group">
+                    <label for="inputFor">Mėgstamiausias žaidimas</label>
+                    <input type="text" name="favGame" class="form-control" id="inputFor" placeholder="Mėgstamiausias žaidimas" value="'.$favGame.'">
+                </div>
+                <div class="form-group">
+                    <label for="inputFor">Biografinė žinutė</label>
+                    <input type="text" name="description" class="form-control" id="inputFor" placeholder="Biografinė žinutė" value="'.$description.'">
+                </div>
+                <div class="form-group">
+                    <label for="inputFor">Discord ID</label>
+                    <input type="text" name="discID" class="form-control" id="inputFor" placeholder="Discord ID" value="'.$discID.'">
+                </div>
+                <div class="form-group">
+                    <label for="inputFor">Facebook</label>
+                    <input type="text" name="faceID" class="form-control" id="inputFor" placeholder="Facebook" value="'.$faceID.'">
+                </div>
+                <div class="form-group">
+                    <label for="inputFor">Instagram</label>
+                    <input type="text" name="$instaID" class="form-control" id="inputFor" placeholder="Instagram" value="'.$instaID.'">
+                </div>
+                <div class="form-group">
+                    <label for="inputFor">Skype</label>
+                    <input type="text" name="skypeID" class="form-control" id="inputFor" placeholder="Skype" value="'.$skypeID.'">
+                </div>
+                <div class="form-group">
+                    <label for="inputFor">Snapchat</label>
+                    <input type="text" name="snapID" class="form-control" id="inputFor" placeholder="Snapchat" value="'.$snapID.'">
+                </div>
+                <div class="form-group">
+                    <label for="inputFor">Parašas</label>
+                    <input type="text" name="sign" class="form-control" id="inputFor" placeholder="Parašas" value="'.$sign.'">
+                </div>
+                <div class="form-group">
+                    <label for="inputFor">Tinklalapis</label>
+                    <input type="text" name="website" class="form-control" id="inputFor" placeholder="Tinklalapis" value="'.$website.'">
+                </div>
+                <div class="form-group">
+                    <label for="inputFor">Mokykla</label>
+                    <input type="text" name="school" class="form-control" id="inputFor" placeholder="Mokykla" value="'.$school.'">
+                </div>
+                <div class="form-group">
+                    <label for="inputFor">Aukštasis išsilavinimas</label>
+                    <input type="text" name="degree" class="form-control" id="inputFor" placeholder="Aukštasis išsilavinimas" value="'.$degree.'">
+                </div>
+                    <button type="submit" name="saveSettingsBtn" class="btn btn-primary">Išsaugoti nustatymus</button>
+            </form>';
+    }
+
+    public function printChangePasswordForm()
+    {
+        echo '<form method=\'POST\' class=\'mainForm\'>
+                <h1>Slaptažodžio keitimo forma</h1>
+                <div class="form-group">
+                    <label for="inputFor">Dabartinis slaptažodis</label>
+                    <input type="password" name="oldPasswd" class="form-control" id="inputFor" placeholder="Senas slaptažodis">
+                </div>
+                <div class="form-group">
+                    <label for="inputFor">Naujas slaptažodis</label>
+                    <input type="password" name="newPasswd" class="form-control" id="inputFor" placeholder="Naujas slaptažodis">
+                </div>
+                <div class="form-group">
+                    <label for="inputFor">Pakartokite naują slaptažodį</label>
+                    <input type="password"  name="repeatNewPasswd" class="form-control" id="inputFor" placeholder="Naujas slaptažodis">
+                </div>
+                <button type="submit" name="changePasswdBtn" class="btn btn-danger">Keisti slaptažodį</button>
+            </form>';
+    }
+
+    public function printProfPic($picPath)
+    {
+        echo '<form method=\'POST\' class=\'mainForm\' enctype="multipart/form-data">
+                <h1>Profilio nuotrauka</h1>
+                <div class=\'profile-picture--200px\'>
+                    <img src="'.$picPath.'" alt="default profile picture" class="img-thumbnail">
+                    <div class="file-upload-form--small">
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <button type="submit" name="uploadProfPic" class="input-group-text" id="inputGroupFileAddon01">Įkelti</button>
+                            </div>
+                            <div class="custom-file">
+                                <input type="file" name="profPicLoc" class="custom-file-input" id="inputGroupFile01"
+                                aria-describedby="inputGroupFileAddon01">
+                                <label class="custom-file-label" for="inputGroupFile01">Pasirinkti nuotrauką</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+              </form>';
+    }
+
+    public function printRemindPass()
+    {
+        echo '<form method=\'POST\' class=\'mainForm\'>
+            <h1>Slaptažodžio priminimas!</h1>
+            <div class="form-group">
+                <label for="inputFor">El. pašto adresas</label>
+                <input type="email" name="email" class="form-control" id="inputFor" aria-describedby="emailHelp" placeholder="El. Paštas">
+            </div>
+                <button type="submit" name="remindPassBtn" class="btn btn-primary">Siųsti priminimą</button>
+        </form>';
+    }
+
+    public function printNewPassForm()
+    {
+        echo '<form method=\'POST\' class=\'mainForm\'>
+                <h1>Slaptažodžio keitimo forma</h1>
+                <div class="form-group">
+                    <label for="inputFor">Naujas slaptažodis</label>
+                    <input type="password" name="newPasswd" class="form-control" id="inputFor" placeholder="Naujas slaptažodis">
+                </div>
+                <div class="form-group">
+                    <label for="inputFor">Pakartokite naują slaptažodį</label>
+                    <input type="password"  name="repeatNewPasswd" class="form-control" id="inputFor" placeholder="Naujas slaptažodis">
+                </div>
+                <button type="submit" name="newPassBtn" class="btn btn-danger">Keisti slaptažodį</button>
+            </form>';
+    }
+    // Pabaiga
+
 }
