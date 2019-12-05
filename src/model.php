@@ -338,6 +338,15 @@ class Model {
         }
     }
 
+    public function getLastCreatedTheme()
+    {
+        $sql = "SELECT id FROM temos ORDER BY id DESC LIMIT 1";
+        $result = $this->conn->query($sql);
+        $id = $result->fetch_assoc();
+
+        return $id['id'];
+    }
+
     public function likeTheme($date, $userId, $themeAnsId)
     {
         $date = $this->secureInput($date);
@@ -398,6 +407,96 @@ class Model {
         {
             echo mysqli_error($this->conn);
             return false;
+        }
+    }
+
+    public function gallery_insert_img($img_name, $img_path, $img_format, $img_date, $user_id)
+    {
+        $img_name = $this->secureInput($img_name);
+        $img_path = $this->secureInput($img_path);
+        $img_format = $this->secureInput($img_format);
+
+        $SQL_insert_request = "INSERT INTO `galerijos_nuotraukos` ( `pavadinimas`, `nuotraukos_kelias`, `formatas`, `sukurimo_data`, `fk_naudotojas`) 
+                                    VALUES ( '".$img_name."', '".$img_path."', '".$img_format."', '".$img_date."', '".$user_id."');";
+
+        $SQL_insert_request = $SQL_insert_request."SELECT id FROM galerijos_nuotraukos WHERE nuotraukos_kelias = '".$img_path."'";
+
+
+        $result = $this->conn->multi_query($SQL_insert_request);
+
+        if (mysqli_next_result($this->conn) > 0)
+        {
+            $result=mysqli_store_result($this->conn);
+            $result=mysqli_fetch_row($result);
+            $result = $result[0];
+            return $result;
+        }else
+        {
+            echo mysqli_error($this->conn);
+            return -1;
+        }
+
+    }
+
+    public function gallery_insert_tag($tag, $date)
+    {
+        $tag = $this->secureInput($tag);
+
+        $SQL_check_existing = "SELECT IF(EXISTS(SELECT * From galerijos_nuotraukos_etikete WHERE pavadinimas = '".$tag."'),
+          (SELECT id From galerijos_nuotraukos_etikete WHERE pavadinimas = '".$tag."' ),-1) as result";
+
+        $result = $this->conn->query($SQL_check_existing);
+
+        if (mysqli_num_rows($result) > 0)
+        {
+            $result = $result->fetch_assoc();
+            $result = $result['result'];
+            if ($result == -1)
+            {
+                $SQL_insert_tag = "INSERT INTO galerijos_nuotraukos_etikete (pavadinimas,sukurimo_data) VALUES ('".$tag."','".$date."');
+                                    SELECT id FROM galerijos_nuotraukos_etikete WHERE pavadinimas = '".$tag."'";
+
+
+                $result = $this->conn->multi_query($SQL_insert_tag);
+
+                if (mysqli_next_result($this->conn) > 0)
+                {
+                    $result=mysqli_store_result($this->conn);
+                    $result=mysqli_fetch_row($result);
+                    $result = $result[0];
+                    return $result;
+                }else
+                {
+                    echo mysqli_error($this->conn);
+                    return -1;
+                }
+
+            }else
+            {
+                return $result;
+            }
+
+        }
+        else
+        {
+            echo mysqli_error($this->conn);
+            return -1;
+        }
+
+
+    }
+
+    public function gallery_assign_tag_to_img($img_id, $tag_id)
+    {
+        $SQL_assign_tag_to_img = "INSERT INTO `galerijos_nuotrauku_etiketes` (`fk_nuotrauka`, `fk_etikete`) VALUES ('".$img_id."', '".$tag_id."')";
+
+        if($this->conn->query($SQL_assign_tag_to_img))
+        {
+            return false;
+        }
+        else {
+            echo mysqli_error($this->conn);
+            return true;
         }
     }
 

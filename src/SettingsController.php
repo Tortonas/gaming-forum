@@ -20,6 +20,48 @@ class SettingsController extends MainController implements iController
                 $picPath = "img/profile pictures/default.png";
             }
             $this->getView()->printProfPic($picPath);
+
+            if(isset($_POST['uploadProfPic']))
+            {
+                $controller = new model();
+                $conn = $controller->returnConn();
+                $username = $controller->secureInput($_SESSION['slapyvardis']);
+                $targetDir = "img/profile pictures/";
+                $temp = explode(".", $_FILES["profPicLoc"]["name"]);
+                $fileName = $username . "_picture" . '.' . end($temp);
+                $targetFilePath = $targetDir . $fileName;
+                $fileType = pathinfo($targetFilePath, PATHINFO_EXTENSION);
+
+                if (!empty($_FILES["profPicLoc"]["name"]))
+                {
+                    $allowTypes = array('jpg', 'png', 'jpeg', 'gif');
+                    if (in_array($fileType, $allowTypes))
+                    {
+                        if (move_uploaded_file($_FILES["profPicLoc"]["tmp_name"], $targetFilePath))
+                        {
+                            $sql = "UPDATE naudotojai SET avataro_kelias=? WHERE slapyvardis=?";
+                            $stmt = mysqli_stmt_init($conn);
+                            if (mysqli_stmt_prepare($stmt, $sql))
+                            {
+                                mysqli_stmt_bind_param($stmt, "ss", $targetFilePath, $username);
+                                mysqli_stmt_execute($stmt);
+                                echo("<script>location.href = 'settings.php?picchange=success';</script>");
+                                $this->printSuccess('Nuotrauka sėkmingai pakeista!');
+                            } else {
+                                $this->printDanger('Klaida');
+                            }
+                        } else {
+                            $this->printDanger('Klaida');
+                        }
+                    } else {
+                        $this->printDanger('Klaida');
+                    }
+                } else {
+                    $this->printDanger('Klaida');
+                }
+            }
+
+
             $this->getView()->printSettingsForm($row['slapyvardis'], $row['email'], $row['salis'], $row['adresas'], $row['telefono_nr'],
                 $row['pavarde'], $row['vardas'], $row['gimimo_data'], $row['miestas'], $row['megstamiausias_zaidimas'],
                 $row['biografine_zinute'], $row['discord'], $row['facebook'], $row['instagram'], $row['skype'], $row['parasas'],
@@ -53,6 +95,7 @@ class SettingsController extends MainController implements iController
                 $skypeID, $sign, $snapID, $website, $school, $degree))
             {
                 $this->getView()->printSuccess('Pakeitimai išsaugoti');
+                $this->redirect_to_another_page('settings.php', 1);
             } else {
                 $this->getView()->printDanger('Klaida');
             }
