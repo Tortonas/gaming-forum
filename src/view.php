@@ -455,6 +455,15 @@ class View
 
     public function print_Gallery_frontpage()
     {
+        echo '<form class="form-inline my-2 my-lg-0" method="POST" action="search.php">
+                <input class="form-control mr-sm-2" type="search" placeholder="Raktažodis paieškai" aria-label="Search">
+                <button class="btn btn-primary" type="submit">Ieškoti</button>
+            </form>';
+
+    }
+
+    public function  print_gallery_image_upload()
+    {
         echo '<br><h1>Nuotraukos įkėlimas</h1>
         <form method="post" enctype="multipart/form-data">
             <div class="file-upload-form--medium">
@@ -482,13 +491,7 @@ class View
                     <button type="submit" name="submitBtn" class="btn btn-danger">Įkelti</button>
                 </div>
             </div>
-        </form>
-
-        <form class="form-inline my-2 my-lg-0" method="POST" action="search.php">
-            <input class="form-control mr-sm-2" type="search" placeholder="Raktažodis paieškai" aria-label="Search">
-            <button class="btn btn-primary" type="submit">Ieškoti</button>
         </form>';
-
     }
 
     public function print_gallery_images($image)
@@ -497,12 +500,14 @@ class View
                 <a href="viewphoto.php"><img src="'.$image['nuotraukos_kelias'].'" id="imageInput" alt="fortnite dance" class="img-thumbnail rounded"></a>
                 <figcaption class="figure-caption"><p name="pavadinimas">'.$image['pavadinimas'].'</p></figcaption>
                 
-                    <form method="post">
-                    
-                    <a href="#"><button class="btn btn-danger btn-sm" name="delete_img" type="submit" value="'.$image['img_id'].'">Ištrinti</button></a>
+                    <form method="post">';
+
+                    if ($_SESSION['role'] == 3 || $_SESSION['id'] == $image['fk_naudotojas'])
+                    {
+                        echo '<a href="#"><button class="btn btn-danger btn-sm" name="delete_img" type="submit" value="'.$image['img_id'].'">Ištrinti</button></a> '  ;
+                    }
                 
-                    
-                        <button type="submit" name="like_button" value="'.$image['img_id'].'" class="btn btn-primary btn-sm">
+                    echo '<button type="submit" name="like_button" value="'.$image['img_id'].'" class="btn btn-primary btn-sm">
                             Pamėgti <span class="badge badge-light">'.$image['likes'].'</span>
                         </button>
                         
