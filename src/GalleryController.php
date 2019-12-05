@@ -131,7 +131,7 @@ class GalleryController extends MainController implements iController
             }
         }else
         {
-            $this->getView()->printDanger("Nepavyko rasti nuoitraukų duomabazėje!");
+            $this->getView()->printDanger("Nepavyko rasti nuotraukų duomabazėje!11111111");
         }
     }
 
