@@ -500,6 +500,53 @@ class Model {
         }
     }
 
+    public function gallery_get_all_imgs()
+    {
+        $SQL_get_all_imgs = "SELECT gallery.pavadinimas, gallery.nuotraukos_kelias, gallery.sukurimo_data, gallery.fk_naudotojas, likes.id as likes_id, likes.nuotraukos_pamegimas as likes, gallery.id as img_id
+                                FROM galerijos_nuotraukos as gallery
+                                JOIN galerijos_nuotraukos_pamegimai as likes
+                                ON gallery.id = likes.fk_nuotrauka  
+                                ORDER BY gallery.sukurimo_data DESC";
+
+        $result = $this->conn->query($SQL_get_all_imgs);
+
+        if ($result->num_rows > 0)
+        {
+            $images = [];
+            while($row = $result->fetch_assoc())
+            {
+                array_push($images, $row);
+            }
+            return $images;
+        }
+        else
+        {
+            echo mysqli_error($this->conn);
+            return -1;
+        }
+    }
+
+    public function gallery_assign_likes_to_img($img_id, $date)
+    {
+        $SQL_assign_likes_to_img = "INSERT INTO `galerijos_nuotraukos_pamegimai` (`sukurimo_data`, `nuotraukos_pamegimas`, `fk_komentaras`, `fk_nuotrauka`) 
+                                    VALUES ('".$date."', '0', NULL, '".$img_id."');";
+        $SQL_assign_likes_to_img = $SQL_assign_likes_to_img . "SELECT id From galerijos_nuotraukos_pamegimai WHERE fk_nuotrauka = ".$img_id;
+
+        $result = $this->conn->multi_query($SQL_assign_likes_to_img);
+
+        if (mysqli_next_result($this->conn) > 0)
+        {
+            $result=mysqli_store_result($this->conn);
+            $result=mysqli_fetch_row($result);
+            $result = $result[0];
+            return $result;
+        }else
+        {
+            echo mysqli_error($this->conn);
+            return -1;
+        }
+    }
+
     public function registerUser($username, $email, $password, $passwordRepeat, $country, $address, $phoneNum, $surname, $realName, $birthDate, $city, $favGame, $description,
                                  $discID, $faceID, $instaID, $skypeID, $sign, $snapID, $website, $school, $degree)
     {

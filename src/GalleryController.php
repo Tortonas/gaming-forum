@@ -80,6 +80,13 @@ class GalleryController extends MainController implements iController
                                 }
                             }
 
+                            $img_likes_id = $this->getModel()->gallery_assign_likes_to_img($img_id, $img_date);
+                            if ($img_likes_id == -1)
+                            {
+                                $error_flag = true;
+                                $this->getView()->printDanger("Nepavyko priskirti pamėgimų prie nuotraukos!");
+                            }
+
                             if($error_flag != true)
                             {
                                 $this->getView()->printSuccess("Nuotrauka sėkmingai įkelta");
@@ -103,7 +110,29 @@ class GalleryController extends MainController implements iController
             }
         }
 
+        if(isset($_POST['like_button']))
+        {
+            echo '<h1>LIKED IMAGE!</h1>';
+        }
+
+        if(isset($_POST['delete_img']))
+        {
+            echo '<h1>DELETE IMAGE!</h1>';
+        }
+
         $this->getView()->print_Gallery_frontpage();
+
+        $images = $this->getModel()->gallery_get_all_imgs();
+        if( $images != -1 )
+        {
+            foreach ($images as $image)
+            {
+                $this->getView()->print_gallery_images($image);
+            }
+        }else
+        {
+            $this->getView()->printDanger("Nepavyko rasti nuoitraukų duomabazėje!");
+        }
     }
 
     public function getTitle()
