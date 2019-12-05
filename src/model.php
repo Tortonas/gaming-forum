@@ -488,7 +488,7 @@ class Model {
 
     public function gallery_assign_tag_to_img($img_id, $tag_id)
     {
-        $SQL_assign_tag_to_img = "INSERT INTO `galerijos_nuotrauku_etiketes` (`fk_nuotrauka`, `fk_etikete`) VALUES ('".$img_id."', '".$tag_id."')";
+        $SQL_assign_tag_to_img = "INSERT INTO `galerijos_nuotrauku_etiketes` (`fk_nuotrauka`, `fk_etikete`) VALUES (".$img_id.", ".$tag_id.")";
 
         if($this->conn->query($SQL_assign_tag_to_img))
         {
