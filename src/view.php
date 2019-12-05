@@ -106,10 +106,49 @@ class View
             while ($row = mysqli_fetch_assoc($users)) {
              echo'<li class="list-group-item">
                 '.$row['slapyvardis'].' 
-                <button type="button" class="btn btn-warning btn-sm">Užtildyti</button>
-                <button type="button" class="btn btn-danger btn-sm">Užblokuoti</button>
+                <form class="btn">
+                <input type="hidden" name="id" value="'.$row['id'].'">
+                <button type="submit" name="uztildytas" value="1" class="btn btn-warning btn-sm">Užtildyti</button>
+                </form>
+                <form class="btn">
+                <input type="hidden" name="id" value="'.$row['id'].'">
+                <button type="submit" name="uzblokuotas" value="1" class="btn btn-danger btn-sm">Užblokuoti</button>
+                </form>
                 <a href="edituser.php?id='.$row['id'].'"><button type="button" class="btn btn-primary btn-sm">Redaguoti naudotoją</button> </a>
-                </li>';
+                <form class="btn">
+                <select class="btn btn-light" name="role">
+                ';
+                if($row['role'] == 1)
+                {
+                    echo '<option selected value = "1" > Naudotojas</option >
+                          <option value = "2" > Moderatorius</option >
+                          <option value = "3" > Administratorius</option >
+                     </select>
+                ';
+                }
+                else if($row['role'] == 2)
+                {
+                    echo '<option value = "1" > Naudotojas</option >
+                          <option selected value = "2" > Moderatorius</option >
+                          <option value = "3" > Administratorius</option >
+                     </select>     
+                ';
+                }
+                else if($row['role'] == 3)
+                {
+                    echo '<option value = "1" > Naudotojas</option >
+                          <option value = "2" > Moderatorius</option >
+                          <option selected value = "3" > Administratorius</option >
+                     </select>
+                ';
+                }
+
+                    echo '
+                
+                <input type="hidden" name="id" value="'.$row['id'].'">
+                <button type="submit" class="btn btn-primary btn-sm">Pakeisti rolę</button>
+                </form>
+             </li>';
 
             }
         }
@@ -130,7 +169,7 @@ class View
 
         if ($catalogs) {
             while ($row = mysqli_fetch_assoc($catalogs)) {
-                if ($role == 3) {
+                if ($role == 3 || $role == 2) {
                     echo '<h2><a href="themes.php?id=' . $row['id'] . '">' . $row['pavadinimas'] . '</a> <button class="btn btn-danger btn-sm" type="submit" name="deleteButton" value="' . $row['id'] . '">Naikinti</button></h2>';
                 } else {
                     echo '<h2><a href="themes.php?id=' . $row['id'] . '">' . $row['pavadinimas'] . '</a></h2>';
@@ -142,7 +181,7 @@ class View
 
         echo '</form>';
 
-        if ($role == 3) {
+        if ($role == 3 || $role == 2) {
             echo '
         <form method="POST">
             <div class="input-group mb-3">
@@ -276,33 +315,6 @@ class View
             <div class="form-group">
                 <label for="inputFor">Slapyvardis*</label>
                 <input type="text" class="form-control" id="inputFor" value="'.$content['slapyvardis'].'" disabled>
-            </div>
-            <div class="form-group">
-                <label for="inputFor">Rolė</label>
-                <select class="custom-select" name="role">';
-                if($content['role'] == 1)
-                {
-                    echo '<option selected value = "1" > Naudotojas</option >
-                          <option value = "2" > Moderatorius</option >
-                          <option value = "3" > Administratorius</option >
-                          ';
-                }
-                else if($content['role'] == 2)
-                {
-                    echo '<option value = "1" > Naudotojas</option >
-                          <option selected value = "2" > Moderatorius</option >
-                          <option value = "3" > Administratorius</option >
-                          ';
-                }
-                else if($content['role'] == 3)
-                {
-                    echo '<option value = "1" > Naudotojas</option >
-                          <option value = "2" > Moderatorius</option >
-                          <option selected value = "3" > Administratorius</option >
-                          ';
-                }
-                    echo '
-                </select>
             </div>
             <div class="form-group">
                 <label for="inputFor">El. pašto adresas*</label>
