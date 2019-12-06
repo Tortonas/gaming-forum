@@ -330,6 +330,96 @@ class GalleryController extends MainController implements iController
         }
     }
 
+    public function printImageSearchPageView()
+    {
+        $this->getView()->print_Gallery_searchpage();
+
+        if (isset($_POST['search_img_submit']))
+        {
+            $jpg = false;
+            $jpeg = false;
+            $png = false;
+
+            $img_name = false;
+
+            $img_date = $_POST['img_upload_date'];
+
+            $img_tags = false;
+
+            if (isset($_POST['jpg']) && $_POST['jpg'] == 1)
+            {
+                $jpg = true;
+            }
+            if (isset($_POST['jpeg']) && $_POST['jpeg'] == 1)
+            {
+                $jpeg = true;
+            }
+            if (isset($_POST['png']) && $_POST['png'] == 1)
+            {
+                $png = true;
+            }
+            if (isset($_POST['img_name']) && strlen($_POST['img_name']) > 0)
+            {
+                $img_name = $_POST['img_name'];
+            }
+
+            if (isset($_POST['img_tags']) && $_POST['img_tags'] != "")
+            {
+                $img_tags = $_POST['img_tags'];
+
+                $img_tags = explode(";",$img_tags);
+
+                $tags = array();
+
+                foreach ( $img_tags as $tag )
+                {
+                    if ( strlen($tag) > 0)
+                    {
+                        array_push($tags,$tag);
+                    }
+                }
+
+                $img_tags = true;
+            }
+
+            $images = $this->getModel()->gallery_get_images_by_name_date_format($img_name,$jpg,$jpeg,$png,$img_date);
+            if ($images != -1)
+            {
+                foreach ($images as $image)
+                {
+                    if ($img_tags == true)
+                    {
+                        $image_tag = $image['tags'];
+
+                        $image_tag = explode(";",$image_tag);
+
+                        $image_tag_array = [];
+
+                        foreach ( $image_tag as $tag )
+                        {
+                            if ( strlen($tag) > 0)
+                            {
+                                array_push($image_tag_array,$tag);
+                            }
+                        }
+
+                        if (count(array_intersect($image_tag_array, $tags)) > 0)
+                        {
+                            $this->getView()->print_gallery_images($image);
+                        }
+                    }else
+                    {
+                        $this->getView()->print_gallery_images($image);
+                    }
+                }
+            }else
+            {
+                $this->getView()->printWarning("Nuotraukų paieška duombazėje nepavyko!");
+            }
+        }
+
+    }
+
     public function getTitle()
     {
         echo "Gaming Forum - Galerija";
