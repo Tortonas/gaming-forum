@@ -699,6 +699,77 @@ class Model {
         }
     }
 
+    public function gallery_get_images_by_name_date_format($img_name, $jpg, $jpeg, $png, $img_date)
+    {
+        $format = "";
+        $img_name = $this->secureInput($img_name);
+
+        if ($jpg == true)
+        {
+            $format = "'jpg'";
+        }
+        if ($jpeg == true)
+        {
+            if(strlen($format) > 0)
+            {
+                $format = $format.",";
+            }
+            $format = $format."'jpeg'";
+        }
+        if($png == true)
+        {
+            if(strlen($format) > 0)
+            {
+                $format = $format.",";
+            }
+            $format = $format."'png'";
+        }
+
+        $SQL = "SELECT gallery.id as img_id, gallery.pavadinimas as pavadinimas, gallery.nuotraukos_kelias, gallery.formatas as img_format, gallery.sukurimo_data as img_date, gallery.fk_naudotojas, 
+                    ROUND(AVG(likes.nuotraukos_pamegimas),0) as likes, ROUND(AVG(likes.id),0) as like_id ,GROUP_CONCAT(tag.pavadinimas SEPARATOR ';') as tags
+                
+                FROM galerijos_nuotraukos as gallery
+                JOIN galerijos_nuotraukos_pamegimai as likes
+                    ON likes.fk_nuotrauka = gallery.id
+                
+                JOIN galerijos_nuotrauku_etiketes as tags
+                    ON gallery.id = tags.fk_nuotrauka
+                JOIN galerijos_nuotraukos_etikete as tag
+                    ON tags.fk_etikete = tag.id ";
+
+                $SQL = $SQL."WHERE gallery.sukurimo_data >= '".$img_date."' ";
+
+                if ($img_name != false)
+                {
+                    $SQL = $SQL."AND gallery.pavadinimas LIKE '%".$img_name."%' ";
+                }
+
+                if (strlen($format) >= 3)
+                {
+                    $SQL = $SQL." AND gallery.formatas IN (".$format.") ";
+                }
+
+                $SQL = $SQL."GROUP BY gallery.id  
+                ORDER BY `img_date` DESC";
+
+        $result = $this->conn->query($SQL);
+
+        if ($result->num_rows > 0)
+        {
+            $images = [];
+            while($row = $result->fetch_assoc())
+            {
+                array_push($images, $row);
+            }
+            return $images;
+        }
+        else
+        {
+            echo mysqli_error($this->conn);
+            return -1;
+        }
+    }
+
     public function registerUser($username, $email, $password, $passwordRepeat, $country, $address, $phoneNum, $surname, $realName, $birthDate, $city, $favGame, $description,
                                  $discID, $faceID, $instaID, $skypeID, $sign, $snapID, $website, $school, $degree)
     {

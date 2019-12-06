@@ -66,6 +66,11 @@ class View
         echo '<div class="alert alert-danger" role="alert">' . $text . '</div>';
     }
 
+    function printWarning($text)
+    {
+        echo '<div class="alert alert-warning" role="alert">' . $text . '</div>';
+    }
+
     // -- GLOBAL VIEW END --
 
     // -- INDEX PAGE VIEW START --
@@ -455,11 +460,52 @@ class View
 
     public function print_Gallery_frontpage()
     {
-        echo '<form class="form-inline my-2 my-lg-0" method="POST" action="search.php">
-                <input class="form-control mr-sm-2" type="search" placeholder="Raktažodis paieškai" aria-label="Search">
-                <button class="btn btn-primary" type="submit">Ieškoti</button>
-            </form>';
+        echo '<br>
+                <form class="form-inline my-2 my-lg-0" method="POST" action="img_search.php">
+                <button class="btn btn-primary" type="submit" name="search_img">Ieškoti nuotraukų</button>
+            </form>
+            <br>
+            <br>';
 
+    }
+
+    public function print_Gallery_searchpage()
+    {
+        echo '<br><br><form method="post">
+                    <input class="form-control" type="text" name="img_name" placeholder="Nuotraukos pavadinimas"><br>
+                    <input class="form-control" type="text" name="img_tags" placeholder="fortnite;dance;gaming"
+                    pattern="^([AaĄąBbCcČčDdEeĘęĖėFfGgHhIiĮįYyJjKkLlMmNnOoPpRrSsŠšTtUuŲųŪūVvZzŽžqQwWxX]{2,};?){0,}" title="Įveskite etiketę nors iš 2 raidžių ir atskirkite etiketes ; symboliu!"><br>
+                    
+                    <div class="form-check">
+                      <input class="form-check-input" type="checkbox" name="jpg" value="1" id="defaultCheck1">
+                      <label class="form-check-label" for="defaultCheck1">
+                        .jpg
+                      </label>
+                    </div>
+                    
+                    <div class="form-check">
+                      <input class="form-check-input" type="checkbox" name="jpeg" value="1" id="defaultCheck1">
+                      <label class="form-check-label" for="defaultCheck1">
+                        .jpeg
+                      </label>
+                    </div>
+                    
+                    <div class="form-check">
+                      <input class="form-check-input" type="checkbox" name="png" value="1" id="defaultCheck1">
+                      <label class="form-check-label" for="defaultCheck1">
+                        .png
+                      </label>
+                    </div><br>
+                    
+                    <div class="form-group">
+                            <label for="data">Nuotraukos įkelimo data</label>
+                            <input type="date" max="'.date('Y-m-d').'" class="form-control" name="img_upload_date" required>
+                    </div>
+                    
+                    <button type="submit" name="search_img_submit" value="true" class="btn btn-primary btn-sm">
+                            IDK
+                        </button>
+              </form><br>';
     }
 
     public function  print_gallery_image_upload()
@@ -520,7 +566,7 @@ class View
                             <button class="btn btn-primary btn-sm" type="button">Komentuoti</button>
                         </a>
                     </form>
-            </figure>';
+            </figure>       ';
     }
 
     public function print_gallery_comment_section_image($image)
