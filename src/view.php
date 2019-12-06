@@ -519,7 +519,7 @@ class View
                     </div>
                     
                     <button type="submit" name="search_img_submit" value="true" class="btn btn-primary btn-sm">
-                            IDK
+                            Ieškoti
                         </button>
               </form><br>';
     }
