@@ -146,13 +146,15 @@ class View
                <form method="POST">';
 
         if ($catalogs) {
+            echo '<ul class="list-group">';
             while ($row = mysqli_fetch_assoc($catalogs)) {
                 if ($role == 3) {
-                    echo '<h2><a href="themes.php?id=' . $row['id'] . '">' . $row['pavadinimas'] . '</a> <button class="btn btn-danger btn-sm" type="submit" name="deleteButton" value="' . $row['id'] . '">Naikinti</button></h2>';
+                    echo '<li class="list-group-item"><h2><a href="themes.php?id=' . $row['id'] . '">' . $row['pavadinimas'] . '</a> <button class="btn btn-danger btn-sm" type="submit" name="deleteButton" value="' . $row['id'] . '">Naikinti</button></h2></li>';
                 } else {
-                    echo '<h2><a href="themes.php?id=' . $row['id'] . '">' . $row['pavadinimas'] . '</a></h2>';
+                    echo '<li class="list-group-item"><h2><a href="themes.php?id=' . $row['id'] . '">' . $row['pavadinimas'] . '</a></h2></li>';
                 }
             }
+            echo '</ul>';
         } else {
             echo '<h2>Nėra nei vienos forumo kategorijos!</h2>';
         }
@@ -160,7 +162,7 @@ class View
         echo '</form>';
 
         if ($role == 3) {
-            echo '
+            echo '<br>
         <form method="POST">
             <div class="input-group mb-3">
                 <div class="input-group-prepend">
@@ -180,18 +182,20 @@ class View
 
         if ($themeList) {
             while ($row = $themeList->fetch_assoc()) {
+                echo '<ul class="list-group">';
                 if ($_SESSION['role'] >= 3) {
-                    echo '<h2> <a href="viewtheme.php?id=' . $row['id'] . '">' . $row['pavadinimas'] . '</a> <button class="btn btn-danger btn-sm" type="submit" name="deleteThemeBtn" value="'.$row['id'].'">Naikinti</button></h2>';
+                    echo '<li class="list-group-item"><h2> <a href="viewtheme.php?id=' . $row['id'] . '">' . $row['pavadinimas'] . '</a> <button class="btn btn-danger btn-sm" type="submit" name="deleteThemeBtn" value="'.$row['id'].'">Naikinti</button></h2></li>';
                 } else {
-                    echo '<h2> <a href="viewtheme.php?id=' . $row['id'] . '">' . $row['pavadinimas'] . '</a></h2>';
+                    echo '<li class="list-group-item"><h2> <a href="viewtheme.php?id=' . $row['id'] . '">' . $row['pavadinimas'] . '</a></h2></li>';
                 }
+                echo '</ul>';
             }
         }
 
         echo '</form>';
 
         if ($_SESSION['role'] > 0) {
-            echo '<a href="createtheme.php?id=' . $_GET['id'] . '"> <button type="button" class="btn btn-primary">Sukurti naują temą</button> </a>';
+            echo '<br><a href="createtheme.php?id=' . $_GET['id'] . '"> <button type="button" class="btn btn-primary">Sukurti naują temą</button> </a>';
         }
     }
 
