@@ -108,7 +108,11 @@ class Model {
                     $date = date('Y-m-d H:i:s');
                     $sql = "UPDATE naudotojai SET paskutini_karta_prisijunges='$date' WHERE slapyvardis='$username'";
                     $this->conn->query($sql);
-                    $sql = "INSERT INTO naudotoju_ipai (ip, paskutinis_prisijungimas, fk_naudotojas) VALUES (".$this->getUserIpAddr().", ".$date.", ".$row['id'].")";
+                    $sql = "INSERT INTO naudotoju_ipai (ip, paskutinis_prisijungimas, fk_naudotojas) 
+                            VALUES (".$this->getUserIpAddr().", ".$date.", ".$row['id'].") 
+                            ON DUPLICATE KEY UPDATE 
+                            ip=VALUES(ip),
+                            paskutinis_prisijungimas=VALUES(paskutinis_prisijungimas)";
                     $this->conn->query($sql);
                     return true;
                 }
