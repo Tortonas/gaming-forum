@@ -1,3 +1,8 @@
+<?php
+session_start();
+include('src/autoloader.php');
+$controller = new GalleryController();
+?>
 <!doctype html>
 <html lang="en">
   <head>
@@ -9,90 +14,22 @@
     <link rel="stylesheet" href="./style/stylesheet.css">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 
-    <title>Hello, world!</title>
+    <title><?php $controller->getTitle() ?></title>
   </head>
   <body>
-      
-    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
-        <div class='container'>
-            <a class="navbar-brand" href="index.php">Gaming Forumas  </a>
-            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-            </button>
 
-            <div class="collapse navbar-collapse" id="navbarSupportedContent">
-            <ul class="navbar-nav mr-auto">
-                <li class="nav-item">
-                    <a class="nav-link" href="index.php">Namai <span class="sr-only">(current)</span></a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="forum.php">Forumas</a>
-                </li>
-                <li class="nav-item active">
-                    <a class="nav-link" href="gallery.php">Galerija</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="login.php">Prisijungti</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="register.php">Registracija</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="settings.php">Nustatymai</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#">Atsijungti</a>
-                </li>
-                <li class="nav-item">
-                        <a class="nav-link" href="adminpanel.php">Admin</a>
-                    </li>
-            </ul>
-            <form class="form-inline my-2 my-lg-0" method="POST" action="search.php">
-                    <input class="form-control mr-sm-2" type="search" placeholder="Raktažodis paieškai" aria-label="Search">
-                    <button class="btn btn-outline-light my-2 my-sm-0" type="submit">Ieškoti</button>
-                </form>
-            </div>
-        
-        </div>
-    </nav>
+      <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+          <div class='container'>
+              <?php
+              MainController::printNavigationBar("login.php");
+              ?>
+          </div>
+      </nav>
 
     <div class='container'>
-        
-        <figure class="figure">
-            <img src="./img/1.png" id="imageInput" alt="fortnite dance" class="img-thumbnail rounded">
-            <figcaption class="figure-caption">Nuotraukos aprasymas</figcaption>
-            <button type="button" class="btn btn-primary">
-                Pamėgti <span class="badge badge-light">4</span>
-            </button>
-            <a href="editphoto.php"> <button type="button" class="btn btn-primary">Redaguoti</button> </a>
-            <button type="button" class="btn btn-danger">Ištrinti</button>
-        </figure>
-
-        <div class='theme-answer'>
-                <form method='POST' class='form-group'>
-                    <h4>Autorius</h4>
-                    <h6>2018-02-02 12:45</h6>
-                    <p>Kazkoks temos atsakymasKazkoks temos atsakymasKazkoks temos atsakymasKazkoks temos atsakymasKazkoks temos atsakymasKazkoks temos atsakymasKazkoks temos atsakymasKazkoks temos atsakymasKazkoks temos atsakymasKazkoks temos atsakymasKazkoks temos atsakymasKazkoks temos atsakymasKazkoks temos atsakymasKazkoks temos atsakymasKazkoks temos atsakymasKazkoks temos atsakymasKazkoks temos atsakymasKazkoks temos atsakymasKazkoks temos atsakymasKazkoks temos atsakymasKazkoks temos atsakymasKazkoks temos atsakymasKazkoks temos atsakymasKazkoks temos atsakymas</p>
-                    <a href="editcomment.php"> <button type="button" class="btn btn-primary btn-sm">Redaguoti</button> </a>
-                    <button type="button" class="btn btn-danger btn-sm">Naikinti</button>
-                </form>
-            </div>
-            <div class='theme-answer'>
-                <form method='POST' class='form-group'>
-                    <h4>Autorius</h4>
-                    <h6>2018-02-02 12:45</h6>
-                    <p>Kazkoks temos atsakymasKazkoks temos atsakymasKazkoks temos atsakymasKazkoks temos atsakymasKazkoks temos atsakymasKazkoks temos atsakymasKazkoks temos atsakymasKazkoks temos atsakymasKazkoks temos atsakymasKazkoks temos atsakymasKazkoks temos atsakymasKazkoks temos atsakymasKazkoks temos atsakymasKazkoks temos atsakymasKazkoks temos atsakymasKazkoks temos atsakymasKazkoks temos atsakymasKazkoks temos atsakymasKazkoks temos atsakymasKazkoks temos atsakymasKazkoks temos atsakymasKazkoks temos atsakymasKazkoks temos atsakymasKazkoks temos atsakymas</p>
-                    <a href="editcomment.php"> <button type="button" class="btn btn-primary btn-sm">Redaguoti</button> </a>
-                    <button type="button" class="btn btn-danger btn-sm">Naikinti</button>
-                </form>
-            </div>
-        <form method='POST'>
-            <div class="form-group">
-                <label for="comment">Komentuoti:</label>
-                <textarea class="form-control" rows="5" id="comment"></textarea>
-                <button type="button" class="btn btn-danger">Komentuoti</button>
-            </div>
-        </form>
+        <?php
+        $controller->printCommentPageView();
+        ?>
     </div>
       
     <!-- Optional JavaScript -->

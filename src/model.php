@@ -108,7 +108,11 @@ class Model {
                     $date = date('Y-m-d H:i:s');
                     $sql = "UPDATE naudotojai SET paskutini_karta_prisijunges='$date' WHERE slapyvardis='$username'";
                     $this->conn->query($sql);
-                    $sql = "INSERT INTO naudotoju_ipai (ip, paskutinis_prisijungimas, fk_naudotojas) VALUES (".$this->getUserIpAddr().", ".$date.", ".$row['id'].")";
+                    $sql = "INSERT INTO naudotoju_ipai (ip, paskutinis_prisijungimas, fk_naudotojas) 
+                            VALUES (".$this->getUserIpAddr().", ".$date.", ".$row['id'].") 
+                            ON DUPLICATE KEY UPDATE 
+                            ip=VALUES(ip),
+                            paskutinis_prisijungimas=VALUES(paskutinis_prisijungimas)";
                     $this->conn->query($sql);
                     return true;
                 }
@@ -410,8 +414,364 @@ class Model {
         }
     }
 
+    public function gallery_insert_img($img_name, $img_path, $img_format, $img_date, $user_id)
+    {
+        $img_name = $this->secureInput($img_name);
+        $img_path = $this->secureInput($img_path);
+        $img_format = $this->secureInput($img_format);
+
+        $SQL_insert_request = "INSERT INTO `galerijos_nuotraukos` ( `pavadinimas`, `nuotraukos_kelias`, `formatas`, `sukurimo_data`, `fk_naudotojas`) 
+                                    VALUES ( '".$img_name."', '".$img_path."', '".$img_format."', '".$img_date."', '".$user_id."');";
+
+        $SQL_insert_request = $SQL_insert_request."SELECT id FROM galerijos_nuotraukos WHERE nuotraukos_kelias = '".$img_path."'";
+
+
+        $result = $this->conn->multi_query($SQL_insert_request);
+
+        if (mysqli_next_result($this->conn) > 0)
+        {
+            $result=mysqli_store_result($this->conn);
+            $result=mysqli_fetch_row($result);
+            $result = $result[0];
+            return $result;
+        }else
+        {
+            echo mysqli_error($this->conn);
+            return -1;
+        }
+
+    }
+
+    public function gallery_insert_tag($tag, $date)
+    {
+        $tag = $this->secureInput($tag);
+
+        $SQL_check_existing = "SELECT IF(EXISTS(SELECT * From galerijos_nuotraukos_etikete WHERE pavadinimas = '".$tag."'),
+          (SELECT id From galerijos_nuotraukos_etikete WHERE pavadinimas = '".$tag."' ),-1) as result";
+
+        $result = $this->conn->query($SQL_check_existing);
+
+        if (mysqli_num_rows($result) > 0)
+        {
+            $result = $result->fetch_assoc();
+            $result = $result['result'];
+            if ($result == -1)
+            {
+                $SQL_insert_tag = "INSERT INTO galerijos_nuotraukos_etikete (pavadinimas,sukurimo_data) VALUES ('".$tag."','".$date."');
+                                    SELECT id FROM galerijos_nuotraukos_etikete WHERE pavadinimas = '".$tag."'";
+
+
+                $result = $this->conn->multi_query($SQL_insert_tag);
+
+                if (mysqli_next_result($this->conn) > 0)
+                {
+                    $result=mysqli_store_result($this->conn);
+                    $result=mysqli_fetch_row($result);
+                    $result = $result[0];
+                    return $result;
+                }else
+                {
+                    echo mysqli_error($this->conn);
+                    return -1;
+                }
+
+            }else
+            {
+                return $result;
+            }
+
+        }
+        else
+        {
+            echo mysqli_error($this->conn);
+            return -1;
+        }
+
+
+    }
+
+    public function gallery_assign_tag_to_img($img_id, $tag_id)
+    {
+        $SQL_assign_tag_to_img = "INSERT INTO `galerijos_nuotrauku_etiketes` (`fk_nuotrauka`, `fk_etikete`) VALUES (".$img_id.", ".$tag_id.")";
+
+        if($this->conn->query($SQL_assign_tag_to_img))
+        {
+            return false;
+        }
+        else {
+            echo mysqli_error($this->conn);
+            return true;
+        }
+    }
+
+    public function gallery_get_all_imgs()
+    {
+        $SQL_get_all_imgs = "SELECT gallery.pavadinimas, gallery.nuotraukos_kelias, gallery.sukurimo_data, gallery.fk_naudotojas, likes.id as likes_id, likes.nuotraukos_pamegimas as likes, gallery.id as img_id
+                                FROM galerijos_nuotraukos as gallery
+                                JOIN galerijos_nuotraukos_pamegimai as likes
+                                ON gallery.id = likes.fk_nuotrauka  
+                                ORDER BY gallery.sukurimo_data DESC";
+
+        $result = $this->conn->query($SQL_get_all_imgs);
+
+        if ($result->num_rows > 0)
+        {
+            $images = [];
+            while($row = $result->fetch_assoc())
+            {
+                array_push($images, $row);
+            }
+            return $images;
+        }
+        else
+        {
+            echo mysqli_error($this->conn);
+            return -1;
+        }
+    }
+
+    public function gallery_assign_likes_to_img($img_id, $date)
+    {
+        $SQL_assign_likes_to_img = "INSERT INTO `galerijos_nuotraukos_pamegimai` (`sukurimo_data`, `nuotraukos_pamegimas`, `fk_komentaras`, `fk_nuotrauka`) 
+                                    VALUES ('".$date."', '0', NULL, '".$img_id."');";
+        $SQL_assign_likes_to_img = $SQL_assign_likes_to_img . "SELECT id From galerijos_nuotraukos_pamegimai WHERE fk_nuotrauka = ".$img_id;
+
+        $result = $this->conn->multi_query($SQL_assign_likes_to_img);
+
+        if (mysqli_next_result($this->conn) > 0)
+        {
+            $result=mysqli_store_result($this->conn);
+            $result=mysqli_fetch_row($result);
+            $result = $result[0];
+            return $result;
+        }else
+        {
+            echo mysqli_error($this->conn);
+            return -1;
+        }
+    }
+
+    public function gallery_get_image($img_id)
+    {
+        $SQL_get_image = "SELECT gallery.id as img_id, gallery.pavadinimas as img_pav, gallery.nuotraukos_kelias, gallery.fk_naudotojas, likes.id as like_id, likes.nuotraukos_pamegimas as likes
+                            FROM galerijos_nuotraukos as gallery
+                            JOIN galerijos_nuotraukos_pamegimai as likes
+                                ON gallery.id = likes.fk_nuotrauka
+                            WHERE gallery.id = ".$img_id;
+
+        $result = $this->conn->query($SQL_get_image);
+
+        if ($result->num_rows > 0)
+        {
+            $result = $result->fetch_assoc();
+            return $result;
+        }
+        else
+        {
+            echo mysqli_error($this->conn);
+            return -1;
+        }
+    }
+
+    public function gallery_add_image_comment($img_id, $user_id, $text, $date)
+    {
+        $text = $this->secureInput($text);
+        $SQL_add_image_comment = "INSERT INTO `galerijos_nuotrauku_komentarai` (`tekstas`, `sukurimo_data`, `fk_naudotojas`, `fk_galerijos_nuotrauka`) 
+                                    VALUES ('".$text."', '".$date."', '".$user_id."', '".$img_id."')";
+
+        if($this->conn->query($SQL_add_image_comment))
+        {
+            return false;
+        }
+        else {
+            echo mysqli_error($this->conn);
+            return true;
+        }
+    }
+
+    public function gallery_delete_image($img_id)
+    {
+        $SQL_delete_img = "DELETE FROM `galerijos_nuotraukos` WHERE `galerijos_nuotraukos`.`id` = ".$img_id;
+
+        if($this->conn->query($SQL_delete_img))
+        {
+            return false;
+        }
+        else {
+            echo mysqli_error($this->conn);
+            return true;
+        }
+    }
+
+    public function gallery_get_all_image_comments($img_id)
+    {
+        $SQL_get_all_image_comments = "SELECT comment.id, comment.tekstas, comment.sukurimo_data, comment.fk_galerijos_nuotrauka as img_id, naudotojai.id as user_id, naudotojai.slapyvardis as user_name
+                                        FROM galerijos_nuotrauku_komentarai as comment
+                                        JOIN naudotojai 
+                                        ON comment.fk_naudotojas = naudotojai.id
+                                        WHERE fk_galerijos_nuotrauka = ".$img_id."
+                                        ORDER BY sukurimo_data ASC";
+
+        $result = $this->conn->query($SQL_get_all_image_comments);
+
+        if ($result->num_rows > 0)
+        {
+            $comments = [];
+            while($row = $result->fetch_assoc())
+            {
+                array_push($comments, $row);
+            }
+            return $comments;
+        }
+        else
+        {
+            echo mysqli_error($this->conn);
+            return -1;
+        }
+
+
+    }
+
+    public function gallery_delete_image_comment($comment_id)
+    {
+        $SQL_delete_image_comment = "DELETE FROM `galerijos_nuotrauku_komentarai` 
+                                        WHERE `galerijos_nuotrauku_komentarai`.`id` = ".$comment_id;
+
+        if($this->conn->query($SQL_delete_image_comment))
+        {
+            return false;
+        }
+        else {
+            echo mysqli_error($this->conn);
+            return true;
+        }
+    }
+
+    public function gallery_get_image_comment($comment_id)
+    {
+        $SQL_get_image_comment = "SELECT * 
+                                    FROM galerijos_nuotrauku_komentarai
+                                    WHERE id = ".$comment_id;
+
+        $result = $this->conn->query($SQL_get_image_comment);
+
+        if ($result->num_rows > 0)
+        {
+            $result = $result->fetch_assoc();
+            return $result;
+        }
+        else
+        {
+            echo mysqli_error($this->conn);
+            return -1;
+        }
+    }
+
+    public function gallery_update_image_comment($comment_id, $comment)
+    {
+        $SQL_update_image_comment = "UPDATE galerijos_nuotrauku_komentarai 
+                                        SET tekstas = '".$comment."' 
+                                        WHERE id = ".$comment_id;
+
+        if($this->conn->query($SQL_update_image_comment))
+        {
+            return false;
+        }
+        else {
+            echo mysqli_error($this->conn);
+            return true;
+        }
+    }
+
+    public function gallery_increase_img_like_count($img_id)
+    {
+        $SQL_increase_like_count = "UPDATE galerijos_nuotraukos_pamegimai
+                                    SET nuotraukos_pamegimas = nuotraukos_pamegimas + 1
+                                    WHERE fk_nuotrauka = ".$img_id;
+
+        if($this->conn->query($SQL_increase_like_count))
+        {
+            return false;
+        }
+        else {
+            echo mysqli_error($this->conn);
+            return true;
+        }
+    }
+
+    public function gallery_get_images_by_name_date_format($img_name, $jpg, $jpeg, $png, $img_date)
+    {
+        $format = "";
+        $img_name = $this->secureInput($img_name);
+
+        if ($jpg == true)
+        {
+            $format = "'jpg'";
+        }
+        if ($jpeg == true)
+        {
+            if(strlen($format) > 0)
+            {
+                $format = $format.",";
+            }
+            $format = $format."'jpeg'";
+        }
+        if($png == true)
+        {
+            if(strlen($format) > 0)
+            {
+                $format = $format.",";
+            }
+            $format = $format."'png'";
+        }
+
+        $SQL = "SELECT gallery.id as img_id, gallery.pavadinimas as pavadinimas, gallery.nuotraukos_kelias, gallery.formatas as img_format, gallery.sukurimo_data as img_date, gallery.fk_naudotojas, 
+                    ROUND(AVG(likes.nuotraukos_pamegimas),0) as likes, ROUND(AVG(likes.id),0) as like_id ,GROUP_CONCAT(tag.pavadinimas SEPARATOR ';') as tags
+                
+                FROM galerijos_nuotraukos as gallery
+                JOIN galerijos_nuotraukos_pamegimai as likes
+                    ON likes.fk_nuotrauka = gallery.id
+                
+                JOIN galerijos_nuotrauku_etiketes as tags
+                    ON gallery.id = tags.fk_nuotrauka
+                JOIN galerijos_nuotraukos_etikete as tag
+                    ON tags.fk_etikete = tag.id ";
+
+                $SQL = $SQL."WHERE gallery.sukurimo_data >= '".$img_date."' ";
+
+                if ($img_name != false)
+                {
+                    $SQL = $SQL."AND gallery.pavadinimas LIKE '%".$img_name."%' ";
+                }
+
+                if (strlen($format) >= 3)
+                {
+                    $SQL = $SQL." AND gallery.formatas IN (".$format.") ";
+                }
+
+                $SQL = $SQL."GROUP BY gallery.id  
+                ORDER BY `img_date` DESC";
+
+        $result = $this->conn->query($SQL);
+
+        if ($result->num_rows > 0)
+        {
+            $images = [];
+            while($row = $result->fetch_assoc())
+            {
+                array_push($images, $row);
+            }
+            return $images;
+        }
+        else
+        {
+            echo mysqli_error($this->conn);
+            return -1;
+        }
+    }
+
     public function registerUser($username, $email, $password, $passwordRepeat, $country, $address, $phoneNum, $surname, $realName, $birthDate, $city, $favGame, $description,
-                                 $discID, $faceID, $isntaID, $skypeID, $sign, $snapID, $website, $school, $degree)
+                                 $discID, $faceID, $instaID, $skypeID, $sign, $snapID, $website, $school, $degree)
     {
         $conn = $this->conn;
 
@@ -430,7 +790,7 @@ class Model {
         $description = $this->secureInput($description);
         $discID = $this->secureInput($discID);
         $faceID = $this->secureInput($faceID);
-        $isntaID = $this->secureInput($isntaID);
+        $instaID = $this->secureInput($instaID);
         $skypeID = $this->secureInput($skypeID);
         $sign = $this->secureInput($sign);
         $snapID = $this->secureInput($snapID);
@@ -480,7 +840,7 @@ class Model {
                             $path = NULL;
                             $date = date('Y-m-d H:i:s');
                             mysqli_stmt_bind_param($stmt, "isssssiisissssssssssssssssss", $id, $username, $hashedPwd, $email, $date, $path, $blocked, $muted, $date, $role, $country, $address, $phoneNum,
-                                $realName, $surname, $birthDate, $city, $favGame, $description, $discID, $faceID, $isntaID, $skypeID, $sign, $snapID, $website, $school, $degree);
+                                $realName, $surname, $birthDate, $city, $favGame, $description, $discID, $faceID, $instaID, $skypeID, $sign, $snapID, $website, $school, $degree);
                             mysqli_stmt_execute($stmt);
                             return true;
                         }

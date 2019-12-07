@@ -66,6 +66,11 @@ class View
         echo '<div class="alert alert-danger" role="alert">' . $text . '</div>';
     }
 
+    function printWarning($text)
+    {
+        echo '<div class="alert alert-warning" role="alert">' . $text . '</div>';
+    }
+
     // -- GLOBAL VIEW END --
 
     // -- INDEX PAGE VIEW START --
@@ -168,13 +173,15 @@ class View
                <form method="POST">';
 
         if ($catalogs) {
+            echo '<ul class="list-group">';
             while ($row = mysqli_fetch_assoc($catalogs)) {
                 if ($role == 3 || $role == 2) {
-                    echo '<h2><a href="themes.php?id=' . $row['id'] . '">' . $row['pavadinimas'] . '</a> <button class="btn btn-danger btn-sm" type="submit" name="deleteButton" value="' . $row['id'] . '">Naikinti</button></h2>';
+                    echo '<li class="list-group-item"><h2><a href="themes.php?id=' . $row['id'] . '">' . $row['pavadinimas'] . '</a> <button class="btn btn-danger btn-sm" type="submit" name="deleteButton" value="' . $row['id'] . '">Naikinti</button></h2></li>';
                 } else {
-                    echo '<h2><a href="themes.php?id=' . $row['id'] . '">' . $row['pavadinimas'] . '</a></h2>';
+                    echo '<li class="list-group-item"><h2><a href="themes.php?id=' . $row['id'] . '">' . $row['pavadinimas'] . '</a></h2></li>';
                 }
             }
+            echo '</ul>';
         } else {
             echo '<h2>Nėra nei vienos forumo kategorijos!</h2>';
         }
@@ -182,7 +189,7 @@ class View
         echo '</form>';
 
         if ($role == 3 || $role == 2) {
-            echo '
+            echo '<br>
         <form method="POST">
             <div class="input-group mb-3">
                 <div class="input-group-prepend">
@@ -202,18 +209,20 @@ class View
 
         if ($themeList) {
             while ($row = $themeList->fetch_assoc()) {
+                echo '<ul class="list-group">';
                 if ($_SESSION['role'] >= 3) {
-                    echo '<h2> <a href="viewtheme.php?id=' . $row['id'] . '">' . $row['pavadinimas'] . '</a> <button class="btn btn-danger btn-sm" type="submit" name="deleteThemeBtn" value="'.$row['id'].'">Naikinti</button></h2>';
+                    echo '<li class="list-group-item"><h2> <a href="viewtheme.php?id=' . $row['id'] . '">' . $row['pavadinimas'] . '</a> <button class="btn btn-danger btn-sm" type="submit" name="deleteThemeBtn" value="'.$row['id'].'">Naikinti</button></h2></li>';
                 } else {
-                    echo '<h2> <a href="viewtheme.php?id=' . $row['id'] . '">' . $row['pavadinimas'] . '</a></h2>';
+                    echo '<li class="list-group-item"><h2> <a href="viewtheme.php?id=' . $row['id'] . '">' . $row['pavadinimas'] . '</a></h2></li>';
                 }
+                echo '</ul>';
             }
         }
 
         echo '</form>';
 
         if ($_SESSION['role'] > 0) {
-            echo '<a href="createtheme.php?id=' . $_GET['id'] . '"> <button type="button" class="btn btn-primary">Sukurti naują temą</button> </a>';
+            echo '<br><a href="createtheme.php?id=' . $_GET['id'] . '"> <button type="button" class="btn btn-primary">Sukurti naują temą</button> </a>';
         }
     }
 
@@ -249,12 +258,24 @@ class View
                     <form method="POST" class="form-group">
                         <h4>' . $row['slapyvardis'] . '</h4>
                         <h6>' . $row['sukurimo_data'] . '</h6>
-                        <p>' . $row['tekstas'] . '</p>';
+                        <p>' . $row['tekstas'] . '</p>
+                        ';
 
-                if ($_SESSION['role'] >= 3 || $_SESSION['slapyvardis'] == $row['slapyvardis']) {
+                if($_SESSION['role'] >= 1)
+                {
                     echo '<button type="submit" name="likeBtn" value="' . $row['id'] . '" class="btn btn-primary btn-sm">
                             Pamėgti <span class="badge badge-light">' . $likeCount[$likeCountIter++] . '</span>
-                        </button>
+                        </button>';
+                }
+                else
+                {
+                    echo '<button type="submit" name="likeBtn" value="' . $row['id'] . '" class="btn btn-primary btn-sm" disabled>
+                            Pamėgti <span class="badge badge-light">' . $likeCount[$likeCountIter++] . '</span>
+                        </button>';
+                }
+
+                if ($_SESSION['role'] >= 3 || $_SESSION['slapyvardis'] == $row['slapyvardis']) {
+                    echo '
                     <a href="edittheme.php?id=' . $row['id'] . '"> <button type="button" class="btn btn-primary btn-sm">Redaguoti</button> </a>
                         <button type="submit" name="deleteBtn" value=' . $row['id'] . ' class="btn btn-danger btn-sm">Naikinti</button>';
                 }
@@ -708,4 +729,5 @@ class View
             </form>';
     }
     // Pabaiga
+
 }
