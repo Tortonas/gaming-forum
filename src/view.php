@@ -22,18 +22,18 @@ class View
             self::printNavbarItem("Forumas", "forum.php", $location);
             self::printNavbarItem("Galerija", "gallery.php", $location);
         }
-            if ($_SESSION['role'] == "0") {
-                self::printNavbarItem("Registruotis", "register.php", $location);
-                self::printNavbarItem("Prisijungti", "login.php", $location);
-            } else {
-                if ($_SESSION['role'] >= 2 && $_SESSION['uzblokuotas'] !== '1') {
-                    self::printNavbarItem("Valdymas", "adminpanel.php", $location);
-                }
-                self::printNavbarItem("Nustatymai", "settings.php", $location);
-                self::printNavbarItem("Atsijungti", "logout.php", $location);
+        if ($_SESSION['role'] == "0") {
+            self::printNavbarItem("Registruotis", "register.php", $location);
+            self::printNavbarItem("Prisijungti", "login.php", $location);
+        } else {
+            if ($_SESSION['role'] >= 2 && $_SESSION['uzblokuotas'] !== '1') {
+                self::printNavbarItem("Valdymas", "adminpanel.php", $location);
             }
-            if( $_SESSION['uzblokuotas'] !== '1') {
-                echo '</ul>
+            self::printNavbarItem("Nustatymai", "settings.php", $location);
+            self::printNavbarItem("Atsijungti", "logout.php", $location);
+        }
+        if( $_SESSION['uzblokuotas'] !== '1') {
+            echo '</ul>
             <form class="form-inline my-2 my-lg-0" method="POST" action="search.php">
                 <input class="form-control mr-sm-2" type="search" name="searchText" placeholder="Raktažodis paieškai" aria-label="Search">
                 <button class="btn btn-outline-light my-2 my-sm-0" type="submit">Ieškoti</button>
@@ -41,7 +41,7 @@ class View
             </div>
           </nav>
         ';
-            }
+        }
 
     }
 
@@ -82,10 +82,6 @@ class View
     function printIndexPage()
     {
         echo '<h1>Sveiki atvykę į forumą!</h1>';
-        if($_SESSION['uzblokuotas'] === '1')
-        {
-            echo '<h1>Jūs esate užboluotas</h1>';
-        }
     }
     // -- INDEX PAGE VIEW END --
 
@@ -117,51 +113,54 @@ class View
         echo '
                 <ul class="list-group">';
         if ($users) {
+            echo '<li class="list-group-item">
+                   Prisijungusio valdytojo vardas: '.$_SESSION['slapyvardis'].'
+                  </li>';
             while ($row = mysqli_fetch_assoc($users)) {
-             echo'<li class="list-group-item">
+                echo'<li class="list-group-item">
                 '.$row['slapyvardis'].' 
                 <form class="btn">
                 <input type="hidden" name="id" value="'.$row['id'].'">
-                <button type="submit" name="uztildytas" value="1" class="btn btn-warning btn-sm">Užtildyti</button>
+                <button type="submit" name="uztildytas" value="1" class="btn btn-warning btn-sm">'; if($row['uztildytas'] == '0') { echo 'uztildyti'; } else { echo 'atitildyti'; }  echo '</button>
                 </form>';
-             if($_SESSION['role'] == 3) {
-                 echo '
+                if($_SESSION['role'] == 3) {
+                    echo '
                 <form class="btn">
                 <input type="hidden" name="id" value="' . $row['id'] . '">
-                <button type="submit" name="uzblokuotas" value="1" class="btn btn-danger btn-sm">Užblokuoti</button>
+                <button type="submit" name="uzblokuotas" value="1" class="btn btn-danger btn-sm">'; if($row['uzblokuotas'] == '0') { echo 'uzblokuoti'; } else { echo 'atblokuoti'; }  echo '</button>
                 </form>
                 <a href="edituser.php?id=' . $row['id'] . '"><button type="button" class="btn btn-primary btn-sm">Redaguoti naudotoją</button> </a>
                 <form class="btn">
                 <select class="btn btn-light" name="role">
                 ';
 
-                 if ($row['role'] == 1) {
-                     echo '<option selected value = "1" > Naudotojas</option >
+                    if ($row['role'] == 1) {
+                        echo '<option selected value = "1" > Naudotojas</option >
                           <option value = "2" > Moderatorius</option >
                           <option value = "3" > Administratorius</option >
                      </select>
                 ';
-                 } else if ($row['role'] == 2) {
-                     echo '<option value = "1" > Naudotojas</option >
+                    } else if ($row['role'] == 2) {
+                        echo '<option value = "1" > Naudotojas</option >
                           <option selected value = "2" > Moderatorius</option >
                           <option value = "3" > Administratorius</option >
                      </select>     
                 ';
-                 } else if ($row['role'] == 3) {
-                     echo '<option value = "1" > Naudotojas</option >
+                    } else if ($row['role'] == 3) {
+                        echo '<option value = "1" > Naudotojas</option >
                           <option value = "2" > Moderatorius</option >
                           <option selected value = "3" > Administratorius</option >
                      </select>
                 ';
-                 }
+                    }
 
-                 echo '
+                    echo '
                 
                 <input type="hidden" name="id" value="' . $row['id'] . '">
                 <button type="submit" class="btn btn-primary btn-sm">Pakeisti rolę</button>
                 </form>
              </li>';
-             }
+                }
 
             }
         }
@@ -338,7 +337,7 @@ class View
     public function printEditUserAsAdmin($content)
     {
         echo ' <form method="POST" class="mainForm">
-            <h1>Koreguojamas (naudotojo vardas) profilis</h1>
+            <h1>Koreguojamas '.$content['slapyvardis'].' profilis</h1>
             <h1>Profilio nustatymai</h1>
             <input type="hidden" name="id" value="'.$content['id'].'">
             <div class="form-group">
@@ -417,20 +416,20 @@ class View
                 <label for="inputFor">Aukštasis išsilavinimas</label>
                 <input type="text" class="form-control" id="inputFor" name="aukstasis_issilavinimas" placeholder="Aukštasis išsilavinimas" value="'.$content['aukstasis_issilavinimas'].'">
             </div>
-                <button type="submit" value="visiDuomenys" name="request" class="btn btn-primary">Išsaugoti nustatymus</button>
+                <button type="submit" class="btn btn-primary">Išsaugoti nustatymus</button>
         </form>
 
         <form method="POST" class="mainForm">
             <h1>Slaptažodžio keitimo forma</h1>
             <div class="form-group">
                 <label for="inputFor">Naujas slaptažodis</label>
-                <input type="password" class="form-control" id="inputFor" name="slaptazodis" placeholder="Naujas slaptažodis">
+                <input type="password" class="form-control" id="inputFor" name="slaptazodis	" placeholder="Naujas slaptažodis">
             </div>
             <div class="form-group">
                 <label for="inputFor">Pakartokite naują slaptažodį</label>
                 <input type="password" class="form-control" id="inputFor" name="slaptazodisPakartoti" placeholder="Naujas slaptažodis">
             </div>
-            <button type="submit" value="slaptazodisSubmit" name="request" class="btn btn-danger">Keisti slaptažodį</button>
+            <button type="button" class="btn btn-danger">Keisti slaptažodį</button>
         </form>';
 
     }
@@ -590,7 +589,7 @@ class View
                         </a>';
         }
 
-            echo '
+        echo '
                     </form>
             </figure>       ';
     }

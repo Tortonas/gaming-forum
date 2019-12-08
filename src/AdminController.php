@@ -12,54 +12,48 @@ class AdminController extends  MainController implements iController
         if($_SESSION['role'] < 2 || $_SESSION['uzblokuotas'] === '1') {
             $this->redirect_to_another_page('index.php', 0);
         }
+        else {
 
-        if(isset($_GET['id']) && !empty($_GET['id']) && $_GET['id'] != '' && isset($_GET['role']) && !empty($_GET['role']) && $_GET['role'] != '' && $_GET['role'] > 0 && 4 > $_GET['role'])
-        {
-            $id = $this->getModel()->secureInput($_GET['id']);
-            $role = $this->getModel()->secureInput($_GET['role']);
-            $data = $this->getModel()->getDataByColumnFirst("naudotojai", "id",$id);
-            if( $data['role'] !== $_GET['role'] && $data['id'] == $_GET['id']) {
-                $this->getModel()->updateDataOneColumn("naudotojai", $_GET['id'], "role", $role);
-                $this->printSuccess("sėkmingai pakeista privilegija");
-            }
-        }
-        else if(isset($_GET['id']) && !empty($_GET['id']) && $_GET['id'] != '' && isset($_GET['uztildytas']) && !empty($_GET['uztildytas']) && $_GET['uztildytas'] != '' && $_GET['uztildytas'] >= 0 && 2 > $_GET['uztildytas']) {
-            $id = $this->getModel()->secureInput($_GET['id']);
-            $uztildytas = $this->getModel()->secureInput($_GET['uztildytas']);
-            $data = $this->getModel()->getDataByColumnFirst("naudotojai", "id",$id);
-            if($data['uztildytas'] !== $uztildytas && $id == $id) {
-                $this->getModel()->updateDataOneColumn("naudotojai", $id, "uztildytas", $uztildytas);
-                $this->printSuccess("Sėkmingai užtildytas");
-            }
-            else if($data['uztildytas'] === $_GET['uztildytas'] && $data['id'] == $_GET['id'])
-            {
-                $this->getModel()->updateDataOneColumn("naudotojai", $id, "uztildytas", '0');
-                $this->printSuccess("Vartotojas yra atitildytas");
-
-            }
-
-        }
-        else if(isset($_GET['id']) && !empty($_GET['id']) && $_GET['id'] != '' && isset($_GET['uzblokuotas']) && !empty($_GET['uzblokuotas']) && $_GET['uzblokuotas'] != '' && $_GET['uzblokuotas'] >= 0 && 2 > $_GET['uzblokuotas']) {
-            $id = $this->getModel()->secureInput($_GET['id']);
-            $uzblokuotas = $this->getModel()->secureInput($_GET['uzblokuotas']);
-
-
-            $data = $this->getModel()->getDataByColumnFirst("naudotojai", "id", $id);
-            if($data['uzblokuotas'] !== $uzblokuotas && $data['id'] == $id) {
-                $id = $this->getModel()->secureInput($id);
-                $this->getModel()->updateDataOneColumn("naudotojai", $id, "uzblokuotas", $uzblokuotas);
-                $this->printSuccess("Sėkmingai užblokuotas");
-                if($id === $_SESSION['id'])
-                {
-                    $_SESSION['uzblokuotas'] = '1';
-                    $this->redirect_to_another_page('index.php', 0);
+            if (isset($_GET['id']) && !empty($_GET['id']) && $_GET['id'] != '' && isset($_GET['role']) && !empty($_GET['role']) && $_GET['role'] != '' && $_GET['role'] > 0 && 4 > $_GET['role']) {
+                $id = $this->getModel()->secureInput($_GET['id']);
+                $role = $this->getModel()->secureInput($_GET['role']);
+                $data = $this->getModel()->getDataByColumnFirst("naudotojai", "id", $id);
+                if ($data['role'] !== $_GET['role'] && $data['id'] == $_GET['id']) {
+                    $this->getModel()->updateDataOneColumn("naudotojai", $_GET['id'], "role", $role);
+                    $this->printSuccess("sėkmingai pakeista privilegija");
                 }
-            }
-            else if($data['uzblokuotas'] === $_GET['uzblokuotas'] && $data['id'] == $id)
-            {
-                $id = $this->getModel()->secureInput($id);
-                $this->getModel()->updateDataOneColumn("naudotojai", $id, "uzblokuotas", '0');
-                $this->printSuccess("Vartotojas yra atblokuotas");
+            } else if (isset($_GET['id']) && !empty($_GET['id']) && $_GET['id'] != '' && isset($_GET['uztildytas']) && !empty($_GET['uztildytas']) && $_GET['uztildytas'] != '' && $_GET['uztildytas'] >= 0 && 2 > $_GET['uztildytas']) {
+                $id = $this->getModel()->secureInput($_GET['id']);
+                $uztildytas = $this->getModel()->secureInput($_GET['uztildytas']);
+                $data = $this->getModel()->getDataByColumnFirst("naudotojai", "id", $id);
+                if ($data['uztildytas'] !== $uztildytas && $id == $id) {
+                    $this->getModel()->updateDataOneColumn("naudotojai", $id, "uztildytas", $uztildytas);
+                    $this->printSuccess("Sėkmingai užtildytas");
+                } else if ($data['uztildytas'] === $_GET['uztildytas'] && $data['id'] == $_GET['id']) {
+                    $this->getModel()->updateDataOneColumn("naudotojai", $id, "uztildytas", '0');
+                    $this->printSuccess("Vartotojas yra atitildytas");
+
+                }
+
+            } else if (isset($_GET['id']) && !empty($_GET['id']) && $_GET['id'] != '' && isset($_GET['uzblokuotas']) && !empty($_GET['uzblokuotas']) && $_GET['uzblokuotas'] != '' && $_GET['uzblokuotas'] >= 0 && 2 > $_GET['uzblokuotas']) {
+                $id = $this->getModel()->secureInput($_GET['id']);
+                $uzblokuotas = $this->getModel()->secureInput($_GET['uzblokuotas']);
+
+
+                $data = $this->getModel()->getDataByColumnFirst("naudotojai", "id", $id);
+                if ($data['uzblokuotas'] !== $uzblokuotas && $data['id'] == $id) {
+                    $id = $this->getModel()->secureInput($id);
+                    $this->getModel()->updateDataOneColumn("naudotojai", $id, "uzblokuotas", $uzblokuotas);
+                    $this->printSuccess("Sėkmingai užblokuotas");
+                    if ($id === $_SESSION['id']) {
+                        $_SESSION['uzblokuotas'] = '1';
+                        $this->redirect_to_another_page('index.php', 0);
+                    }
+                } else if ($data['uzblokuotas'] === $_GET['uzblokuotas'] && $data['id'] == $id) {
+                    $id = $this->getModel()->secureInput($id);
+                    $this->getModel()->updateDataOneColumn("naudotojai", $id, "uzblokuotas", '0');
+                    $this->printSuccess("Vartotojas yra atblokuotas");
+                }
             }
         }
 
