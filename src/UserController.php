@@ -45,8 +45,12 @@ class UserController extends MainController implements iController
 
             if($this->getModel()->registerUser($username, $email, $password, $passwordRepeat, $country, $address, $phoneNum, $surname, $realName, $birthDate, $city, $favGame, $description,
                 $discID, $faceID, $instaID, $skypeID, $sign, $snapID, $website, $school, $degree)) {
+                $ip = $this->getModel()->getIP();
+                $this->getModel()->updateLog("Registracija sėkminga!", $ip);
                 $this->getView()->printSuccess('Registracija sėkminga!');
             } else {
+                $ip = $this->getModel()->getIP();
+                $this->getModel()->updateLog("Registracijos klaida", $ip);
                 $this->getView()->printDanger('Klaida');
             }
         }

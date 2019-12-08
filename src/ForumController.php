@@ -12,6 +12,8 @@ class ForumController extends MainController implements iController
     {
         if($_SESSION['uzblokuotas'] === '1')
         {
+            $ip = $this->getModel()->getIP();
+            $this->getModel()->updateLog("Naudotojas neleistinai bandė prieiti prie puslapio", $ip);
             $this->redirect_to_another_page('index.php', 0);
         }
 
@@ -23,6 +25,8 @@ class ForumController extends MainController implements iController
         {
             if(empty($_POST['catalogName']))
             {
+                $ip = $this->getModel()->getIP();
+                $this->getModel()->updateLog("Kategorija kurta be pavadinimo", $ip);
                 $this->getView()->printDanger('Įveskite pavadinimą!');
             }
             else
@@ -30,6 +34,9 @@ class ForumController extends MainController implements iController
                 $this->getView()->printSuccess('Sukurta!');
                 if($this->getModel()->createNewCatalog($_POST['catalogName'], $this->getDateTime()))
                 {
+                    $ip = $this->getModel()->getIP();
+                    $this->getModel()->updateLog("Sukurta nauja kategorija: ".$_POST['catalogName']." ", $ip);
+
                     $this->redirect_to_another_page('forum.php', 0);
                 }
             }
@@ -38,11 +45,15 @@ class ForumController extends MainController implements iController
         {
             if($this->getModel()->removeData('katalogai', $_POST['deleteButton']))
             {
+                $ip = $this->getModel()->getIP();
+                $this->getModel()->updateLog("Ištrinta kategorija ", $ip);
                 $this->printSuccess('Istrinta!');
                 $this->redirect_to_another_page('forum.php', 0);
             }
             else
             {
+                $ip = $this->getModel()->getIP();
+                $this->getModel()->updateLog("Kategorijos trynimo klaida", $ip);
                 $this->printDanger('Ivyko klaida!');
             }
         }
@@ -53,6 +64,8 @@ class ForumController extends MainController implements iController
     {
         if(!isset($_GET['id']) || $_SESSION['uzblokuotas'] === '1')
         {
+            $ip = $this->getModel()->getIP();
+            $this->getModel()->updateLog("Neisitinas jungimasis prie puslapio", $ip);
             $this->printDanger('Ivyko klaida!');
             $this->redirect_to_another_page('forum.php', 0);
             return;
@@ -66,11 +79,15 @@ class ForumController extends MainController implements iController
         {
             if($this->getModel()->removeData('temos', $_POST['deleteThemeBtn']))
             {
+                $ip = $this->getModel()->getIP();
+                $this->getModel()->updateLog("Ištrinta tema ", $ip);
                 $this->printSuccess('Istrinta!');
                 $this->redirect_to_another_page('themes.php?id=' . $_GET['id'], 0);
             }
             else
             {
+                $ip = $this->getModel()->getIP();
+                $this->getModel()->updateLog("Temos trynimo klaida", $ip);
                 $this->printDanger('Klaida!');
             }
         }
@@ -82,6 +99,8 @@ class ForumController extends MainController implements iController
     {
         if(!isset($_GET['id']) || $_SESSION['uztildytas'] === '1' || $_SESSION['uzbokuotas'] === '1')
         {
+            $ip = $this->getModel()->getIP();
+            $this->getModel()->updateLog("Neleistinas bandymas eiti į puslapį", $ip);
             $this->printDanger('Ivyko klaida!');
             $this->redirect_to_another_page('forum.php', 0);
             return;
@@ -93,6 +112,8 @@ class ForumController extends MainController implements iController
         {
             if(empty($_POST['themeName']) || empty($_POST['themeText']))
             {
+                $ip = $this->getModel()->getIP();
+                $this->getModel()->updateLog("Tamos pavadinimas arba tekstato laukas tuščias", $ip);
                 $this->printDanger('Iveskite kazka!');
                 return;
             }
@@ -100,12 +121,16 @@ class ForumController extends MainController implements iController
 
             if($this->getModel()->createNewTheme($_POST['themeName'], $this->getDateTime(), $_SESSION['id'], $_GET['id'], $_POST['themeText']))
             {
+                $ip = $this->getModel()->getIP();
+                $this->getModel()->updateLog("Sukurta nauja tema: ".$_POST['themeName']." ", $ip);
                 $this->printSuccess('Tema sukurta!');
                 $newThemeId = $this->getModel()->getLastCreatedTheme();
                 $this->redirect_to_another_page('viewtheme.php?id=' . $newThemeId, 1);
             }
             else
             {
+                $ip = $this->getModel()->getIP();
+                $this->getModel()->updateLog("Nenumatyta klaida Naujos temos sukūrime", $ip);
                 $this->printDanger('Nenumatyta klaida!');
             }
 
@@ -117,6 +142,8 @@ class ForumController extends MainController implements iController
     {
         if(!isset($_GET['id']))
         {
+            $ip = $this->getModel()->getIP();
+            $this->getModel()->updateLog("Naudotojas neleistinai bandė panaudoti puslapį", $ip);
             $this->printDanger('Ivyko klaida!');
             $this->redirect_to_another_page('forum.php', 0);
             return;
@@ -129,6 +156,8 @@ class ForumController extends MainController implements iController
 
         if($themeAnswerList == null)
         {
+            $ip = $this->getModel()->getIP();
+            $this->getModel()->updateLog("Tema su tokiu ID neegzistuoja!", $ip);
             $this->printDanger('Tema su tokiu ID neegzistuoja!');
             return;
         }
@@ -145,17 +174,22 @@ class ForumController extends MainController implements iController
         {
             if(empty($_POST['text']))
             {
+                $ip = $this->getModel()->getIP();
+                $this->getModel()->updateLog("Tuščias komentaras", $ip);
                 $this->printDanger('Irašykite kažką!');
             }
             else
             {
                 if($this->getModel()->createNewThemeAnswer($_POST['text'], $this->getDateTime(), $_SESSION['id'], $_GET['id']))
                 {
+                    $ip = $this->getModel()->getIP();
+                    $this->getModel()->updateLog("Temos atsakymas sukurtas: ".$_POST['text']." ", $ip);
                     $this->printSuccess('Temos atsakymas sukurtas!');
                     $this->redirect_to_another_page('viewtheme.php?id='.$_GET['id'], 1);
                 }
                 else
                 {
+
                     $this->printDanger('Ivyko klaida!');
                 }
             }
@@ -165,6 +199,8 @@ class ForumController extends MainController implements iController
         {
             if($this->getModel()->removeData('temu_atsakymai', $_POST['deleteBtn']))
             {
+                $ip = $this->getModel()->getIP();
+                $this->getModel()->updateLog("Temos atsakymas išįrintas ", $ip);
                 $this->printSuccess('Istrinta!');
                 $this->redirect_to_another_page('viewtheme.php?id='.$_GET['id'], 1);
             }
@@ -191,6 +227,8 @@ class ForumController extends MainController implements iController
     {
         if(!isset($_GET['id']))
         {
+            $ip = $this->getModel()->getIP();
+            $this->getModel()->updateLog("Ivyko klaida su id", $ip);
             $this->printDanger('Ivyko klaida!');
             $this->redirect_to_another_page('forum.php', 0);
             return;
@@ -198,6 +236,8 @@ class ForumController extends MainController implements iController
 
         if(!$this->getModel()->checkIfICanEditThisTheme($_SESSION['id'], $_GET['id']) || !$_SESSION['id'] == 3)
         {
+            $ip = $this->getModel()->getIP();
+            $this->getModel()->updateLog("Neturite teises tvarkyti temos puslapio", $ip);
             $this->printDanger('Neturite teises matyti sio puslapio!');
             $this->redirect_to_another_page('forum.php', 0);
             return;
@@ -213,16 +253,22 @@ class ForumController extends MainController implements iController
             {
                 if($this->getModel()->updateDataOneColumn('temu_atsakymai', $_GET['id'], 'tekstas', $_POST['text']))
                 {
+                    $ip = $this->getModel()->getIP();
+                    $this->getModel()->updateLog("Komanteras atnaujintas: ".$_POST['text']."", $ip);
                     $this->printSuccess('Komentaras atnaujintas!');
                     $this->redirect_to_another_page('viewtheme.php?id='.$content['fk_tema'], 0);
                 }
                 else
                 {
+                    $ip = $this->getModel()->getIP();
+                    $this->getModel()->updateLog("Ivyko klaida! Komentaro atnaujiname", $ip);
                     $this->printDanger('Ivyko klaida!');
                 }
             }
             else
             {
+                $ip = $this->getModel()->getIP();
+                $this->getModel()->updateLog("Ivyko klaida! Negalima pateikti tuščio komentaro!", $ip);
                 $this->printDanger('Ivyko klaida! Negalima pateikti tuščio komentaro!');
             }
         }
@@ -233,6 +279,8 @@ class ForumController extends MainController implements iController
     {
         if($_SESSION['uzblokuotas'] === '1')
         {
+            $ip = $this->getModel()->getIP();
+            $this->getModel()->updateLog("Naudotojas neleistinai bandė panaudoti puslapįu", $ip);
             $this->redirect_to_another_page('index.php', 0);
         }
 
@@ -245,6 +293,9 @@ class ForumController extends MainController implements iController
         {
             $catalogList = $this->getModel()->getCatalogListByPattern($_POST['searchText']);
             $themeList = $this->getModel()->getThemeListByPattern($_POST['searchText']);
+
+            $ip = $this->getModel()->getIP();
+            $this->getModel()->updateLog("Atlikta paieška: ".$_POST['searchText']."", $ip);
 
             $this->getView()->printCatalogSearchResults($catalogList, $themeList);
         }
