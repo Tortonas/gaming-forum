@@ -381,14 +381,14 @@ class Model {
         $sql = "INSERT INTO temu_pamegimai (sukurimo_data, fk_naudotojas, fk_temos_atsakymas) VALUES ('$date', '$userId', '$themeAnsId')";
         if($this->conn->query($sql))
         {
-            $ip = $this->getModel()->getIP();
-            $this->getModel()->updateLog("Pamėgta tema: $themeAnsId", $ip);
+            $ip = $this->getIP();
+            $this->updateLog("Pamėgta tema: $themeAnsId", $ip);
             return true;
         }
         else
         {
-            $ip = $this->getModel()->getIP();
-            $this->getModel()->updateLog("Temos pamėgime erroras: ".mysqli_error($this->conn)."", $ip);
+            $ip = $this->getIP();
+            $this->updateLog("Temos pamėgime erroras: ".mysqli_error($this->conn)."", $ip);
             echo mysqli_error($this->conn);
             return false;
         }
@@ -435,8 +435,8 @@ class Model {
         }
         else
         {
-            $ip = $this->getModel()->getIP();
-            $this->getModel()->updateLog("Temos ataskymo erroras: ".mysqli_error($this->conn)."", $ip);
+            $ip = $this->getIP();
+            $this->updateLog("Temos ataskymo erroras: ".mysqli_error($this->conn)."", $ip);
             echo mysqli_error($this->conn);
             return false;
         }
@@ -464,8 +464,8 @@ class Model {
             return $result;
         }else
         {
-            $ip = $this->getModel()->getIP();
-            $this->getModel()->updateLog("Duombzės užklausos erroras: ".mysqli_error($this->conn)."", $ip);
+            $ip = $this->getIP();
+            $this->updateLog("Duombzės užklausos erroras: ".mysqli_error($this->conn)."", $ip);
             echo mysqli_error($this->conn);
             return -1;
         }
@@ -501,8 +501,8 @@ class Model {
                     return $result;
                 }else
                 {
-                    $ip = $this->getModel()->getIP();
-                    $this->getModel()->updateLog("Duombzės užklausos erroras: ".mysqli_error($this->conn)."", $ip);
+                    $ip = $this->getIP();
+                    $this->updateLog("Duombzės užklausos erroras: ".mysqli_error($this->conn)."", $ip);
                     echo mysqli_error($this->conn);
                     return -1;
                 }
@@ -515,8 +515,8 @@ class Model {
         }
         else
         {
-            $ip = $this->getModel()->getIP();
-            $this->getModel()->updateLog("Duombzės užklausos erroras: ".mysqli_error($this->conn)."", $ip);
+            $ip = $this->getIP();
+            $this->updateLog("Duombzės užklausos erroras: ".mysqli_error($this->conn)."", $ip);
             echo mysqli_error($this->conn);
             return -1;
         }
@@ -533,8 +533,8 @@ class Model {
             return false;
         }
         else {
-            $ip = $this->getModel()->getIP();
-            $this->getModel()->updateLog("Duombzės užklausos erroras: ".mysqli_error($this->conn)."", $ip);
+            $ip = $this->getIP();
+            $this->updateLog("Duombzės užklausos erroras: ".mysqli_error($this->conn)."", $ip);
             echo mysqli_error($this->conn);
             return true;
         }
@@ -561,8 +561,8 @@ class Model {
         }
         else
         {
-            $ip = $this->getModel()->getIP();
-            $this->getModel()->updateLog("Duombzės užklausos erroras: ".mysqli_error($this->conn)."", $ip);
+            $ip = $this->getIP();
+            $this->updateLog("Duombzės užklausos erroras: ".mysqli_error($this->conn)."", $ip);
             echo mysqli_error($this->conn);
             return -1;
         }
@@ -584,8 +584,8 @@ class Model {
             return $result;
         }else
         {
-            $ip = $this->getModel()->getIP();
-            $this->getModel()->updateLog("Duombzės užklausos erroras: ".mysqli_error($this->conn)."", $ip);
+            $ip = $this->getIP();
+            $this->updateLog("Duombzės užklausos erroras: ".mysqli_error($this->conn)."", $ip);
             echo mysqli_error($this->conn);
             return -1;
         }
@@ -608,8 +608,8 @@ class Model {
         }
         else
         {
-            $ip = $this->getModel()->getIP();
-            $this->getModel()->updateLog("Duombzės užklausos erroras: ".mysqli_error($this->conn)."", $ip);
+            $ip = $this->getIP();
+            $this->updateLog("Duombzės užklausos erroras: ".mysqli_error($this->conn)."", $ip);
             echo mysqli_error($this->conn);
             return -1;
         }
@@ -626,8 +626,8 @@ class Model {
             return false;
         }
         else {
-            $ip = $this->getModel()->getIP();
-            $this->getModel()->updateLog("Duombzės užklausos erroras: ".mysqli_error($this->conn)."", $ip);
+            $ip = $this->getIP();
+            $this->updateLog("Duombzės užklausos erroras: ".mysqli_error($this->conn)."", $ip);
             echo mysqli_error($this->conn);
             return true;
         }
@@ -642,8 +642,8 @@ class Model {
             return false;
         }
         else {
-            $ip = $this->getModel()->getIP();
-            $this->getModel()->updateLog("Duombzės užklausos erroras: ".mysqli_error($this->conn)."", $ip);
+            $ip = $this->getIP();
+            $this->updateLog("Duombzės užklausos erroras: ".mysqli_error($this->conn)."", $ip);
             echo mysqli_error($this->conn);
             return true;
         }
@@ -671,8 +671,8 @@ class Model {
         }
         else
         {
-            $ip = $this->getModel()->getIP();
-            $this->getModel()->updateLog("Duombzės užklausos erroras: ".mysqli_error($this->conn)."", $ip);
+            $ip = $this->getIP();
+            $this->updateLog("Duombzės užklausos erroras: ".mysqli_error($this->conn)."", $ip);
             echo mysqli_error($this->conn);
             return -1;
         }
@@ -690,8 +690,8 @@ class Model {
             return false;
         }
         else {
-            $ip = $this->getModel()->getIP();
-            $this->getModel()->updateLog("Duombzės užklausos erroras: ".mysqli_error($this->conn)."", $ip);
+            $ip = $this->getIP();
+            $this->updateLog("Duombzės užklausos erroras: ".mysqli_error($this->conn)."", $ip);
             echo mysqli_error($this->conn);
             return true;
         }
@@ -712,8 +712,8 @@ class Model {
         }
         else
         {
-            $ip = $this->getModel()->getIP();
-            $this->getModel()->updateLog("Duombzės užklausos erroras: ".mysqli_error($this->conn)."", $ip);
+            $ip = $this->getIP();
+            $this->updateLog("Duombzės užklausos erroras: ".mysqli_error($this->conn)."", $ip);
             echo mysqli_error($this->conn);
             return -1;
         }
@@ -730,8 +730,8 @@ class Model {
             return false;
         }
         else {
-            $ip = $this->getModel()->getIP();
-            $this->getModel()->updateLog("Duombzės užklausos erroras: ".mysqli_error($this->conn)."", $ip);
+            $ip = $this->getIP();
+            $this->updateLog("Duombzės užklausos erroras: ".mysqli_error($this->conn)."", $ip);
             echo mysqli_error($this->conn);
             return true;
         }
@@ -748,8 +748,8 @@ class Model {
             return false;
         }
         else {
-            $ip = $this->getModel()->getIP();
-            $this->getModel()->updateLog("Duombzės užklausos erroras: ".mysqli_error($this->conn)."", $ip);
+            $ip = $this->getIP();
+            $this->updateLog("Duombzės užklausos erroras: ".mysqli_error($this->conn)."", $ip);
             echo mysqli_error($this->conn);
             return true;
         }
@@ -821,8 +821,8 @@ class Model {
         }
         else
         {
-            $ip = $this->getModel()->getIP();
-            $this->getModel()->updateLog("Duombzės užklausos erroras: ".mysqli_error($this->conn)."", $ip);
+            $ip = $this->getIP();
+            $this->updateLog("Duombzės užklausos erroras: ".mysqli_error($this->conn)."", $ip);
             echo mysqli_error($this->conn);
             return -1;
         }
@@ -920,8 +920,8 @@ class Model {
         }
         else
         {
-            $ip = $this->getModel()->getIP();
-            $this->getModel()->updateLog("Duombzės užklausos erroras: ".mysqli_error($this->conn)."", $ip);
+            $ip = $this->getIP();
+            $this->updateLog("Duombzės užklausos erroras: ".mysqli_error($this->conn)."", $ip);
             echo mysqli_error($this->conn);
             return false;
         }
@@ -941,8 +941,8 @@ class Model {
         }
         else
         {
-            $ip = $this->getModel()->getIP();
-            $this->getModel()->updateLog("Duombzės užklausos erroras: ".mysqli_error($this->conn)."", $ip);
+            $ip = $this->getIP();
+            $this->updateLog("Duombzės užklausos erroras: ".mysqli_error($this->conn)."", $ip);
             echo mysqli_error($this->conn);
             return false;
         }
@@ -1125,8 +1125,8 @@ class Model {
         {
 
         } else {
-            $ip = $this->getModel()->getIP();
-            $this->getModel()->updateLog("Duombzės užklausos erroras: ".mysqli_error($this->conn)."", $ip);
+            $ip = $this->getIP();
+            $this->updateLog("Duombzės užklausos erroras: ".mysqli_error($this->conn)."", $ip);
             echo mysqli_error($this->conn);
             return false;
         }
@@ -1199,8 +1199,10 @@ class Model {
     public function updateLog($text, $ip)
     {
         $text = $this->secureInput($text);
-        $userId = 1;
-        $this->getDataByColumnFirst('naudotojai', 'slapyvardis', 'admin');
+        $temp = 'admin';
+        $data = $this->getDataByColumnFirst("naudotojai", "slapyvardis", $temp);
+        $userId = $data['id'];
+
         if ($_SESSION['id'] >= 1)
         {
             $userId = $this->secureInput($_SESSION['id']);
