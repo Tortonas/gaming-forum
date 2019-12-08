@@ -112,10 +112,11 @@ class View
     {
         echo '
                 <ul class="list-group">';
-        if ($users) {
-            echo '<li class="list-group-item">
+                 echo '<li class="list-group-item">
                    Prisijungusio valdytojo vardas: '.$_SESSION['slapyvardis'].'
-                  </li>';
+                 </li>';
+        if ($users) {
+
             while ($row = mysqli_fetch_assoc($users)) {
                 echo'<li class="list-group-item">
                 '.$row['slapyvardis'].' 
