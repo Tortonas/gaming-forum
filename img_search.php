@@ -21,7 +21,7 @@ $controller = new GalleryController();
 <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
     <div class='container'>
         <?php
-            MainController::printNavigationBar("login.php");
+            MainController::printNavigationBar("gallery.php");
         ?>
     </div>
 </nav>

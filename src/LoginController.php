@@ -7,6 +7,11 @@ class LoginController extends MainController implements iController
     }
     public function printPageView()
     {
+        if($_SESSION['uzblokuotas'] === '1' || $_SESSION['role'] >= 1)
+        {
+            $this->redirect_to_another_page('index.php', 0);
+        }
+
         $this->getView()->printLoginPage();
         if(isset($_POST['loginBtn']))
         {
