@@ -68,9 +68,9 @@ class GalleryController extends MainController implements iController
                             if ($id == -1 )
                             {
                                 $error_flag = true;
-                                $ip = $this->getModel()->getIP();
-                                $this->getModel()->updateLog("Nepavyko įkelti nuotraukos etikečių!", $ip);
-                                $this->getView()->printDanger("Nepavyko įkelti nuotraukos etikečių!");
+//                                $ip = $this->getModel()->getIP();
+//                                $this->getModel()->updateLog("Nepavyko įkelti nuotraukos etikečių!", $ip);
+//                                $this->getView()->printDanger("Nepavyko įkelti nuotraukos etikečių!");
                                 break;
                             }
                             array_push($inserted_tag_ids, $id);
@@ -83,8 +83,8 @@ class GalleryController extends MainController implements iController
                                 $error_flag = $this->getModel()->gallery_assign_tag_to_img($img_id, $tag_id);
                                 if($error_flag == true)
                                 {
-                                    $ip = $this->getModel()->getIP();
-                                    $this->getModel()->updateLog("Nepavyko priskirti nuotraukų prie etikečių!", $ip);
+//                                    $ip = $this->getModel()->getIP();
+//                                    $this->getModel()->updateLog("Nepavyko priskirti nuotraukų prie etikečių!", $ip);
                                     $this->getView()->printDanger("Nepavyko priskirti nuotraukų prie etikečių!");
                                     break;
                                 }
@@ -94,15 +94,15 @@ class GalleryController extends MainController implements iController
                             if ($img_likes_id == -1)
                             {
                                 $error_flag = true;
-                                $ip = $this->getModel()->getIP();
-                                $this->getModel()->updateLog("Nepavyko priskirti pamėgimų prie nuotraukos!", $ip);
+//                                $ip = $this->getModel()->getIP();
+//                                $this->getModel()->updateLog("Nepavyko priskirti pamėgimų prie nuotraukos!", $ip);
                                 $this->getView()->printDanger("Nepavyko priskirti pamėgimų prie nuotraukos!");
                             }
 
                             if($error_flag != true)
                             {
-                                $ip = $this->getModel()->getIP();
-                                $this->getModel()->updateLog("Nuotrauka sėkmingai įkelta", $ip);
+//                                $ip = $this->getModel()->getIP();
+//                                $this->getModel()->updateLog("Nuotrauka sėkmingai įkelta", $ip);
                                 $this->getView()->printSuccess("Nuotrauka sėkmingai įkelta");
                             }
 
@@ -110,36 +110,36 @@ class GalleryController extends MainController implements iController
 
                     }else {
                         $error_flag = true;
-                        $ip = $this->getModel()->getIP();
-                        $this->getModel()->updateLog("Nuotraukos dydis yra per didelis!", $ip);
+//                        $ip = $this->getModel()->getIP();
+//                        $this->getModel()->updateLog("Nuotraukos dydis yra per didelis!", $ip);
                         $this->getView()->printDanger("Nuotraukos dydis yra per didelis!");
                     }
                 }else
                 {
                     $error_flag = true;
-                    $ip = $this->getModel()->getIP();
-                    $this->getModel()->updateLog("Nuotraukos nepavyko įkelti!", $ip);
+//                    $ip = $this->getModel()->getIP();
+//                    $this->getModel()->updateLog("Nuotraukos nepavyko įkelti!", $ip);
                     $this->getView()->printDanger("Nuotraukos nepavyko įkelti!");
                 }
             }else
             {
                 $error_flag = true;
-                $ip = $this->getModel()->getIP();
-                $this->getModel()->updateLog("Nuotraukos formatas privalo būti PNG,JPG arba JPEG!", $ip);
+//                $ip = $this->getModel()->getIP();
+//                $this->getModel()->updateLog("Nuotraukos formatas privalo būti PNG,JPG arba JPEG!", $ip);
                 $this->getView()->printDanger("Nuotraukos formatas privalo būti PNG,JPG arba JPEG!");
             }
         }
 
         if (isset($_SESSION['message'])) {
-            $ip = $this->getModel()->getIP();
-            $this->getModel()->updateLog($_SESSION['message'], $ip);
+//            $ip = $this->getModel()->getIP();
+//            $this->getModel()->updateLog($_SESSION['message'], $ip);
             $this->getView()->printSuccess($_SESSION['message']);
             unset($_SESSION['message']);
         }
 
         if (isset($_SESSION['error'])) {
-            $ip = $this->getModel()->getIP();
-            $this->getModel()->updateLog($_SESSION['error'], $ip);
+//            $ip = $this->getModel()->getIP();
+//            $this->getModel()->updateLog($_SESSION['error'], $ip);
             $this->getView()->printDanger($_SESSION['error']);
             unset($_SESSION['error']);
         }
@@ -151,8 +151,8 @@ class GalleryController extends MainController implements iController
             $error_flag = $this->getModel()->gallery_increase_img_like_count($img_id);
             if($error_flag != true)
             {
-                $ip = $this->getModel()->getIP();
-                $this->getModel()->updateLog("Sėkmingai pavyko pamėgti nuotrauką!", $ip);
+//                $ip = $this->getModel()->getIP();
+//                $this->getModel()->updateLog("Sėkmingai pavyko pamėgti nuotrauką!", $ip);
                 $this->getView()->printSuccess("Sėkmingai pavyko pamėgti nuotrauką!");
             }else
             {
@@ -174,19 +174,19 @@ class GalleryController extends MainController implements iController
                 $error_flag = !unlink($img['nuotraukos_kelias']);
                 if ($error_flag != true)
                 {
-                    $ip = $this->getModel()->getIP();
-                    $this->getModel()->updateLog("Sėkmingai pavyko ištrinti nuotrauką!", $ip);
+//                    $ip = $this->getModel()->getIP();
+//                    $this->getModel()->updateLog("Sėkmingai pavyko ištrinti nuotrauką!", $ip);
                     $this->printSuccess("Sėkmingai pavyko ištrinti nuotrauką!");
                 }else
                 {
-                    $ip = $this->getModel()->getIP();
-                    $this->getModel()->updateLog("Nepavyko ištrinti nuotraukos iš katalogo", $ip);
+//                    $ip = $this->getModel()->getIP();
+//                    $this->getModel()->updateLog("Nepavyko ištrinti nuotraukos iš katalogo", $ip);
                     $this->getView()->printDanger("Nepavyko ištrinti nuotraukos iš katalogo");
                 }
             }else
             {
-                $ip = $this->getModel()->getIP();
-                $this->getModel()->updateLog("Nepavyko ištrinti nuotraukos iš duombazės", $ip);
+//                $ip = $this->getModel()->getIP();
+//                $this->getModel()->updateLog("Nepavyko ištrinti nuotraukos iš duombazės", $ip);
                 $this->getView()->printDanger("Nepavyko ištrinti nuotraukos iš duombazės");
             }
 
@@ -217,8 +217,8 @@ class GalleryController extends MainController implements iController
         $error_flag = false;
         if($_SESSION['uzblokuotas'] === '1')
         {
-            $ip = $this->getModel()->getIP();
-            $this->getModel()->updateLog("Naudotojas neleistinai bandė prieiti prie puslapio", $ip);
+//            $ip = $this->getModel()->getIP();
+//            $this->getModel()->updateLog("Naudotojas neleistinai bandė prieiti prie puslapio", $ip);
             $this->redirect_to_another_page('index.php', 0);
         }
 
@@ -230,8 +230,8 @@ class GalleryController extends MainController implements iController
                 $error_flag = $this->getModel()->gallery_increase_img_like_count($img_id);
                 if($error_flag != true)
                 {
-                    $ip = $this->getModel()->getIP();
-                    $this->getModel()->updateLog("Sėkmingai pavyko pamėgti nuotrauką!", $ip);
+//                    $ip = $this->getModel()->getIP();
+//                    $this->getModel()->updateLog("Sėkmingai pavyko pamėgti nuotrauką!", $ip);
                     $this->getView()->printSuccess("Sėkmingai pavyko pamėgti nuotrauką!");
                 }else
                 {
@@ -242,15 +242,15 @@ class GalleryController extends MainController implements iController
             $img_id = $_GET['img'];
 
             if (isset($_SESSION['message'])) {
-                $ip = $this->getModel()->getIP();
-                $this->getModel()->updateLog($_SESSION['message'], $ip);
+//                $ip = $this->getModel()->getIP();
+//                $this->getModel()->updateLog($_SESSION['message'], $ip);
                 $this->getView()->printSuccess($_SESSION['message']);
                 unset($_SESSION['message']);
             }
 
             if (isset($_SESSION['error'])) {
-                $ip = $this->getModel()->getIP();
-                $this->getModel()->updateLog($_SESSION['error'], $ip);
+//                $ip = $this->getModel()->getIP();
+//                $this->getModel()->updateLog($_SESSION['error'], $ip);
                 $this->getView()->printDanger($_SESSION['error']);
                 unset($_SESSION['error']);
             }
@@ -293,12 +293,12 @@ class GalleryController extends MainController implements iController
 
                     $error_flag = $this->getModel()->gallery_add_image_comment($img_id, $user_id, $comment, $date);
                     if ($error_flag != true) {
-                        $ip = $this->getModel()->getIP();
-                        $this->getModel()->updateLog("Sėkmingai pavyko įkelti komentarą", $ip);
+//                        $ip = $this->getModel()->getIP();
+//                        $this->getModel()->updateLog("Sėkmingai pavyko įkelti komentarą", $ip);
                         $this->getView()->printSuccess("Sėkmingai pavyko įkelti komentarą");
                     } else {
-                        $ip = $this->getModel()->getIP();
-                        $this->getModel()->updateLog("Nepavyko įkelti komentaro į duombazėję!", $ip);
+//                        $ip = $this->getModel()->getIP();
+//                        $this->getModel()->updateLog("Nepavyko įkelti komentaro į duombazėję!", $ip);
                         $this->getView()->printDanger("Nepavyko įkelti komentaro į duombazėję!");
                     }
                 }
@@ -308,12 +308,12 @@ class GalleryController extends MainController implements iController
 
                     $error_flag = $this->getModel()->gallery_delete_image_comment($comment_id);
                     if ($error_flag != true) {
-                        $ip = $this->getModel()->getIP();
-                        $this->getModel()->updateLog("Sėkmingai pavyko ištrinti komentarą iš duombazės!", $ip);
+//                        $ip = $this->getModel()->getIP();
+//                        $this->getModel()->updateLog("Sėkmingai pavyko ištrinti komentarą iš duombazės!", $ip);
                         $this->getView()->printSuccess("Sėkmingai pavyko ištrinti komentarą iš duombazės!");
                     } else {
-                        $ip = $this->getModel()->getIP();
-                        $this->getModel()->updateLog("Nepavyko ištrinti komentaro iš duombazės!", $ip);
+//                        $ip = $this->getModel()->getIP();
+//                        $this->getModel()->updateLog("Nepavyko ištrinti komentaro iš duombazės!", $ip);
                         $this->getView()->printDanger("Nepavyko ištrinti komentaro iš duombazės!");
                     }
 
@@ -335,8 +335,8 @@ class GalleryController extends MainController implements iController
                 }
 
             } else {
-                $ip = $this->getModel()->getIP();
-                $this->getModel()->updateLog("Nepavyko rasti nuotraukos duombazėje!", $ip);
+//                $ip = $this->getModel()->getIP();
+//                $this->getModel()->updateLog("Nepavyko rasti nuotraukos duombazėje!", $ip);
                 $this->getView()->printDanger("Nepavyko rasti nuotraukos duombazėje!");
             }
         }else
@@ -350,8 +350,8 @@ class GalleryController extends MainController implements iController
         $error_flag = false;
         if($_SESSION['uzblokuotas'] === '1' || empty($_SESSION['id']))
         {
-            $ip = $this->getModel()->getIP();
-            $this->getModel()->updateLog("Naudotojas neleistinai bandė prieiti prie puslapio", $ip);
+//            $ip = $this->getModel()->getIP();
+//            $this->getModel()->updateLog("Naudotojas neleistinai bandė prieiti prie puslapio", $ip);
             $this->redirect_to_another_page('gallery.php', 0);
         }
 
@@ -371,8 +371,8 @@ class GalleryController extends MainController implements iController
                     $this->redirect_to_another_page("viewphoto.php?img=".$img_id,0);
                 }else
                 {
-                    $ip = $this->getModel()->getIP();
-                    $this->getModel()->updateLog("Nepavyko atnaujinti komentaro duombazėje!", $ip);
+//                    $ip = $this->getModel()->getIP();
+//                    $this->getModel()->updateLog("Nepavyko atnaujinti komentaro duombazėje!", $ip);
                     $this->getView()->printDanger("Nepavyko atnaujinti komentaro duombazėje!");
                 }
             }
@@ -385,8 +385,8 @@ class GalleryController extends MainController implements iController
 
             }else
             {
-                $ip = $this->getModel()->getIP();
-                $this->getModel()->updateLog("Nepavyko rasti nuotraukos komentaro duombazėje!", $ip);
+//                $ip = $this->getModel()->getIP();
+//                $this->getModel()->updateLog("Nepavyko rasti nuotraukos komentaro duombazėje!", $ip);
                 $this->getView()->printDanger("Nepavyko rasti nuotraukos komentaro duombazėje!");
             }
         }else
@@ -399,8 +399,8 @@ class GalleryController extends MainController implements iController
     {
         if($_SESSION['uzblokuotas'] === '1')
         {
-            $ip = $this->getModel()->getIP();
-            $this->getModel()->updateLog("Naudotojas neleistinai bandė prieiti prie puslapio", $ip);
+//            $ip = $this->getModel()->getIP();
+//            $this->getModel()->updateLog("Naudotojas neleistinai bandė prieiti prie puslapio", $ip);
             $this->redirect_to_another_page('index.php',0);
         }
 
@@ -484,12 +484,12 @@ class GalleryController extends MainController implements iController
                         $this->getView()->print_gallery_images($image);
                     }
                 }
-                $ip = $this->getModel()->getIP();
-                $this->getModel()->updateLog("Nuotraukos paieška", $ip);
+//                $ip = $this->getModel()->getIP();
+//                $this->getModel()->updateLog("Nuotraukos paieška", $ip);
             }else
             {
-                $ip = $this->getModel()->getIP();
-                $this->getModel()->updateLog("Nuotraukų paieška duombazėje nepavyko!", $ip);
+//                $ip = $this->getModel()->getIP();
+//                $this->getModel()->updateLog("Nuotraukų paieška duombazėje nepavyko!", $ip);
                 $this->getView()->printWarning("Nuotraukų paieška duombazėje nepavyko!");
             }
         }
