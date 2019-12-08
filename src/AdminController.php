@@ -29,27 +29,37 @@ class AdminController extends  MainController implements iController
             $data = $this->getModel()->getDataByColumnFirst("naudotojai", "id",$id);
             if($data['uztildytas'] !== $uztildytas && $id == $id) {
                 $this->getModel()->updateDataOneColumn("naudotojai", $id, "uztildytas", $uztildytas);
-                $this->printSuccess("Sėkmingai užtildyta");
+                $this->printSuccess("Sėkmingai užtildytas");
             }
             else if($data['uztildytas'] === $_GET['uztildytas'] && $data['id'] == $_GET['id'])
             {
-                $this->printDanger("Vartotojas jau yra užtildytas");
+                $this->getModel()->updateDataOneColumn("naudotojai", $id, "uztildytas", '0');
+                $this->printSuccess("Vartotojas yra atitildytas");
+
             }
+
         }
         else if(isset($_GET['id']) && !empty($_GET['id']) && $_GET['id'] != '' && isset($_GET['uzblokuotas']) && !empty($_GET['uzblokuotas']) && $_GET['uzblokuotas'] != '' && $_GET['uzblokuotas'] >= 0 && 2 > $_GET['uzblokuotas']) {
             $id = $this->getModel()->secureInput($_GET['id']);
             $uzblokuotas = $this->getModel()->secureInput($_GET['uzblokuotas']);
-            $role = $this->getModel()->secureInput($_GET['role']);
+
+
             $data = $this->getModel()->getDataByColumnFirst("naudotojai", "id", $id);
             if($data['uzblokuotas'] !== $uzblokuotas && $data['id'] == $id) {
                 $id = $this->getModel()->secureInput($id);
-                $role = $this->getModel()->secureInput($role);
                 $this->getModel()->updateDataOneColumn("naudotojai", $id, "uzblokuotas", $uzblokuotas);
-                $this->printSuccess("Sėkmingai užblokuota");
+                $this->printSuccess("Sėkmingai užblokuotas");
+                if($id === $_SESSION['id'])
+                {
+                    $_SESSION['uzblokuotas'] = '1';
+                    $this->redirect_to_another_page('index.php', 0);
+                }
             }
-            else if($data['uzblokuotas'] === $_GET['uzblokuotas'] && $data['id'] == $_GET['id'])
+            else if($data['uzblokuotas'] === $_GET['uzblokuotas'] && $data['id'] == $id)
             {
-                $this->printDanger("Vartotojas jau yra užblokuotas");
+                $id = $this->getModel()->secureInput($id);
+                $this->getModel()->updateDataOneColumn("naudotojai", $id, "uzblokuotas", '0');
+                $this->printSuccess("Vartotojas yra atblokuotas");
             }
         }
 
@@ -82,23 +92,36 @@ class AdminController extends  MainController implements iController
         $sum = 0;
         $id = $this->getModel()->secureInput($_GET['id']);
         foreach ($_POST as $param_name => $param_val) {
-
-            if($param_name !== 'id' && $param_name != "slapyvardis" && isset($param_val) && !empty($param_val) && $param_val != '')
-            {
-                $this->getModel()->updateDataOneColumn("naudotojai", $id, $param_name, $param_val);
+            $value = $this->getModel()->secureInput($param_val);
+            if(isset($_POST['request']) && $_POST['request'] == "visiDuomenys") {
+                if ($param_name !== 'id' && $param_name != "slapyvardis" && $param_name != "request" &&  isset($value) && !empty($value) && $value != '') {
+                    $this->getModel()->updateDataOneColumn("naudotojai", $id, $param_name, $value);
+                } else if (($param_name == 'email') && ( $param_name != "request" && !isset($value) || empty($value) || $value == '')) {
+                    $this->printDanger('Laukai yra tušti');
+                    $check = false;
+                } else if ($param_name === 'slapyvardis') {
+                    $this->printDanger('Laukai yra tušti');
+                    $check = false;
+                }
+                $sum++;
             }
-            else if(($param_name == 'email') && (!isset($param_val) || empty($param_val) || $param_val == ''))
-            {
-                $this->printDanger('Laukai yra tušti');
-                $check = false;
-            }
-            else if($param_name === 'slapyvardis')
-            {
-                $this->printDanger('Laukai yra tušti');
-                $check = false;
-            }
-            $sum++;
         }
+
+        if(isset($_POST['request']) && $_POST['request'] == "slaptazodisSubmit" ) {
+
+            $password = $this->getModel()->secureInput($_POST['slaptazodis']) ;
+            $passwordCheck = $this->getModel()->secureInput($_POST['slaptazodisPakartoti']);
+            $id = $this->getModel()->secureInput($_GET['id']);
+
+            if ($this->getModel()->changePasswdAdmin($id, $password, $passwordCheck))
+            {
+                $this->getView()->printSuccess('Slaptažodis sėkmingai pakeistas');
+            } else {
+                $this->getView()->printDanger('Klaida');
+            }
+
+        }
+
         if($check === true && $sum > 0)
         {
             $this->printSuccess("Sėkmingai pakeisti duomenys");
