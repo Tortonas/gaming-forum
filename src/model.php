@@ -1209,5 +1209,6 @@ class Model {
         $ip = $this->getModel()->getIP();
         $this->getModel()->updateLog("Duombzės užklausos erroras: ".mysqli_error($this->conn)."", $ip);
         echo mysqli_error($this->conn);
+        return true;
     }
 }
