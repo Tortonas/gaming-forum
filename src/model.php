@@ -1200,6 +1200,7 @@ class Model {
     {
         $text = $this->secureInput($text);
         $userId = 1;
+        $this->getDataByColumnFirst('naudotojai', 'slapyvardis', 'admin');
         if ($_SESSION['id'] >= 1)
         {
             $userId = $this->secureInput($_SESSION['id']);
