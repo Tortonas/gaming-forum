@@ -10,6 +10,11 @@ class UserController extends MainController implements iController
     // register.php
     public function printPageView()
     {
+        if($_SESSION['uzblokuotas'] === '1' || $_SESSION['role'] > 0)
+        {
+            $this->redirect_to_another_page('index.php', 0);
+        }
+
         $this->getView()->printRegisterForm();
 
         if (isset($_POST['registerBtn']))

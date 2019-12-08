@@ -18,19 +18,22 @@ class View
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav mr-auto">';
         self::printNavbarItem("Namai", "index.php", $location);
-        self::printNavbarItem("Forumas", "forum.php", $location);
-        self::printNavbarItem("Galerija", "gallery.php", $location);
-        if ($_SESSION['role'] == "0") {
-            self::printNavbarItem("Registruotis", "register.php", $location);
-            self::printNavbarItem("Prisijungti", "login.php", $location);
-        } else {
-            if ($_SESSION['role'] == 3) {
-                self::printNavbarItem("Admin", "adminpanel.php", $location);
-            }
-            self::printNavbarItem("Nustatymai", "settings.php", $location);
-            self::printNavbarItem("Atsijungti", "logout.php", $location);
+        if($_SESSION['uzblokuotas'] !== '1') {
+            self::printNavbarItem("Forumas", "forum.php", $location);
+            self::printNavbarItem("Galerija", "gallery.php", $location);
         }
-        echo '</ul>
+            if ($_SESSION['role'] == "0") {
+                self::printNavbarItem("Registruotis", "register.php", $location);
+                self::printNavbarItem("Prisijungti", "login.php", $location);
+            } else {
+                if ($_SESSION['role'] >= 2 && $_SESSION['uzblokuotas'] !== '1') {
+                    self::printNavbarItem("Valdymas", "adminpanel.php", $location);
+                }
+                self::printNavbarItem("Nustatymai", "settings.php", $location);
+                self::printNavbarItem("Atsijungti", "logout.php", $location);
+            }
+            if( $_SESSION['uzblokuotas'] !== '1') {
+                echo '</ul>
             <form class="form-inline my-2 my-lg-0" method="POST" action="search.php">
                 <input class="form-control mr-sm-2" type="search" name="searchText" placeholder="Raktažodis paieškai" aria-label="Search">
                 <button class="btn btn-outline-light my-2 my-sm-0" type="submit">Ieškoti</button>
@@ -38,6 +41,8 @@ class View
             </div>
           </nav>
         ';
+            }
+
     }
 
     private static function printNavbarItem($name, $location, $globalLocation)
@@ -114,46 +119,45 @@ class View
                 <form class="btn">
                 <input type="hidden" name="id" value="'.$row['id'].'">
                 <button type="submit" name="uztildytas" value="1" class="btn btn-warning btn-sm">Užtildyti</button>
-                </form>
+                </form>';
+             if($_SESSION['role'] == 3) {
+                 echo '
                 <form class="btn">
-                <input type="hidden" name="id" value="'.$row['id'].'">
+                <input type="hidden" name="id" value="' . $row['id'] . '">
                 <button type="submit" name="uzblokuotas" value="1" class="btn btn-danger btn-sm">Užblokuoti</button>
                 </form>
-                <a href="edituser.php?id='.$row['id'].'"><button type="button" class="btn btn-primary btn-sm">Redaguoti naudotoją</button> </a>
+                <a href="edituser.php?id=' . $row['id'] . '"><button type="button" class="btn btn-primary btn-sm">Redaguoti naudotoją</button> </a>
                 <form class="btn">
                 <select class="btn btn-light" name="role">
                 ';
-                if($row['role'] == 1)
-                {
-                    echo '<option selected value = "1" > Naudotojas</option >
+
+                 if ($row['role'] == 1) {
+                     echo '<option selected value = "1" > Naudotojas</option >
                           <option value = "2" > Moderatorius</option >
                           <option value = "3" > Administratorius</option >
                      </select>
                 ';
-                }
-                else if($row['role'] == 2)
-                {
-                    echo '<option value = "1" > Naudotojas</option >
+                 } else if ($row['role'] == 2) {
+                     echo '<option value = "1" > Naudotojas</option >
                           <option selected value = "2" > Moderatorius</option >
                           <option value = "3" > Administratorius</option >
                      </select>     
                 ';
-                }
-                else if($row['role'] == 3)
-                {
-                    echo '<option value = "1" > Naudotojas</option >
+                 } else if ($row['role'] == 3) {
+                     echo '<option value = "1" > Naudotojas</option >
                           <option value = "2" > Moderatorius</option >
                           <option selected value = "3" > Administratorius</option >
                      </select>
                 ';
-                }
+                 }
 
-                    echo '
+                 echo '
                 
-                <input type="hidden" name="id" value="'.$row['id'].'">
+                <input type="hidden" name="id" value="' . $row['id'] . '">
                 <button type="submit" class="btn btn-primary btn-sm">Pakeisti rolę</button>
                 </form>
              </li>';
+             }
 
             }
         }
@@ -175,7 +179,7 @@ class View
         if ($catalogs) {
             echo '<ul class="list-group">';
             while ($row = mysqli_fetch_assoc($catalogs)) {
-                if ($role == 3 || $role == 2) {
+                if ($role == 3) {
                     echo '<li class="list-group-item"><h2><a href="themes.php?id=' . $row['id'] . '">' . $row['pavadinimas'] . '</a> <button class="btn btn-danger btn-sm" type="submit" name="deleteButton" value="' . $row['id'] . '">Naikinti</button></h2></li>';
                 } else {
                     echo '<li class="list-group-item"><h2><a href="themes.php?id=' . $row['id'] . '">' . $row['pavadinimas'] . '</a></h2></li>';
@@ -188,7 +192,7 @@ class View
 
         echo '</form>';
 
-        if ($role == 3 || $role == 2) {
+        if ($role == 3 && $_SESSION['uztildytas'] === '0') {
             echo '<br>
         <form method="POST">
             <div class="input-group mb-3">
@@ -210,7 +214,7 @@ class View
         if ($themeList) {
             while ($row = $themeList->fetch_assoc()) {
                 echo '<ul class="list-group">';
-                if ($_SESSION['role'] >= 3) {
+                if ($_SESSION['role'] >= 2 ) {
                     echo '<li class="list-group-item"><h2> <a href="viewtheme.php?id=' . $row['id'] . '">' . $row['pavadinimas'] . '</a> <button class="btn btn-danger btn-sm" type="submit" name="deleteThemeBtn" value="'.$row['id'].'">Naikinti</button></h2></li>';
                 } else {
                     echo '<li class="list-group-item"><h2> <a href="viewtheme.php?id=' . $row['id'] . '">' . $row['pavadinimas'] . '</a></h2></li>';
@@ -221,7 +225,7 @@ class View
 
         echo '</form>';
 
-        if ($_SESSION['role'] > 0) {
+        if ($_SESSION['role'] > 0 && $_SESSION['uztildytas'] === '0') {
             echo '<br><a href="createtheme.php?id=' . $_GET['id'] . '"> <button type="button" class="btn btn-primary">Sukurti naują temą</button> </a>';
         }
     }
@@ -289,7 +293,7 @@ class View
         }
 
 
-        if ($_SESSION['role'] > 0) {
+        if ($_SESSION['role'] > 0 && $_SESSION['uztildytas'] === '0') {
             echo '
         <form method="POST">
             <div class="form-group">
@@ -472,6 +476,191 @@ class View
 
     // -- FORUM PAGE END
 
+    // -- Gallery Page View START
+
+    public function print_Gallery_frontpage()
+    {
+        echo '<br>
+                <form class="form-inline my-2 my-lg-0" method="POST" action="img_search.php">
+                <button class="btn btn-primary" type="submit" name="search_img">Ieškoti nuotraukų</button>
+            </form>
+            <br>
+            <br>';
+
+    }
+
+    public function print_Gallery_searchpage()
+    {
+        echo '<br><br><form method="post">
+                    <input class="form-control" type="text" name="img_name" placeholder="Nuotraukos pavadinimas"><br>
+                    <input class="form-control" type="text" name="img_tags" placeholder="fortnite;dance;gaming"
+                    pattern="^([AaĄąBbCcČčDdEeĘęĖėFfGgHhIiĮįYyJjKkLlMmNnOoPpRrSsŠšTtUuŲųŪūVvZzŽžqQwWxX]{2,};?){0,}" title="Įveskite etiketę nors iš 2 raidžių ir atskirkite etiketes ; symboliu!"><br>
+                    
+                    <div class="form-check">
+                      <input class="form-check-input" type="checkbox" name="jpg" value="1" id="defaultCheck1">
+                      <label class="form-check-label" for="defaultCheck1">
+                        .jpg
+                      </label>
+                    </div>
+                    
+                    <div class="form-check">
+                      <input class="form-check-input" type="checkbox" name="jpeg" value="1" id="defaultCheck1">
+                      <label class="form-check-label" for="defaultCheck1">
+                        .jpeg
+                      </label>
+                    </div>
+                    
+                    <div class="form-check">
+                      <input class="form-check-input" type="checkbox" name="png" value="1" id="defaultCheck1">
+                      <label class="form-check-label" for="defaultCheck1">
+                        .png
+                      </label>
+                    </div><br>
+                    
+                    <div class="form-group">
+                            <label for="data">Nuotraukos įkelimo data</label>
+                            <input type="date" max="'.date('Y-m-d').'" class="form-control" name="img_upload_date" required>
+                    </div>
+                    
+                    <button type="submit" name="search_img_submit" value="true" class="btn btn-primary btn-sm">
+                            Ieškoti
+                        </button>
+              </form><br>';
+    }
+
+    public function  print_gallery_image_upload()
+    {
+        echo '<br><h1>Nuotraukos įkėlimas</h1>
+        <form method="post" enctype="multipart/form-data">
+            <div class="file-upload-form--medium">
+                <div class="input-group">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text" id="inputGroupFileAddon01">Įkelti</span>
+                    </div>
+                    <div class="custom-file">
+                        <input type="file" class="custom-file-input" id="inputGroupFile01" name="photo"
+                        aria-describedby="inputGroupFileAddon01" accept="image/gif, image/jpeg, image/png" required>
+                        <label class="custom-file-label" for="inputGroupFile01">Pasirinkti nuotrauką</label>
+                    </div>
+                </div>
+                <div class="form-group">
+                <br>
+                    <label for="inputFor">Etiketės</label>
+                    <input type="text" class="form-control" id="inputFor" placeholder="fortnite;dance;gaming" name="tags"
+                    pattern="^([AaĄąBbCcČčDdEeĘęĖėFfGgHhIiĮįYyJjKkLlMmNnOoPpRrSsŠšTtUuŲųŪūVvZzŽžqQwWxX]{2,};?){0,}" title="Įveskite etiketę nors iš 2 raidžių ir atskirkite etiketes ; symboliu!">
+                </div>
+                <div class="form-group">
+                    <label for="comment">Pavadinimas:</label>
+                    <input type="text" class="form-control" id="inputFor" placeholder="Nuotraukos pavadinimas" name="img_name"
+                    pattern="^([AaĄąBbCcČčDdEeĘęĖėFfGgHhIiĮįYyJjKkLlMmNnOoPpRrSsŠšTtUuŲųŪūVvZzŽžqQwWxX][AaĄąBbCcČčDdEeĘęĖėFfGgHhIiĮįYyJjKkLlMmNnOoPpRrSsŠšTtUuŲųŪūVvZzŽžqQwWxX ]{2,})" title="Įveskite etiketę nors iš 2 raidžių ir atskirkite etiketes ; symboliu!" required>
+                    <br>
+                    <button type="submit" name="submitBtn" class="btn btn-danger">Įkelti</button>
+                </div>
+            </div>
+        </form>';
+    }
+
+    public function print_gallery_images($image)
+    {
+        echo '<figure class="figure">
+                <a href="viewphoto.php?img='.$image['img_id'].'"><img src="'.$image['nuotraukos_kelias'].'" id="imageInput" alt="fortnite dance" class="img-thumbnail rounded"></a>
+                <figcaption class="figure-caption"><p name="pavadinimas">'.$image['pavadinimas'].'</p></figcaption>
+                
+                    <form method="post">';
+
+        if ($_SESSION['role'] == 3 || $_SESSION['id'] == $image['fk_naudotojas'])
+        {
+            echo '<a href="#"><button class="btn btn-danger btn-sm" name="delete_img" type="submit" value="'.$image['img_id'].'">Ištrinti</button></a> '  ;
+        }
+
+        if ($_SESSION['role'] > 0)
+        {
+            echo '<button type="submit" name="like_button" value="'.$image['img_id'].'" class="btn btn-primary btn-sm">
+                            Pamėgti <span class="badge badge-light">'.$image['likes'].'</span>
+                        </button>';
+        }
+        if($_SESSION['role'] > 0 && $_SESSION['uztildytas'] !== '1') {
+            echo '
+                        <a href="viewphoto.php?img=' . $image['img_id'] . '">
+                            <button class="btn btn-primary btn-sm" type="button">Komentuoti</button>
+                        </a>';
+        }
+
+            echo '
+                    </form>
+            </figure>       ';
+    }
+
+    public function print_gallery_comment_section_image($image)
+    {
+        echo '<figure class="figure">
+                <img src="'.$image['nuotraukos_kelias'].'" id="imageInput" alt="fortnite dance" class="img-thumbnail rounded">
+                <figcaption class="figure-caption">'.$image['img_pav'].'</figcaption>
+                <form method="post">';
+
+        if ($_SESSION['role'] == 3 || $_SESSION['id'] == $image['fk_naudotojas'])
+        {
+            echo '<a href="#"><button class="btn btn-danger btn-sm" name="delete_img" type="submit" value="'.$image['img_id'].'">Ištrinti</button></a> ';
+        }
+
+        if($_SESSION['role'] > 0)
+        {
+            echo '<button type="submit" name="like_button" value="'.$image['img_id'].'" class="btn btn-primary btn-sm">
+                            Pamėgti <span class="badge badge-light">'.$image['likes'].'</span>
+                        </button>';
+        }
+
+        echo '</form>
+            </figure>';
+    }
+
+    public function print_gallery_comment_section_comment_form()
+    {
+        echo '<form method="POST">
+                <div class="form-group">
+                    <label for="comment">Komentuoti:</label>
+                    <textarea class="form-control" rows="5" id="comment" name="comment" required></textarea>
+                    <button type="submit" class="btn btn-danger">Komentuoti</button>
+                </div>
+            </form>';
+    }
+
+    public function print_gallery_comment_section_comment($comment)
+    {
+        echo '<div class="theme-answer">
+                <form method="POST" class="form-group">
+                    <h4>'.$comment['user_name'].'</h4>
+                    <h6>'.$comment['sukurimo_data'].'</h6>
+                    <p>'.$comment['tekstas'].'</p>';
+
+        if($_SESSION['role'] == 3 || $_SESSION['id'] == $comment['user_id'])
+        {
+            echo '<a href="editcomment.php?img='.$comment['img_id'].'&comment_id='.$comment['id'].'"> <button name="edit_comment" type="button" class="btn btn-primary btn-sm">Redaguoti</button> </a>
+                        <button type="submit" name="delete_comment" value="'.$comment['id'].'" class="btn btn-danger btn-sm">Naikinti</button>';
+        }
+
+        echo '</form>
+            </div>';
+    }
+
+    public function print_gallery_image_comment_edit($comment)
+    {
+        echo '<h1>Redaguoti nuotraukos komentarą</h1>
+        
+        <form method="post">
+        
+        <div class="form-group">
+            <label for="exampleFormControlTextarea3">Turinys</label>
+            <textarea class="form-control" id="exampleFormControlTextarea3" name="text" rows="7" required>'.$comment['tekstas'].'</textarea>
+        </div>
+        
+        
+            <button type="submit" name="edit_comment" value="'.$comment['id'].'" class="btn btn-danger">Pateikti atnaujintą atsakymą</button>
+        </form>';
+    }
+
+    // -- Gallery Page View END
+
     // Rimvydo naudotoju posisteme pradzia
 
     public function printRegisterForm()
@@ -572,7 +761,7 @@ class View
     public function printSettingsForm($username, $email, $country, $address, $phoneNum, $surname, $realName, $birthDate, $city, $favGame, $description,
                                       $discID, $faceID, $instaID, $skypeID, $sign, $snapID, $website, $school, $degree)
     {
-            echo '
+        echo '
             <form method=\'POST\' class=\'mainForm\'>
                 <h1>Profilio nustatymai</h1>
                 <div class="form-group">
@@ -729,5 +918,6 @@ class View
             </form>';
     }
     // Pabaiga
+
 
 }

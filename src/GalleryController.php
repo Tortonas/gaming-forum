@@ -10,6 +10,10 @@ class GalleryController extends MainController implements iController
 
     public function printPageView()
     {
+        if($_SESSION['uzblokuotas'] === '1')
+        {
+            $this->redirect_to_another_page('index.php', 0);
+        }
         if(isset($_POST['submitBtn']))
         {
             $error_flag = false;
@@ -183,6 +187,10 @@ class GalleryController extends MainController implements iController
     public function printCommentPageView()
     {
         $error_flag = false;
+        if($_SESSION['uzblokuotas'] === '1')
+        {
+            $this->redirect_to_another_page('index.php', 0);
+        }
 
         if(isset($_GET['img'])) {
 
@@ -293,6 +301,10 @@ class GalleryController extends MainController implements iController
     public function printCommentEditView()
     {
         $error_flag = false;
+        if($_SESSION['uzblokuotas'] === '1' || empty($_SESSION['id']))
+        {
+            $this->redirect_to_another_page('gallery.php', 0);
+        }
 
         if(isset($_GET['img']) && isset($_GET['comment_id'])) {
             $img_id = $_GET['img'];
@@ -332,6 +344,11 @@ class GalleryController extends MainController implements iController
 
     public function printImageSearchPageView()
     {
+        if($_SESSION['uzblokuotas'] === '1')
+        {
+            $this->redirect_to_another_page('index.php',0);
+        }
+
         $this->getView()->print_Gallery_searchpage();
 
         if (isset($_POST['search_img_submit']))

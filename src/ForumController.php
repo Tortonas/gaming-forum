@@ -10,6 +10,11 @@ class ForumController extends MainController implements iController
     // forum.php
     public function printPageView()
     {
+        if($_SESSION['uzblokuotas'] === '1')
+        {
+            $this->redirect_to_another_page('index.php', 0);
+        }
+
         $catalogs = $this->getModel()->getData('katalogai');
         $this->getView()->printForumFrontPage($catalogs);
 
@@ -46,7 +51,7 @@ class ForumController extends MainController implements iController
     // themes.php
     public function printPageViewThemes()
     {
-        if(!isset($_GET['id']))
+        if(!isset($_GET['id']) || $_SESSION['uzblokuotas'] === '1')
         {
             $this->printDanger('Ivyko klaida!');
             $this->redirect_to_another_page('forum.php', 0);
@@ -75,7 +80,7 @@ class ForumController extends MainController implements iController
     // createtheme.php
     public function printCreateThemeView()
     {
-        if(!isset($_GET['id']))
+        if(!isset($_GET['id']) || $_SESSION['uztildytas'] === '1' || $_SESSION['uzbokuotas'] === '1')
         {
             $this->printDanger('Ivyko klaida!');
             $this->redirect_to_another_page('forum.php', 0);
@@ -136,7 +141,7 @@ class ForumController extends MainController implements iController
         $themeAnswerList = $this->getModel()->getThemeListJoinedWithUsers($_GET['id']);
         $this->getView()->printViewTheme($themeAnswerList, $likeCount);
 
-        if(isset($_POST['commentBtn']))
+        if(isset($_POST['commentBtn']) && $_SESSION['uztildytas'] === '0')
         {
             if(empty($_POST['text']))
             {
@@ -226,6 +231,11 @@ class ForumController extends MainController implements iController
     // search.php
     public function printSearchContent()
     {
+        if($_SESSION['uzblokuotas'] === '1')
+        {
+            $this->redirect_to_another_page('index.php', 0);
+        }
+
         if(isset($_POST['searchText']))
             $this->getView()->printSearchPage($_POST['searchText']);
         else

@@ -195,6 +195,28 @@ class Model {
         }
     }
 
+    public function getDataByColumnFirstToken($table, $column, $value)
+    {
+        $table = $this->secureInput($table);
+        $column = $this->secureInput($column);
+        $value = $this->secureInput($value);
+        $sql = "SELECT * FROM ".$table." WHERE ".$column."='".$value."' ";
+        $result = mysqli_query($this->conn, $sql);
+
+        if (mysqli_num_rows($result) > 0)
+        {
+            while($row = $result->fetch_assoc())
+            {
+                return $row;
+            }
+        }
+        else
+        {
+            echo mysqli_error($this->conn);
+            return false;
+        }
+    }
+
     public function getDataByString($table, $column, $value)
     {
         $table = $this->secureInput($table);
@@ -1025,7 +1047,7 @@ class Model {
 
         $to = $email;
         $subject = "Susigrąžinkite slaptažodį ispgame.tk svetainėje";
-        $msg = "Paspauskite šią <a href=\"ispgame.tk/newpass.php?token=" . $token . "\">nuorodą</a>, kad atnaujintumėte slaptažodį";
+        $msg = "Paspauskite šią <a href=\"http://ispgame.tk/newpass.php?token=" . $token . "\">nuorodą</a>, kad atnaujintumėte slaptažodį";
         $msg = wordwrap($msg, 70);
         $headers = "From: info@ispgame.tk";
         mail($to, $subject, $msg, $headers);
@@ -1038,34 +1060,38 @@ class Model {
         $newPass = $this->secureInput($pass);
         $newPassC = $this->secureInput($passRepeat);
 
-        $token = $_GET['token'];
-        if (empty($newPass) || empty($newPassC))
-        {
+
+        if(!isset($_GET['token']) && empty($_GET['token'])) {
             return false;
         }
-        if ($newPass !== $newPassC)
-        {
-            return false;
-        } else {
-            $date = date('Y-m-d H:i:s');
-            $sql = "SELECT tokenas, fk_naudotojas FROM slaptazodziu_priminikliai WHERE tokenas='$token' AND pabaigos_data >= '$date' LIMIT 1";
-            $result = $this->conn->query($sql);
-            if ($result->num_rows > 0) {
-                $row = $result->fetch_assoc();
-                $dbToken = $row['tokenas'];
-                $usrId = $row['fk_naudotojas'];
+        else{
+            $token = $this->secureInput($_GET['token']);
+            if (empty($newPass) || empty($newPassC)) {
+                return false;
+            }
+            if ($newPass !== $newPassC) {
+                return false;
+            } else {
+                $date = date('Y-m-d H:i:s');
+                $sql = "SELECT tokenas, fk_naudotojas FROM slaptazodziu_priminikliai WHERE tokenas='$token' AND pabaigos_data >= '$date' LIMIT 1";
+                $result = $this->conn->query($sql);
+                if ($result->num_rows > 0) {
+                    $row = $result->fetch_assoc();
+                    $dbToken = $row['tokenas'];
+                    $usrId = $row['fk_naudotojas'];
 
-                if ($token === $dbToken) {
-                    $hashedPwd = password_hash($newPass, PASSWORD_DEFAULT);
-                    $sql = "UPDATE naudotojai SET slaptazodis='$hashedPwd' WHERE id='$usrId'";
-                    $results = mysqli_query($this->conn, $sql);
-                    header('location: index.php?changepass=success');
-                    return true;
+                    if ($token === $dbToken) {
+                        $hashedPwd = password_hash($newPass, PASSWORD_DEFAULT);
+                        $sql = "UPDATE naudotojai SET slaptazodis='$hashedPwd' WHERE id='$usrId'; DELETE slaptazodziu_priminikliai ";
+                        $results = mysqli_query($this->conn, $sql);
+                        header('location: index.php?changepass=success');
+                        return true;
+                    } else {
+                        return false;
+                    }
                 } else {
                     return false;
                 }
-            } else {
-                return false;
             }
         }
     }
