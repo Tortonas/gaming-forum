@@ -11,7 +11,10 @@ class SettingsController extends MainController implements iController
     // settings.php
     public function printPageView()
     {
-        if (isset($_SESSION['slapyvardis']))
+        if($_SESSION['role'] == 0) {
+            $this->redirect_to_another_page('index.php', 0);
+        }
+        else if (isset($_SESSION['slapyvardis']))
         {
             $username = $this->getModel()->secureInput($_SESSION['slapyvardis']);
             $row = $this->getModel()->getDataByString('naudotojai', 'slapyvardis', $username);
