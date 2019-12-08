@@ -1206,9 +1206,8 @@ class Model {
         }
         $sql = "INSERT INTO zurnalo_irasai (data, tekstas, ip, fk_naudotojas) VALUE (NOW(), '".$text."', '".$ip."', $userId) ";
         $results = mysqli_query($this->conn, $sql);
-        $ip = $this->getModel()->getIP();
-        //$this->getModel()->updateLog("Duombzės užklausos erroras: ".mysqli_error($this->conn)."", $ip);
-        //echo mysqli_error($this->conn);
+
+        echo mysqli_error($this->conn);
 
     }
 }
