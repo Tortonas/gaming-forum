@@ -1133,9 +1133,10 @@ class Model {
 
         $to = $email;
         $subject = "Susigrąžinkite slaptažodį ispgame.tk svetainėje";
-        $msg = "Paspauskite šią <a href=\"http://ispgame.tk/newpass.php?token=" . $token . "\">nuorodą</a>, kad atnaujintumėte slaptažodį";
+        $msg = "Paspauskite šią <a href='http://ispgame.tk/newpass.php?token=".$token."'>nuorodą</a>, kad atnaujintumėte slaptažodį";
         $msg = wordwrap($msg, 70);
         $headers = "From: info@ispgame.tk";
+        $headers .= "Content-Type: text/html; charset=UTF-8\r\n";
         mail($to, $subject, $msg, $headers);
         header('location: index.php?emailsent=true');
         return true;
