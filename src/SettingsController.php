@@ -12,6 +12,8 @@ class SettingsController extends MainController implements iController
     public function printPageView()
     {
         if($_SESSION['role'] == 0) {
+            $ip = $this->getModel()->getIP();
+            $this->getModel()->updateLog("Bandymas prieiti prie puslapio be teisės", $ip);
             $this->redirect_to_another_page('index.php', 0);
         }
         else if (isset($_SESSION['slapyvardis']))
@@ -48,18 +50,29 @@ class SettingsController extends MainController implements iController
                             {
                                 mysqli_stmt_bind_param($stmt, "ss", $targetFilePath, $username);
                                 mysqli_stmt_execute($stmt);
-                                echo("<script>location.href = 'settings.php?picchange=success';</script>");
+                                $ip = $this->getModel()->getIP();
+                                $this->getModel()->updateLog("Nuotrauka sėkmingai pakeista!", $ip);
                                 $this->printSuccess('Nuotrauka sėkmingai pakeista!');
+                                echo("<script>location.href = 'settings.php?picchange=success';</script>");
+
                             } else {
+                                $ip = $this->getModel()->getIP();
+                                $this->getModel()->updateLog("Nuotraukos keitimo kalida", $ip);
                                 $this->printDanger('Klaida');
                             }
                         } else {
+                            $ip = $this->getModel()->getIP();
+                            $this->getModel()->updateLog("Nuotraukos keitimo kalida", $ip);
                             $this->printDanger('Klaida');
                         }
                     } else {
+                        $ip = $this->getModel()->getIP();
+                        $this->getModel()->updateLog("Nuotraukos keitimo kalida", $ip);
                         $this->printDanger('Klaida');
                     }
                 } else {
+                    $ip = $this->getModel()->getIP();
+                    $this->getModel()->updateLog("Nuotraukos keitimo kalida", $ip);
                     $this->printDanger('Klaida');
                 }
             }
@@ -97,9 +110,13 @@ class SettingsController extends MainController implements iController
                 $phoneNum, $surname, $realName, $birthDate, $city, $favGame, $description, $discID, $faceID, $instaID,
                 $skypeID, $sign, $snapID, $website, $school, $degree))
             {
+                $ip = $this->getModel()->getIP();
+                $this->getModel()->updateLog("Vartotojo pakeitimai iššaugoti", $ip);
                 $this->getView()->printSuccess('Pakeitimai išsaugoti');
                 $this->redirect_to_another_page('settings.php', 1);
             } else {
+                $ip = $this->getModel()->getIP();
+                $this->getModel()->updateLog("Vartotojo pakeitimai neišsaugoti", $ip);
                 $this->getView()->printDanger('Klaida');
             }
         }
@@ -112,8 +129,12 @@ class SettingsController extends MainController implements iController
             $repeatNewPasswd = $this->getModel()->secureInput($_POST['repeatNewPasswd']);
             if ($this->getModel()->changePasswd($username, $oldPasswd, $newPasswd, $repeatNewPasswd))
             {
+                $ip = $this->getModel()->getIP();
+                $this->getModel()->updateLog("Senas slaptažodis sėkmingai pakeistas", $ip);
                 $this->getView()->printSuccess('Slaptažodis sėkmingai pakeistas');
             } else {
+                $ip = $this->getModel()->getIP();
+                $this->getModel()->updateLog("Klaida keičiant seną slaptažodį", $ip);
                 $this->getView()->printDanger('Klaida');
             }
         }

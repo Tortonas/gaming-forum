@@ -417,20 +417,20 @@ class View
                 <label for="inputFor">Aukštasis išsilavinimas</label>
                 <input type="text" class="form-control" id="inputFor" name="aukstasis_issilavinimas" placeholder="Aukštasis išsilavinimas" value="'.$content['aukstasis_issilavinimas'].'">
             </div>
-                <button type="submit" class="btn btn-primary">Išsaugoti nustatymus</button>
+                <button type="submit" name="request" value="visiDuomenys" class="btn btn-primary">Išsaugoti nustatymus</button>
         </form>
 
         <form method="POST" class="mainForm">
             <h1>Slaptažodžio keitimo forma</h1>
             <div class="form-group">
                 <label for="inputFor">Naujas slaptažodis</label>
-                <input type="password" class="form-control" id="inputFor" name="slaptazodis	" placeholder="Naujas slaptažodis">
+                <input type="password" class="form-control" name="slaptazodis" value="slaptazodis" id="inputFor" name="slaptazodis	" placeholder="Naujas slaptažodis">
             </div>
             <div class="form-group">
                 <label for="inputFor">Pakartokite naują slaptažodį</label>
-                <input type="password" class="form-control" id="inputFor" name="slaptazodisPakartoti" placeholder="Naujas slaptažodis">
+                <input type="password" class="form-control" name="slaptazodisPakartoti" value="slaptazodisPakartoti" id="inputFor" name="slaptazodisPakartoti" placeholder="Naujas slaptažodis">
             </div>
-            <button type="button" class="btn btn-danger">Keisti slaptažodį</button>
+            <button type="submit" name="request" value="slaptazodisSubmit" class="btn btn-danger">Keisti slaptažodį</button>
         </form>';
 
     }
