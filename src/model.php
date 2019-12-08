@@ -1136,7 +1136,8 @@ class Model {
         $msg = "Paspauskite šią <a href='http://ispgame.tk/newpass.php?token=".$token."'>nuorodą</a>, kad atnaujintumėte slaptažodį";
         $msg = wordwrap($msg, 70);
         $headers = "From: info@ispgame.tk";
-        $headers .= "Content-Type: text/html; charset=UTF-8\r\n";
+        $headers .= "MIME-Version: 1.0\r\n";
+        $headers .= "Content-type: text/html; charset: utf8\r\n";
         mail($to, $subject, $msg, $headers);
         header('location: index.php?emailsent=true');
         return true;
@@ -1199,9 +1200,16 @@ class Model {
     public function updateLog($text, $ip)
     {
         $text = $this->secureInput($text);
-        $temp = 'admin';
-        $data = $this->getDataByColumnFirst("naudotojai", "slapyvardis", $temp);
-        $userId = $data['id'];
+
+        $sql = "SELECT * FROM naudotojai WHERE slapyvardis='admin'";
+        $result = mysqli_query($this->conn, $sql);
+        $userId = 0;
+        if (mysqli_num_rows($result) > 0) {
+            while($row = $result->fetch_assoc())
+            {
+                $userId = $row['id'];
+            }
+        }
 
         if ($_SESSION['id'] >= 1)
         {
