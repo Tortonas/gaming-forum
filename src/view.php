@@ -774,7 +774,7 @@ class View
                 </div>
                 <div class="form-group">
                     <label for="inputFor">El. pašto adresas*</label>
-                    <input type="email" name="email" class="form-control" id="inputFor" aria-describedby="emailHelp" placeholder="El. Paštas" value="'.$email.'">
+                    <input type="email" name="email" class="form-control" id="inputFor" aria-describedby="emailHelp" placeholder="El. Paštas" value="'.$email.'" required>
                 </div>
                 <div class="form-group">
                     <label for="inputFor">Šalis</label>
