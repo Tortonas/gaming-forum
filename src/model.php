@@ -1170,7 +1170,7 @@ class Model {
 
                     if ($token === $dbToken) {
                         $hashedPwd = password_hash($newPass, PASSWORD_DEFAULT);
-                        $sql = "UPDATE naudotojai SET slaptazodis='$hashedPwd' WHERE id='$usrId'; DELETE slaptazodziu_priminikliai WHERE tokenas='$token' AND pabaigos_data >= '$date' LIMIT 1";
+                        $sql = "UPDATE naudotojai SET slaptazodis='$hashedPwd' WHERE id='$usrId'; DELETE FROM slaptazodziu_priminikliai WHERE tokenas='$token' AND pabaigos_data >= '$date' LIMIT 1";
                         $results = mysqli_query($this->conn, $sql);
                         header('location: index.php?changepass=success');
                         return true;
