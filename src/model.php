@@ -1170,10 +1170,11 @@ class Model {
 
                     if ($token === $dbToken) {
                         $hashedPwd = password_hash($newPass, PASSWORD_DEFAULT);
-                        $sql = "UPDATE naudotojai SET slaptazodis='$hashedPwd' WHERE id='$usrId'; DELETE FROM slaptazodziu_priminikliai WHERE tokenas='$token' AND pabaigos_data >= '$date' LIMIT 1";
+                        $sql = "UPDATE naudotojai SET slaptazodis='$hashedPwd' WHERE id='$usrId'";
+                        $delSql = "DELETE FROM slaptazodziu_priminikliai WHERE tokenas='$dbToken'";
                         $results = mysqli_query($this->conn, $sql);
-                        mysqli_error($this->conn);
-                        //header('location: index.php?changepass=success');
+                        $resultsDel = mysqli_query($this->conn, $delSql);
+                        header('location: index.php?changepass=success');
                         return true;
                     } else {
                         return false;
