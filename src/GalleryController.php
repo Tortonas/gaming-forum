@@ -490,7 +490,7 @@ class GalleryController extends MainController implements iController
             {
                 $ip = $this->getModel()->getIP();
                 $this->getModel()->updateLog("Nuotraukų paieška duombazėje nepavyko!", $ip);
-                $this->getView()->printWarning("Nuotraukų paieška duombazėje nepavyko!");
+                //$this->getView()->printWarning("Nuotraukų paieška duombazėje nepavyko!");
             }
         }
 
