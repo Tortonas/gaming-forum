@@ -577,7 +577,7 @@ class View
             echo '<a href="#"><button class="btn btn-danger btn-sm" name="delete_img" type="submit" value="'.$image['img_id'].'">Ištrinti</button></a> '  ;
         }
 
-        if ($_SESSION['role'] > 0)
+        if ($_SESSION['role'] > 0 && $_SESSION['uztildytas'] != 1)
         {
             echo '<button type="submit" name="like_button" value="'.$image['img_id'].'" class="btn btn-primary btn-sm">
                             Pamėgti <span class="badge badge-light">'.$image['likes'].'</span>
@@ -607,7 +607,7 @@ class View
             echo '<a href="#"><button class="btn btn-danger btn-sm" name="delete_img" type="submit" value="'.$image['img_id'].'">Ištrinti</button></a> ';
         }
 
-        if($_SESSION['role'] > 0)
+        if($_SESSION['role'] > 0 && $_SESSION['uztildytas'] != 1)
         {
             echo '<button type="submit" name="like_button" value="'.$image['img_id'].'" class="btn btn-primary btn-sm">
                             Pamėgti <span class="badge badge-light">'.$image['likes'].'</span>

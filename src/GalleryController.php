@@ -192,7 +192,7 @@ class GalleryController extends MainController implements iController
 
         }
 
-        if($_SESSION['role'] > 0)
+        if($_SESSION['role'] > 0 && $_SESSION['uztildytas'] != 1)
         {
             $this->getView()->print_gallery_image_upload();
         }
@@ -321,7 +321,7 @@ class GalleryController extends MainController implements iController
 
 
                 $this->getView()->print_gallery_comment_section_image($img_data);
-                if($_SESSION['role'] > 0) {
+                if($_SESSION['role'] > 0 && $_SESSION['uztildytas'] != 1) {
                     $this->getView()->print_gallery_comment_section_comment_form();
                 }
 
