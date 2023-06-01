@@ -1,0 +1,30 @@
+version: "3.8"
+
+volumes:
+  gaming_forum_mysql_db:
+    driver: local
+
+services:
+  mysql:
+    image: mysql:8.0
+    container_name: gaming_forum_mysql
+    volumes:
+      - ./dump.sql:/dump.sql
+      - gaming_forum_mysql_db:/var/lib/mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: project
+      MYSQL_USER: project
+      MYSQL_PASSWORD: project
+    ports:
+      - "3306:3306"
+
+  web:
+    build: ./.docker
+    container_name: gaming_forum_web
+    volumes:
+      - ./:/var/www/html/
+    ports:
+      - "80:80"
+    depends_on:
+      - mysql

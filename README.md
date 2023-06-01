@@ -1,27 +1,28 @@
-# Gaming forumas
+# Gaming forum
 ![github-large](readme.gif)
-Tai yra paprastas forumas, su savo kategorijomis, temomis bei galerija.
+This is a simple forum with its categories, topics, gallery and admin panel. This project was made in 2019.
 
 # Developer team
 
-Valentinas Kasteckis (forum sub-system)
+**Valentinas Kasteckis** (forum sub-system)
 
-Henrikas Juzuitis (gallery sub-system)
+**Henrikas Juzuitis** (gallery sub-system)
 
-Eligijus Kiudys (admin sub-system)
+**Eligijus Kiudys** (admin sub-system)
 
-Rimvydas Neverauskas (user sub-system)
+**Rimvydas Neverauskas** (user sub-system)
 
-Projektas buvo atliktas 4 žmonių komandoje
+The project was carried out by a team of 4 people.
 
-# Mano dalis projekte
+# Run this project locally
+1. Have `docker` and `Makefile` installed
+2. Clone this repository
+3. `$ make prepare`
+4. `$ make prepare-db`
+5. visit `localhost:80`
 
-1. Dizainas
-2. Forumo sub-sistema.
-
-# Kokias žinias pagilinau
+# What has been used
 
 1. Bootstrap
-2. PHP
-3. Github actions
-4. MySQL
+2. Plain PHP 7.4
+3. MySQL
