@@ -21,6 +21,12 @@ The project was carried out by a team of 4 people.
 4. `$ make prepare-db`
 5. visit `localhost:80`
 
+# SQL Injection
+This project has many issues, one of them you can perform SQL injection.  
+You can run the following command in order to get access to database:  
+`$ sqlmap http://localhost/themes.php?id=1 --tables`
+
+
 # What has been used
 
 1. Bootstrap
